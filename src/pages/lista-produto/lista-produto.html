@@ -1,0 +1,43 @@
+<ion-header>
+
+  <ion-navbar>
+  	<button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Lista Produtos</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <!-- <ion-searchbar (ionInput)="filterProducts($event)" [(ngModel)]="searchText"></ion-searchbar> -->
+  <ion-list>
+    <ion-item-sliding *ngFor="let produto of produtos">
+      <button ion-item (click)="editProduto(produto.id)">
+        <h1>{{ produto.descricao }}</h1>
+        <h2>{{ produto.unidade_nome }}</h2>
+        <h2>{{ produto.preco }}</h2>
+        <h2>{{ produto.categoria_nome }}</h2>
+      </button>
+      <ion-item-options side="left">
+        <button ion-button color="danger" (click)="removeProduto(produto)">
+          <ion-icon name="trash"></ion-icon>
+          Excluir
+        </button>
+      </ion-item-options>
+      <ion-item-options side="right">
+		<button ion-button color="primary" (click)="pedidoProduto(produto)">
+		  <ion-icon name="document"></ion-icon>
+			Pedido
+		</button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  
+  <button ion-button color="light" block (click)="cancelar()" >Voltar</button>
+ 
+  <ion-fab right bottom>
+    <button ion-fab color="blue" (click)="addProduto()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+ 
+</ion-content>

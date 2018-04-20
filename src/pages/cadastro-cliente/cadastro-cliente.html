@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title *ngIf="!editando">Cadastro Cliente</ion-title>
+    <ion-title *ngIf="editando">Alteração Cliente</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-list>
+	  <ion-item>
+		<ion-label floating>Nome</ion-label>
+		<ion-input type="text" [(ngModel)]="model.nome"></ion-input>
+	  </ion-item>
+	  <ion-item>
+		<ion-label floating>Código</ion-label>
+		<ion-input type="number" [(ngModel)]="model.codigo"></ion-input>
+	  </ion-item>
+	  <ion-item>
+		<ion-label floating>Telefone</ion-label>
+		<ion-input type="tel" [(ngModel)]="model.fone"></ion-input>
+	  </ion-item>
+      <ion-item>
+		<ion-label floating>Celular</ion-label>
+		<ion-input type="tel" [(ngModel)]="model.celular"></ion-input>
+	  </ion-item>
+      <ion-item>
+		<ion-label floating>Endereço</ion-label>
+		<ion-input type="text" [(ngModel)]="model.endereco"></ion-input>
+	  </ion-item>
+      <ion-item>
+		<ion-label floating>Bairro</ion-label>
+		<ion-input type="text" [(ngModel)]="model.bairro"></ion-input>
+	  </ion-item>
+      <ion-item>
+		<ion-label floating>Cidade</ion-label>
+		<ion-input type="text" [(ngModel)]="model.cidade"></ion-input>
+	  </ion-item>
+      <ion-item>
+		<ion-label floating>CNPJ/MF</ion-label>
+		<ion-input type="text" [(ngModel)]="model.cnpj"></ion-input>
+	  </ion-item>
+      <ion-item>
+		<ion-label floating>Inscrição Estadual</ion-label>
+		<ion-input type="text" [(ngModel)]="model.inscricao_est"></ion-input>
+	  </ion-item>	  
+
+    </ion-list>
+
+    <div padding>
+      <button *ngIf="!editando" ion-button block (click)="save()">Adicionar</button>
+      <button *ngIf="editando" ion-button block (click)="save()">Atualizar</button>
+	  <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
+    </div>
+
+	
+</ion-content>

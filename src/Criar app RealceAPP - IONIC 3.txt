@@ -1,0 +1,118 @@
+1 - Instalar o IONIC e CORDOVA. Só instala na primeira vez, depois não precisa mais.
+npm install -g ionic cordova@~7.0 
+
+2 - Para ver as informações do IONIC instalado
+ionic info
+
+3 - Para criar a aplicação IONIC chamada MyApp com o template em branco
+ionic start RealceApp sidemenu
+
+4 - Entrar no diretório criado com a aplicação
+cd c:/code/ionic3/RealceApp 
+
+5 - Iniciar o servidor da aplicação para ver a pagina default
+ionic serve
+ionic serve --lab
+
+6 -- CONFIGURANDO O STORAGE PARA FAZER O CRUD
+  1 - Instalar o Storage
+    ionic cordova plugin add cordova-sqlite-storage --save
+    npm install --save @ionic-native/sqlite
+
+  -- PARA FAZER IMPORT E EXPORT DO DB SQLITE
+    ionic cordova plugin add uk.co.workingedge.cordova.plugin.sqliteporter
+    npm install --save @ionic-native/sqlite-porter
+
+  2 - Incluir essa nova biblioteca no module da APP "app.module.ts"
+    ...
+    import { IonicStorageModule } from '@ionic/storage';
+    ...
+     imports: [
+        ...
+        IonicStorageModule.forRoot()
+     ],
+
+  3 - Criar um PROVIDER (É compartilhado por todas as paginas do app)
+    ionic g provider database
+    ionic g provider Cliente
+    ionic g provider Produto
+    ionic g provider Categoria
+    ionic g provider Unidade
+    ionic g provider Pedido
+    ionic g provider Folhacarga
+    
+    
+    3.1 - Será criado o diretório ../src/provider/cliente e o arquivo cliente.ts
+      Fazer os seguintes ajustes no arquivo criado:
+NÃO FIZ  - Retirar a linha "import { HttpClient } from '@angular/common/http';"
+      - Incluir a linha de import do Storage: "import { Storage } from '@ionic/storage';"
+      - Alterar a referência no construtor. Retirando o Http e incluindo o Storage:
+SÓ INCLUI    Ficando assim: "constructor(private storage: Storage) {"
+      Fazer o seguinte ajuste no arquivo "app.modules.ts"
+      - Incluir o módulo do HTTP no "app.modules.ts":
+        ... 
+          import { HttpClientModule } from '@angular/common/http';
+        ...
+          imports: [
+    
+            ...
+            HttpClientModule,
+            .... 
+
+
+  4 - Usar o PROVIDER na AddGastoPage
+    - Incluir o import: " import { CrudProvider } from '../../providers/crud/crud' "
+    - Injetar o PROVIDER no Construtor: " public crudProvider:CrudProvider "
+    
+7 -- CRIAR AS TELAS DA APLICAÇÃO
+  1 - Gerar uma nova pagina com o nome CadastroCliente
+    ionic g page CadastroCliente
+    ionic g page ListaCliente
+    #ionic g page EditCliente
+    ionic g page CadastroProduto
+    ionic g page ListaProduto
+    #ionic g page EditProduto
+    ionic g page CadastroPedido
+    ionic g page ListaPedido
+    #ionic g page EditPedido
+    ionic g page CadastroFolhacarga
+    ionic g page ListaFolhacarga
+    #ionic g page EditFolhacarga
+
+  2 - Incluir o módulo dessa pagina no module da APP "app.module.ts"
+    ...
+    import { CadastroClientePageModule } from '../pages/cadastro-cliente/cadastro-cliente.module';
+    ...
+    imports : [
+    
+    ...
+	
+      CadastroClientePageModule,
+    ...
+
+8 - Para criar o icone e a imagem de splash basta colocar a sua imagem no diretório \resources da aplicação com o respectivos nomes icon.png e splash.png 
+ionic cordova resources --splash
+ionic cordova resources --icon
+
+9 - Instalar a plataforma para Android
+ionic cordova platform add android --save
+
+-- Para remover a plataforma. As vezes é preciso reinstalar para reconhecer algum plugin.
+ionic cordova platform rm android
+
+
+9.1 - Para usar o emulador do AndroidStudio. Esse plugin HTTP é nativo e só funciona no emulador.
+ionic cordova emulate android
+ionic cordova emulate android --livereload
+
+9.2 - Para rodar a aplicação no Android conectado no notebook via usb
+ionic cordova run android --device
+
+9.3 - Para rodar a aplicação no Android conectado no notebook via usb como PRODUÇÃO. Tela inicial da APP fica mais rápida
+ionic cordova run android --prod
+
+10 - Para gerar a plataforma e a aplicação para Browser
+ionic cordova platform add browser
+ionic cordova run browser
+
+
