@@ -19,7 +19,7 @@ import { ToastController } from 'ionic-angular';
 })
 export class CadastroPedidoPage {
 
-  pedido: Pedido = {id:null, cliente_id:null, data:'', status:'Pendente'};
+  pedido: Pedido = {id:null, cliente_id:null, data:null, status:'Pendente'};
   Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, produto_descricao:'', quantidade:null, valor_unitario:null, valor_total:null};
   //produto: Produto = {id:null, }
   //pedidoEditando: Pedido;
@@ -31,6 +31,8 @@ export class CadastroPedidoPage {
   clientes: any[];
   produtos: any[];
   //unidades: any[]
+  //data_atual: string = new Date().toISOString();
+  data_atual: Date = new Date();
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -64,8 +66,9 @@ export class CadastroPedidoPage {
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
-      });	      
-
+      });	 
+     
+    this.model.data = this.data_atual.toISOString();
   }
 
 
@@ -109,11 +112,34 @@ export class CadastroPedidoPage {
         item.produto_id = this.model_produto.id;
         item.produto_descricao = this.model_produto.descricao;
         item.quantidade = this.model_item_pedido.quantidade;
-        item.valor_unitario = this.model_produto.preco;
-        item.valor_total = this.model_item_pedido.quantidade * this.model_produto.preco;
+        item.valor_unitario = this.model_item_pedido.valor_unitario; //this.model_produto.preco;
+        item.valor_total = this.model_item_pedido.quantidade * this.model_item_pedido.valor_unitario; //this.model_produto.preco;
         this.itens.push(item);
         console.log(item);
         console.log(this.model_item_pedido);   
+      });
+  }
+
+  onSelectChange(selectedValue: any) {
+    
+    console.log('passou onSelectChange');
+
+    Observable.forkJoin([
+        Observable.fromPromise(
+                this.produtoProvider.get(this.model_item_pedido.produto_id)
+                  .then((result: any) => {
+                    this.model_produto = result;
+                    console.log("Promessa: " + result);
+                  })
+                  .catch(() => {
+                    this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
+                  })
+        )
+      ])
+      .subscribe(data => {
+        console.log(data);
+        //let valor_unitario = this.model_produto.preco;
+        this.model_item_pedido.valor_unitario = this.model_produto.preco;
       });
   }
 
@@ -133,6 +159,7 @@ export class CadastroPedidoPage {
       return this.pedidoProvider.update_itens(this.itens);
     } else {
       //this.editando = true;
+      this.model.status = 'Pendente';
       this.pedidoProvider.insert(this.model);
       return this.pedidoProvider.insert_itens(this.itens);
     }
@@ -150,5 +177,10 @@ export class CadastroPedidoPage {
 */
       //this.itens.push(this.model_produto);
 
+
+  cancelar(){
+    //this.navCtrl.setRoot(HomePage);
+    this.navCtrl.pop();
+  }
 
 }

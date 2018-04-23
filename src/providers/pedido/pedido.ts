@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
+import { DatePipe } from '@angular/common';
 
 import { Cliente } from '../cliente/cliente';
 
@@ -14,7 +15,8 @@ import { Cliente } from '../cliente/cliente';
 @Injectable()
 export class PedidoProvider {
 
-  constructor(private dbProvider: DatabaseProvider ) {
+  constructor(private dbProvider: DatabaseProvider,
+              private datepipe: DatePipe) {
     console.log('Hello PedidoProvider Provider');
   }
 
@@ -149,6 +151,29 @@ public insert(pedido: Pedido) {
       .catch((e) => console.error(e));
   }
 
+  public getAll2() {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = 'SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome FROM pedidos p join clientes c on p.cliente_id = c.id';
+ 
+        return db.executeSql(sql, [])
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let pedidos: any[] = [];
+              for (var i = 0; i < data.rows.length; i++) {
+                var pedido = data.rows.item(i);
+                pedidos.push(pedido);
+              }
+              return pedidos;
+            } else {
+              return [];
+            }
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
 
 
 }
@@ -162,6 +187,14 @@ export class Pedido{
   data: string;
   status: string;
   //itens: Produto[];
+}
+
+export class Pedido2{
+  id?: number;
+  cliente_id: number;
+  cliente_nome: string;
+  data: string;
+  status: string;
 }
 
 export class Item_pedido{

@@ -59,7 +59,7 @@ export class ListaProdutoPage {
         var index = this.produtos.indexOf(produto);
         this.produtos.splice(index, 1);
         this.toast.create({ message: 'Produto removido.', duration: 3000, position: 'botton' }).present();
-      })
+    })
   }
 
 

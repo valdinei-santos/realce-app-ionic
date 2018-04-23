@@ -18,9 +18,9 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item-sliding *ngFor="let pedido of pedidos">
+    <ion-item-sliding *ngFor="let pedido of pedidos2">
       <button ion-item (click)="editPedido(pedido.id)">
-        <h2>{{ pedido.data }} - {{ pedido.cliente_id }} - {{ pedido.status }}</h2>
+        <h2>{{ pedido.data }} - {{ pedido.cliente_nome }} - {{ pedido.status }}</h2>
       </button>
       <ion-item-options side="left">
         <button ion-button color="danger" (click)="removePedido(pedido)">
