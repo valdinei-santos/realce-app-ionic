@@ -20,7 +20,7 @@ import { ToastController } from 'ionic-angular';
 export class CadastroPedidoPage {
 
   pedido: Pedido = {id:null, cliente_id:null, data:null, status:'Pendente'};
-  Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, produto_descricao:'', quantidade:null, valor_unitario:null, valor_total:null};
+  Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, quantidade:null, valor_unitario:null, valor_total:null};
   //produto: Produto = {id:null, }
   //pedidoEditando: Pedido;
   editando:boolean = false;	
@@ -50,6 +50,9 @@ export class CadastroPedidoPage {
         .then((result: any) => {
           this.model = result;
         })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
+      });
     }
 
     this.clienteProvider.getAll()
@@ -110,7 +113,6 @@ export class CadastroPedidoPage {
         let item = new Item_pedido();
         item.pedido_id = null; //item.;
         item.produto_id = this.model_produto.id;
-        item.produto_descricao = this.model_produto.descricao;
         item.quantidade = this.model_item_pedido.quantidade;
         item.valor_unitario = this.model_item_pedido.valor_unitario; //this.model_produto.preco;
         item.valor_total = this.model_item_pedido.quantidade * this.model_item_pedido.valor_unitario; //this.model_produto.preco;

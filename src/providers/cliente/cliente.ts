@@ -18,7 +18,6 @@ export class ClienteProvider {
       .then((db: SQLiteObject) => {
         let sql = 'insert into clientes (codigo, nome, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est) values (?, ?, ?, ?, ?, ?, ?, ?, ?)';
         let data = [cliente.codigo, cliente.nome, cliente.fone, cliente.celular, cliente.endereco, cliente.bairro, cliente.cidade, cliente.cnpj, cliente.inscricao_est];
- 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -30,7 +29,6 @@ export class ClienteProvider {
       .then((db: SQLiteObject) => {
         let sql = 'update clientes set codigo = ?, nome = ?, fone = ?, celular = ?, endereco = ?, bairro = ?, cidade = ?, cnpj = ?, inscricao_est = ? where id = ?';
         let data = [cliente.codigo, cliente.nome, cliente.fone, cliente.celular, cliente.endereco, cliente.bairro, cliente.cidade, cliente.cnpj, cliente.inscricao_est, cliente.id];
- 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -42,7 +40,6 @@ export class ClienteProvider {
       .then((db: SQLiteObject) => {
         let sql = 'delete from clientes where id = ?';
         let data = [id];
- 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -54,7 +51,6 @@ export class ClienteProvider {
       .then((db: SQLiteObject) => {
         let sql = 'select * from clientes where id = ?';
         let data = [id];
- 
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -70,10 +66,8 @@ export class ClienteProvider {
               cliente.cidade = item.cidade;
               cliente.cnpj = item.cnpj;
               cliente.inscricao_est = item.inscricao_est;
- 
               return cliente;
             }
- 
             return null;
           })
           .catch((e) => console.error(e));
@@ -85,7 +79,6 @@ export class ClienteProvider {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         let sql = 'SELECT * FROM clientes';
- 
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {

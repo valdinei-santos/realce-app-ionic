@@ -5,18 +5,18 @@ import { ProdutoProvider } from '../produto/produto';
 
 
 @Injectable()
-export class CategoriaProvider {
+export class UnidadeVendaProvider {
 
 
   constructor(private dbProvider: DatabaseProvider) {
   }
 
 
-  public insert(categoria: Categoria) {
+  public insert(unidade_venda: UnidadeVenda) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'insert into produtos_categoria (nome) values (?)';
-        let data = [categoria.nome];
+        let sql = 'insert into produtos_unidade_venda (nome) values (?)';
+        let data = [unidade_venda.nome];
  
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
@@ -24,11 +24,11 @@ export class CategoriaProvider {
       .catch((e) => console.error(e));
   }
  
-  public update(categoria: Categoria) {
+  public update(unidade_venda: UnidadeVenda) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'update produtos_categoria set nome = ? where id = ?';
-        let data = [categoria.nome, categoria.id];
+        let sql = 'update produtos_unidade_venda set nome = ? where id = ?';
+        let data = [unidade_venda.nome, unidade_venda.id];
  
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
@@ -39,7 +39,7 @@ export class CategoriaProvider {
   public remove(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'delete from produtos_categoria where id = ?';
+        let sql = 'delete from produtos_unidade_venda where id = ?';
         let data = [id];
  
         return db.executeSql(sql, data)
@@ -51,17 +51,20 @@ export class CategoriaProvider {
   public get(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'select * from produtos_categoria where id = ?';
+        let sql = 'select * from produtos_unidade_venda where id = ?';
         let data = [id];
+ 
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
-              let categoria = new Categoria();
-              categoria.id = item.id;
-              categoria.nome = item.nome;
-              return categoria;
+              let unidade_venda = new UnidadeVenda();
+              unidade_venda.id = item.id;
+              unidade_venda.nome = item.nome;
+ 
+              return unidade_venda;
             }
+ 
             return null;
           })
           .catch((e) => console.error(e));
@@ -72,16 +75,17 @@ export class CategoriaProvider {
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'SELECT * FROM produtos_categoria';
+        let sql = 'SELECT * FROM produtos_unidade_venda';
+
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
-              let categorias: any[] = [];
+              let unidades: any[] = [];
               for (var i = 0; i < data.rows.length; i++) {
-                var categoria = data.rows.item(i);
-                categorias.push(categoria);
+                var unidade_venda = data.rows.item(i);
+                unidades.push(unidade_venda);
               }
-              return categorias;
+              return unidades;
             } else {
               return [];
             }
@@ -94,7 +98,8 @@ export class CategoriaProvider {
 }
 
 
-export class Categoria{
+export class UnidadeVenda{
   id: number;
   nome: string;
 }
+

@@ -6,12 +6,6 @@ import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 import { ToastController } from 'ionic-angular';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 
-/**
- * Generated class for the ListaPedidoPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -62,7 +56,7 @@ export class ListaPedidoPage {
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao remover o Pedido!', duration: 3000, position: 'center' }).present();
-      });
+    });
   }
 
 

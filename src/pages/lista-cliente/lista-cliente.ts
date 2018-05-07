@@ -6,12 +6,6 @@ import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { CadastroClientePage } from '../cadastro-cliente/cadastro-cliente';
 import { ToastController } from 'ionic-angular';
 
-/**
- * Generated class for the ListaClientePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -35,7 +29,10 @@ export class ListaClientePage {
     this.clienteProvider.getAll()
       .then((results: any[]) => {
         this.clientes = results;
-      });
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar os clientes.', duration: 3000, position: 'botton' }).present();
+    });
   }
 
   addCliente(){
@@ -59,6 +56,9 @@ export class ListaClientePage {
         this.clientes.splice(index, 1);
         this.toast.create({ message: 'Cliente removido.', duration: 3000, position: 'botton' }).present();
       })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao remover cliente.', duration: 3000, position: 'botton' }).present();
+    });
   }
   
   cancelar(){

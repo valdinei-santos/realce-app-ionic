@@ -4,8 +4,9 @@ import { ToastController } from 'ionic-angular';
 
 import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { CategoriaProvider, Categoria } from '../../providers/categoria/categoria';
-import { UnidadeProvider, Unidade } from '../../providers/unidade/unidade';
-
+import { MarcaProvider, Marca } from '../../providers/marca/marca';
+import { TipoProvider, Tipo } from '../../providers/tipo/tipo';
+import { UnidadeVendaProvider, UnidadeVenda } from '../../providers/unidade-venda/unidade-venda';
 
 @IonicPage()
 @Component({
@@ -14,18 +15,23 @@ import { UnidadeProvider, Unidade } from '../../providers/unidade/unidade';
 })
 export class CadastroProdutoPage {
 
-  produto: Produto = {descricao:'', unidade_id:null, preco:null, categoria_id:null, ativo:null };
+  //produto: Produto = {descricao:'', unidade_id:null, preco:null, categoria_id:null, ativo:null };
+  produto: Produto = {categoria_id:null, marca_id:null, tipo_id:null, unidade_venda_id:null, preco:null, ativo:null, observacao:null };
   //produtoEditando: Produto;
   editando:boolean = false;	
   model: Produto;
   categorias: any[];
-  unidades: any[]
+  marcas: any[];
+  tipos: any[];
+  unidades_venda: any[]
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
               public produtoProvider:ProdutoProvider,
               public categoriaProvider:CategoriaProvider,
-  	          public unidadeProvider:UnidadeProvider,
+              public marcaProvider:MarcaProvider,
+              public tipoProvider:TipoProvider,
+  	          public unidadeVendaProvider:UnidadeVendaProvider,
 			        public toast: ToastController) {
 
     this.model = new Produto();
@@ -35,6 +41,9 @@ export class CadastroProdutoPage {
         .then((result: any) => {
           this.model = result;
         })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar um produto.', duration: 3000, position: 'botton' }).present();
+      });
     }
   }
 
@@ -45,10 +54,24 @@ export class CadastroProdutoPage {
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar as categorias.', duration: 3000, position: 'botton' }).present();
-      });
-    this.unidadeProvider.getAll()
+    });
+    this.marcaProvider.getAll()
       .then((result: any[]) => {
-        this.unidades = result;
+        this.marcas = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar as marcas.', duration: 3000, position: 'botton' }).present();
+    });  
+    this.tipoProvider.getAll()
+      .then((result: any[]) => {
+        this.tipos = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar os tipos.', duration: 3000, position: 'botton' }).present();
+    });  
+    this.unidadeVendaProvider.getAll()
+      .then((result: any[]) => {
+        this.unidades_venda = result;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar as unidades.', duration: 3000, position: 'botton' }).present();

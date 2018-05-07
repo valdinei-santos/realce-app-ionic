@@ -8,38 +8,54 @@
 <ion-content padding>
 	<ion-list>
 
-	  <ion-item>
-		<ion-label floating>Descrição</ion-label>
-		<ion-input type="text" [(ngModel)]="model.descricao"></ion-input>
-	  </ion-item>
-	  <ion-item>
-		<ion-label floating>Unidade</ion-label>
-		<ion-select name="unidade_id" [(ngModel)]="model.unidade_id">
-          <ion-option *ngFor="let unidade of unidades" value="{{ unidade.id }}">{{ unidade.nome}}</ion-option>
-        </ion-select>
-	  </ion-item>
-      <ion-item>
-		<ion-label floating>Preço</ion-label>
-		<ion-input type="text" [(ngModel)]="model.preco"></ion-input>
-	  </ion-item>
-      <ion-item>
-		<ion-label floating>Categoria</ion-label>
-		<ion-select name="categoria_id" [(ngModel)]="model.categoria_id">
+    <ion-item>
+		  <ion-label floating>Categoria</ion-label>
+		  <ion-select name="categoria_id" [(ngModel)]="model.categoria_id">
           <ion-option *ngFor="let categoria of categorias" value="{{ categoria.id }}">{{ categoria.nome}}</ion-option>
-        </ion-select>
-	  </ion-item>	
+      </ion-select>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label floating>Marca</ion-label>
+      <ion-select name="marca_id" [(ngModel)]="model.marca_id">
+          <ion-option *ngFor="let marca of marcas" value="{{ marca.id }}">{{ marca.nome}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Tipo</ion-label>
+      <ion-select name="tipo_id" [(ngModel)]="model.tipo_id">
+          <ion-option *ngFor="let tipo of tipos" value="{{ tipo.id }}">{{ tipo.nome}}</ion-option>
+      </ion-select>
+    </ion-item>  
+
+    <ion-item>
+      <ion-label floating>Unidade</ion-label>
+      <ion-select name="unidade_venda_id" [(ngModel)]="model.unidade_venda_id">
+          <ion-option *ngFor="let unidade_venda of unidades_venda" value="{{ unidade_venda.id }}">{{ unidade_venda.nome}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+		<!-- <ion-label floating>Descrição</ion-label>
+		<ion-input type="text" [(ngModel)]="model.descricao"></ion-input>
+	  </ion-item> -->
+	  
+    <ion-item>
+		  <ion-label floating>Preço</ion-label>
+		  <ion-input type="text" [(ngModel)]="model.preco"></ion-input>
+	  </ion-item>
+    	
 	  <ion-item>
         <ion-label>Ativo</ion-label>
         <ion-checkbox name="ativo" [(ngModel)]="model.ativo"></ion-checkbox>
       </ion-item>
 
-    </ion-list>
+  </ion-list>
 
-    <div padding>
-      <button *ngIf="!editando" ion-button block (click)="save()">Adicionar</button>
-      <button *ngIf="editando" ion-button block (click)="save()">Atualizar</button>
+  <div padding>
+    <button *ngIf="!editando" ion-button block (click)="save()">Adicionar</button>
+    <button *ngIf="editando" ion-button block (click)="save()">Atualizar</button>
 	  <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
-    </div>
-
+  </div>
 	
 </ion-content>

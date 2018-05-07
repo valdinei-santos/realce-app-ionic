@@ -20,7 +20,7 @@ import { ToastController } from 'ionic-angular';
 })
 export class ListaProdutoPage {
 
-  produto: Produto = {descricao:'', unidade_id:null, preco:null, ativo:null, categoria_id:null};
+  produto: Produto = {categoria_id:null, marca_id:null, tipo_id:null, unidade_venda_id:null, preco:null, ativo:null, observacao:null};
   produtos: any[];
 
   constructor(public navCtrl: NavController, 
@@ -35,7 +35,10 @@ export class ListaProdutoPage {
   	this.produtoProvider.getAll()
       .then((result: any[]) => {
         this.produtos = result;
-      });
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+    });
   }
 
 
@@ -59,7 +62,10 @@ export class ListaProdutoPage {
         var index = this.produtos.indexOf(produto);
         this.produtos.splice(index, 1);
         this.toast.create({ message: 'Produto removido.', duration: 3000, position: 'botton' }).present();
-    })
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao remover produto.', duration: 3000, position: 'botton' }).present();
+    });
   }
 
 

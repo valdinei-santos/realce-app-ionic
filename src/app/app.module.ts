@@ -28,7 +28,9 @@ import { PedidoProvider } from '../providers/pedido/pedido';
 import { FolhacargaProvider } from '../providers/folhacarga/folhacarga';
 import { DatabaseProvider } from '../providers/database/database';
 import { CategoriaProvider } from '../providers/categoria/categoria';
-import { UnidadeProvider } from '../providers/unidade/unidade';
+import { MarcaProvider } from '../providers/marca/marca';
+import { TipoProvider } from '../providers/tipo/tipo';
+import { UnidadeVendaProvider } from '../providers/unidade-venda/unidade-venda';
 
 @NgModule({
   declarations: [
@@ -68,7 +70,9 @@ import { UnidadeProvider } from '../providers/unidade/unidade';
     FolhacargaProvider,
     DatabaseProvider,
     CategoriaProvider,
-    UnidadeProvider
+    MarcaProvider,
+    TipoProvider,
+    UnidadeVendaProvider
   ]
 })
 export class AppModule {}

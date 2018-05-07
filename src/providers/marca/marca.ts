@@ -4,38 +4,30 @@ import { DatabaseProvider } from '../database/database';
 import { ProdutoProvider } from '../produto/produto';
 
 
-/*
-  Generated class for the ProdutoProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
-export class UnidadeProvider {
+export class MarcaProvider {
 
 
   constructor(private dbProvider: DatabaseProvider) {
   }
 
 
-  public insert(unidade: Unidade) {
+  public insert(marca: Marca) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'insert into produtos_unidade (nome) values (?)';
-        let data = [unidade.nome];
- 
+        let sql = 'insert into produtos_marca (nome) values (?)';
+        let data = [marca.nome];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
       .catch((e) => console.error(e));
   }
  
-  public update(unidade: Unidade) {
+  public update(marca: Marca) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'update produtos_unidade set nome = ? where id = ?';
-        let data = [unidade.nome, unidade.id];
- 
+        let sql = 'update produtos_marca set nome = ? where id = ?';
+        let data = [marca.nome, marca.id];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -45,9 +37,8 @@ export class UnidadeProvider {
   public remove(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'delete from produtos_unidade where id = ?';
+        let sql = 'delete from produtos_marca where id = ?';
         let data = [id];
- 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -57,20 +48,17 @@ export class UnidadeProvider {
   public get(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'select * from produtos_unidade where id = ?';
+        let sql = 'select * from produtos_marca where id = ?';
         let data = [id];
- 
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
-              let unidade = new Unidade();
-              unidade.id = item.id;
-              unidade.nome = item.nome;
- 
-              return unidade;
+              let marca = new Marca();
+              marca.id = item.id;
+              marca.nome = item.nome;
+              return marca;
             }
- 
             return null;
           })
           .catch((e) => console.error(e));
@@ -81,17 +69,16 @@ export class UnidadeProvider {
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'SELECT * FROM produtos_unidade';
-
+        let sql = 'SELECT * FROM produtos_marca';
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
-              let unidades: any[] = [];
+              let marcas: any[] = [];
               for (var i = 0; i < data.rows.length; i++) {
-                var unidade = data.rows.item(i);
-                unidades.push(unidade);
+                var marca = data.rows.item(i);
+                marcas.push(marca);
               }
-              return unidades;
+              return marcas;
             } else {
               return [];
             }
@@ -104,7 +91,7 @@ export class UnidadeProvider {
 }
 
 
-export class Unidade{
+export class Marca{
   id: number;
   nome: string;
 }

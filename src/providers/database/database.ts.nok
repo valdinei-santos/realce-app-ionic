@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 const DATABASES_TABLES = [
-  `DROP TABLE produtos`,
   `DROP TABLE produtos_categoria`,
   `DROP TABLE produtos_unidade`,
+  `DROP TABLE produtos`,
   `DROP TABLE pedidos`,
   `DROP TABLE pedidos_itens`,
+
   `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                                               nome VARCHAR(50)
@@ -25,18 +26,8 @@ const DATABASES_TABLES = [
                                         FOREIGN KEY(marca_id) REFERENCES produtos_marca(id),
                                         FOREIGN KEY(tipo_id) REFERENCES produtos_tipo(id),
                                         FOREIGN KEY(unidade_venda_id) REFERENCES produtos_unidade_venda(id)
-                                       )`,
-  /* `CREATE TABLE IF NOT EXISTS produtos_unidade (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(10))`,
-  `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50))`,
-  `CREATE TABLE IF NOT EXISTS produtos (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                         descricao VARCHAR(50),
-                                         unidade_id INTEGER,
-                                         preco NUMERIC(10,2),
-                                         ativo INTEGER,
-                                         categoria_id INTEGER,
-                                         FOREIGN KEY(unidade_id) REFERENCES produtos_unidade(id),
-                                         FOREIGN KEY(categoria_id) REFERENCES produtos_categoria(id)
-                                        )`, */
+                                        
+                                        )`,
   `CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                          nome VARCHAR(50),
                                          codigo INTEGER,
@@ -74,61 +65,45 @@ const DATABASES_TABLES = [
                                                   )`
 ];
 
-/* const UNIDADES = [
-    ['insert into produtos_unidade (nome) values (?)', ['CX']],
-    ['insert into produtos_unidade (nome) values (?)', ['DZ']],
-    ['insert into produtos_unidade (nome) values (?)', ['PC']],
-    ['insert into produtos_unidade (nome) values (?)', ['UN']]
-]; */
-
 const UNIDADES = [
-  ['insert into produtos_categoria (nome) values (?)', ['Cerveja']],
-  ['insert into produtos_categoria (nome) values (?)', ['Refri']],
-  ['insert into produtos_categoria (nome) values (?)', ['Vinho']],
-  ['insert into produtos_categoria (nome) values (?)', ['Whisky']],
-  ['insert into produtos_categoria (nome) values (?)', ['Vodka']],
-  ['insert into produtos_categoria (nome) values (?)', ['Água']],
-  ['insert into produtos_marca (nome) values (?)', ['Brahma']],
-  ['insert into produtos_marca (nome) values (?)', ['Skol']],
-  ['insert into produtos_marca (nome) values (?)', ['Antártica']],
-  ['insert into produtos_marca (nome) values (?)', ['Schin']],
-  ['insert into produtos_marca (nome) values (?)', ['Original']],
-  ['insert into produtos_marca (nome) values (?)', ['Coca']],
-  ['insert into produtos_marca (nome) values (?)', ['Água da Serra']],
-  ['insert into produtos_marca (nome) values (?)', ['Max Willian']],
-  ['insert into produtos_marca (nome) values (?)', ['Pureza']],
-  ['insert into produtos_marca (nome) values (?)', ['Imperatriz']],
-  ['insert into produtos_marca (nome) values (?)', ['Santa Rita']],
-  ['insert into produtos_tipo (nome) values (?)', ['Coca-cola lata 355ml']],
-  ['insert into produtos_tipo (nome) values (?)', ['Coca-cola Zero lata 355ml']],
-  ['insert into produtos_tipo (nome) values (?)', ['Coca-cola garrafa 1LT']],
-  ['insert into produtos_tipo (nome) values (?)', ['Coca-cola garrafa 1,5LT']],
-  ['insert into produtos_tipo (nome) values (?)', ['Coca-cola garrafa 2LT']],
-  ['insert into produtos_tipo (nome) values (?)', ['Coca-cola Zero garrafa 2LT']],
-  ['insert into produtos_tipo (nome) values (?)', ['Guaraná lata 355ml' ]],
-  ['insert into produtos_tipo (nome) values (?)', ['Guaraná garrafa 2LT' ]],
-  ['insert into produtos_tipo (nome) values (?)', ['Sprite lata 355ml']],
-  ['insert into produtos_tipo (nome) values (?)', ['Sprite garrafa 2LT']],
-  ['insert into produtos_tipo (nome) values (?)', ['Fanta lata 355ml']],
-  ['insert into produtos_tipo (nome) values (?)', ['Fanta garrafa 2LT']],
-  ['insert into produtos_tipo (nome) values (?)', ['Garrafa 600ml']],
-  ['insert into produtos_tipo (nome) values (?)', ['Lata 355ml']],
-  ['insert into produtos_tipo (nome) values (?)', ['Longneck']],
-  ['insert into produtos_tipo (nome) values (?)', ['Profissa']],
-  ['insert into produtos_tipo (nome) values (?)', ['Longneck2']],
-  ['insert into produtos_tipo (nome) values (?)', ['Profissa2']]    
+    ['insert into produtos_categoria (nome) values (?)', ['Cerveja']],
+    ['insert into produtos_categoria (nome) values (?)', ['Refri']],
+    ['insert into produtos_categoria (nome) values (?)', ['Vinho']],
+    ['insert into produtos_categoria (nome) values (?)', ['Whisky']],
+    ['insert into produtos_categoria (nome) values (?)', ['Vodka']],
+    ['insert into produtos_categoria (nome) values (?)', ['Água']],
+    ['insert into produtos_marca (nome) values (?)', ['Brahma']],
+    ['insert into produtos_marca (nome) values (?)', ['Skol']],
+    ['insert into produtos_marca (nome) values (?)', ['Antártica']],
+    ['insert into produtos_marca (nome) values (?)', ['Schin']],
+    ['insert into produtos_marca (nome) values (?)', ['Original']],
+    ['insert into produtos_marca (nome) values (?)', ['Coca']],
+    ['insert into produtos_marca (nome) values (?)', ['Água da Serra']],
+    ['insert into produtos_marca (nome) values (?)', ['Max Willian']],
+    ['insert into produtos_marca (nome) values (?)', ['Pureza']],
+    ['insert into produtos_marca (nome) values (?)', ['Imperatriz']],
+    ['insert into produtos_marca (nome) values (?)', ['Santa Rita']],
+    ['insert into produtos_tipo (nome) values (?)', ['Coca-cola lata 355ml']],
+    ['insert into produtos_tipo (nome) values (?)', ['Coca-cola Zero lata 355ml']],
+    ['insert into produtos_tipo (nome) values (?)', ['Coca-cola garrafa 1LT']],
+    ['insert into produtos_tipo (nome) values (?)', ['Coca-cola garrafa 1,5LT']],
+    ['insert into produtos_tipo (nome) values (?)', ['Coca-cola garrafa 2LT']],
+    ['insert into produtos_tipo (nome) values (?)', ['Coca-cola Zero garrafa 2LT']],
+    ['insert into produtos_tipo (nome) values (?)', ['Guaraná lata 355ml' ]],
+    ['insert into produtos_tipo (nome) values (?)', ['Guaraná garrafa 2LT' ]],
+    ['insert into produtos_tipo (nome) values (?)', ['Sprite lata 355ml']],
+    ['insert into produtos_tipo (nome) values (?)', ['Sprite garrafa 2LT']],
+    ['insert into produtos_tipo (nome) values (?)', ['Fanta lata 355ml']],
+    ['insert into produtos_tipo (nome) values (?)', ['Fanta garrafa 2LT']],
+    ['insert into produtos_tipo (nome) values (?)', ['Garrafa 600ml']],
+    ['insert into produtos_tipo (nome) values (?)', ['Lata 355ml']],
+    ['insert into produtos_tipo (nome) values (?)', ['Longneck']],
+    ['insert into produtos_tipo (nome) values (?)', ['Profissa']]    
 ];
 
-/* const PRODUTOS = [
-    ['insert into produtos_categoria (nome) values (?)', ['Cerveja garrafa 600ml']],
-    ['insert into produtos_categoria (nome) values (?)', ['Cerveja Lata 355ml']],
-    ['insert into produtos_categoria (nome) values (?)', ['Cerveja Longneck 350ml']]
-]; */
 const PRODUTOS = [
-  ['insert into produtos_unidade_venda (nome) values (?)', ['CX']],
-  ['insert into produtos_unidade_venda (nome) values (?)', ['DZ']],
-  ['insert into produtos_unidade_venda (nome) values (?)', ['PC']],
-  ['insert into produtos_unidade_venda (nome) values (?)', ['UN']]
+    ['insert into produtos_tipo (nome) values (?)', ['Longneck2']],
+    ['insert into produtos_tipo (nome) values (?)', ['Profissa2']]    
 ];
 
 @Injectable()

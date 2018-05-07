@@ -6,13 +6,6 @@ import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { ToastController } from 'ionic-angular';
 
 
-/**
- * Generated class for the CadastroClientePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-cadastro-cliente',
@@ -39,6 +32,9 @@ export class CadastroClientePage {
         .then((result: any) => {
           this.model = result;
         })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar um cliente.', duration: 3000, position: 'botton' }).present();
+      });
     }  
   }
 

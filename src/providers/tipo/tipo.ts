@@ -5,31 +5,29 @@ import { ProdutoProvider } from '../produto/produto';
 
 
 @Injectable()
-export class CategoriaProvider {
+export class TipoProvider {
 
 
   constructor(private dbProvider: DatabaseProvider) {
   }
 
 
-  public insert(categoria: Categoria) {
+  public insert(tipo: Tipo) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'insert into produtos_categoria (nome) values (?)';
-        let data = [categoria.nome];
- 
+        let sql = 'insert into produtos_tipo (nome) values (?)';
+        let data = [tipo.nome];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
       .catch((e) => console.error(e));
   }
  
-  public update(categoria: Categoria) {
+  public update(tipo: Tipo) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'update produtos_categoria set nome = ? where id = ?';
-        let data = [categoria.nome, categoria.id];
- 
+        let sql = 'update produtos_tipo set nome = ? where id = ?';
+        let data = [tipo.nome, tipo.id];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -39,9 +37,8 @@ export class CategoriaProvider {
   public remove(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'delete from produtos_categoria where id = ?';
+        let sql = 'delete from produtos_tipo where id = ?';
         let data = [id];
- 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -51,16 +48,16 @@ export class CategoriaProvider {
   public get(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'select * from produtos_categoria where id = ?';
+        let sql = 'select * from produtos_tipo where id = ?';
         let data = [id];
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
-              let categoria = new Categoria();
-              categoria.id = item.id;
-              categoria.nome = item.nome;
-              return categoria;
+              let tipo = new Tipo();
+              tipo.id = item.id;
+              tipo.nome = item.nome;
+              return tipo;
             }
             return null;
           })
@@ -72,16 +69,16 @@ export class CategoriaProvider {
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'SELECT * FROM produtos_categoria';
+        let sql = 'SELECT * FROM produtos_tipo';
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
-              let categorias: any[] = [];
+              let tipos: any[] = [];
               for (var i = 0; i < data.rows.length; i++) {
-                var categoria = data.rows.item(i);
-                categorias.push(categoria);
+                var tipo = data.rows.item(i);
+                tipos.push(tipo);
               }
-              return categorias;
+              return tipos;
             } else {
               return [];
             }
@@ -94,7 +91,8 @@ export class CategoriaProvider {
 }
 
 
-export class Categoria{
+export class Tipo{
   id: number;
   nome: string;
 }
+
