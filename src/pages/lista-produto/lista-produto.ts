@@ -35,6 +35,7 @@ export class ListaProdutoPage {
   	this.produtoProvider.getAll()
       .then((result: any[]) => {
         this.produtos = result;
+        console.log(this.produtos);
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();

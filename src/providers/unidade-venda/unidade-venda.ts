@@ -17,7 +17,6 @@ export class UnidadeVendaProvider {
       .then((db: SQLiteObject) => {
         let sql = 'insert into produtos_unidade_venda (nome) values (?)';
         let data = [unidade_venda.nome];
- 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -29,7 +28,6 @@ export class UnidadeVendaProvider {
       .then((db: SQLiteObject) => {
         let sql = 'update produtos_unidade_venda set nome = ? where id = ?';
         let data = [unidade_venda.nome, unidade_venda.id];
- 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -41,7 +39,6 @@ export class UnidadeVendaProvider {
       .then((db: SQLiteObject) => {
         let sql = 'delete from produtos_unidade_venda where id = ?';
         let data = [id];
- 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -53,7 +50,6 @@ export class UnidadeVendaProvider {
       .then((db: SQLiteObject) => {
         let sql = 'select * from produtos_unidade_venda where id = ?';
         let data = [id];
- 
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -61,10 +57,8 @@ export class UnidadeVendaProvider {
               let unidade_venda = new UnidadeVenda();
               unidade_venda.id = item.id;
               unidade_venda.nome = item.nome;
- 
               return unidade_venda;
             }
- 
             return null;
           })
           .catch((e) => console.error(e));
@@ -76,7 +70,6 @@ export class UnidadeVendaProvider {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         let sql = 'SELECT * FROM produtos_unidade_venda';
-
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {

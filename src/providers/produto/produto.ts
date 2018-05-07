@@ -20,7 +20,7 @@ export class ProdutoProvider {
   public insert(produto: Produto) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'insert into produtos (categoria_id, marca_id, tipo_id, unidade_id, preco, ativo, observacao) values (?, ?, ?, ?, ?, ?, ?)';
+        let sql = 'insert into produtos (categoria_id, marca_id, tipo_id, unidade_venda_id, preco, ativo, observacao) values (?, ?, ?, ?, ?, ?, ?)';
         let data = [produto.categoria_id, produto.marca_id, produto.tipo_id, produto.unidade_venda_id, produto.preco, produto.ativo, produto.observacao];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
@@ -31,7 +31,7 @@ export class ProdutoProvider {
   public update(produto: Produto) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'update produtos set descricao = ?, unidade_id = ?, preco = ?, categoria_id = ? where id = ?';
+        let sql = 'update produtos set descricao = ?, unidade_venda_id = ?, preco = ?, categoria_id = ? where id = ?';
         let data = [produto.categoria_id, produto.marca_id, produto.tipo_id, produto.unidade_venda_id, produto.preco, produto.ativo, produto.observacao];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
@@ -80,7 +80,7 @@ export class ProdutoProvider {
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, u.nome as unidade_nome' +
+        let sql = 'SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, u.nome as unidade_venda_nome' +
                     'FROM produtos p ' +
                     'JOIN produtos_categoria c ' +
                     '  on p.categoria_id = c.id ' +
@@ -89,7 +89,7 @@ export class ProdutoProvider {
                     'JOIN produtos_tipo t ' +
                     '  on p.tipo_id = t.id ' +
                     'JOIN produtos_unidade_venda u ' +
-                    '  on u.id = p.unidade_venda_id';
+                    '  on p.unidade_venda_id = u.id ';
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -119,7 +119,7 @@ export class Produto{
   unidade_venda_id: number;
   preco: number;
   ativo: number;
-  observacao: string;
+  observacao?: string;
 }
 
 export class Produto2{
@@ -134,7 +134,7 @@ export class Produto2{
   unidade_venda_nome: string;
   preco: number;
   ativo: number;
-  observacao: string;
+  observacao?: string;
 }
 
 

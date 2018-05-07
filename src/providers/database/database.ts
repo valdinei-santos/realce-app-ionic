@@ -4,13 +4,13 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 const DATABASES_TABLES = [
   `DROP TABLE produtos`,
   `DROP TABLE produtos_categoria`,
-  `DROP TABLE produtos_unidade`,
+  `DROP TABLE produtos_marca`,
+  `DROP TABLE produtos_tipo`,
+  `DROP TABLE produtos_unidade_venda`,
   `DROP TABLE pedidos`,
   `DROP TABLE pedidos_itens`,
   `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
-  `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                                              nome VARCHAR(50)
-                                             )`,
+  `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_tipo (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_unidade_venda (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(10) )`,
   `CREATE TABLE IF NOT EXISTS produtos (id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -15,7 +15,7 @@ import { UnidadeVendaProvider, UnidadeVenda } from '../../providers/unidade-vend
 })
 export class CadastroProdutoPage {
 
-  //produto: Produto = {descricao:'', unidade_id:null, preco:null, categoria_id:null, ativo:null };
+  //produto: Produto = {descricao:'', unidade_venda_id:null, preco:null, categoria_id:null, ativo:null };
   produto: Produto = {categoria_id:null, marca_id:null, tipo_id:null, unidade_venda_id:null, preco:null, ativo:null, observacao:null };
   //produtoEditando: Produto;
   editando:boolean = false;	
@@ -95,6 +95,7 @@ export class CadastroProdutoPage {
       return this.produtoProvider.update(this.model);
     } else {
       //this.editando = true;
+      console.log(this.model);
       return this.produtoProvider.insert(this.model);
     }
   }
