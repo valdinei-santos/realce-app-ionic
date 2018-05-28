@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+//import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
+//import { Storage } from '@ionic/storage';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { DatePipe } from '@angular/common';
+//import { DatePipe } from '@angular/common';
 
 //import { IProduto } from '../../interfaces/IProduto';
 //import { Produto } from '../../models/Produto';
@@ -20,10 +20,11 @@ export class ProdutoProvider {
   lista:any[];
   chave:string = "produto";
 
-  constructor(public http: HttpClient, 
-              private sqlite: SQLite, 
-              private storage: Storage,
-              private datepipe: DatePipe) {
+  constructor(//public http: HttpClient, 
+              private sqlite: SQLite
+              //private storage: Storage,
+              //private datepipe: DatePipe
+            ) {
     console.log('Hello ProdutoProvider Provider');
     //this.carregaLista();
 

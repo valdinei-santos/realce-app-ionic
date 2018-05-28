@@ -6,34 +6,49 @@
 </ion-header>
 
 <ion-content padding>
+    <!-- <ion-list-header>
+        Titulo
+    </ion-list-header> -->
 	<ion-list>
 
-    <ion-item>
+    <ion-item>     
 		  <ion-label floating>Categoria</ion-label>
-		  <ion-select name="categoria_id" [(ngModel)]="model.categoria_id">
+		  <ion-select interface="popover" name="categoria_id" [(ngModel)]="model.categoria_id"> 
           <ion-option *ngFor="let categoria of categorias" value="{{ categoria.id }}">{{ categoria.nome}}</ion-option>
       </ion-select>
+      <button ion-button item-end >
+          <ion-icon name="add" (click)="addCategoria()"></ion-icon>
+      </button>
     </ion-item>
-    
+
     <ion-item>
       <ion-label floating>Marca</ion-label>
-      <ion-select name="marca_id" [(ngModel)]="model.marca_id">
+      <ion-select interface="popover" name="marca_id" [(ngModel)]="model.marca_id">
           <ion-option *ngFor="let marca of marcas" value="{{ marca.id }}">{{ marca.nome}}</ion-option>
       </ion-select>
+      <button ion-button item-end >
+          <ion-icon name="add" (click)="addMarca()"></ion-icon>
+      </button>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Tipo</ion-label>
-      <ion-select name="tipo_id" [(ngModel)]="model.tipo_id">
+      <ion-select interface="popover" name="tipo_id" [(ngModel)]="model.tipo_id">
           <ion-option *ngFor="let tipo of tipos" value="{{ tipo.id }}">{{ tipo.nome}}</ion-option>
       </ion-select>
+      <button ion-button item-end >
+          <ion-icon name="add" (click)="addTipo()"></ion-icon>
+      </button>
     </ion-item>  
 
     <ion-item>
       <ion-label floating>Unidade</ion-label>
-      <ion-select name="unidade_venda_id" [(ngModel)]="model.unidade_venda_id">
+      <ion-select interface="popover" name="unidade_venda_id" [(ngModel)]="model.unidade_venda_id">
           <ion-option *ngFor="let unidade_venda of unidades_venda" value="{{ unidade_venda.id }}">{{ unidade_venda.nome}}</ion-option>
       </ion-select>
+      <button ion-button item-end >
+          <ion-icon name="add" (click)="addUnidade()"></ion-icon>
+      </button>
     </ion-item>
 
 		<!-- <ion-label floating>Descrição</ion-label>
@@ -46,9 +61,14 @@
 	  </ion-item>
     	
 	  <ion-item>
-        <ion-label>Ativo</ion-label>
-        <ion-checkbox name="ativo" [(ngModel)]="model.ativo"></ion-checkbox>
-      </ion-item>
+      <ion-label>Ativo</ion-label>
+      <ion-checkbox name="ativo" [(ngModel)]="model.ativo"></ion-checkbox>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Observação</ion-label>
+      <ion-input type="text" [(ngModel)]="model.observacao"></ion-input>
+    </ion-item>  
 
   </ion-list>
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
 
 
@@ -78,7 +78,7 @@ export class ClienteProvider {
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'SELECT * FROM clientes';
+        let sql = 'SELECT * FROM clientes order by nome';
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {

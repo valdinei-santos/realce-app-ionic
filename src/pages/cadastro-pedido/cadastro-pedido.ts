@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs';
 //import { forkJoin } from 'rxjs/add/observable/forkJoin';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+//import { forkJoin } from 'rxjs/observable/forkJoin';
 
 
 
 import { PedidoProvider, Pedido, Item_pedido } from '../../providers/pedido/pedido';
-import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
+import { ClienteProvider } from '../../providers/cliente/cliente';
 import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { ToastController } from 'ionic-angular';
 

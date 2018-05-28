@@ -1,0 +1,31 @@
+
+# Para Acessar o BD Sqlite no emulador do android
+
+1 - Acessar o shell
+adb shell
+
+2 - Entrar na pasta onde esta o arquivo de database do Sqlite.
+su
+cd data/data/br.com.valdinei.realceapp/databases/
+ls -ltr
+
+3 - Acessar o console do Sqlite
+sqlite3 realce.db
+
+4 - Para ver as tabelas existentes
+.tables
+
+5 - Para consultar as tabelas é só fazer SELECT
+
+
+
+SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, u.nome as unidade_venda_nome
+                    FROM produtos p 
+                    JOIN produtos_categoria c 
+                      on p.categoria_id = c.id 
+                    JOIN produtos_marca m 
+                      on p.marca_id = m.id 
+                    JOIN produtos_tipo t 
+                      on p.tipo_id = t.id 
+                    JOIN produtos_unidade_venda u
+                     on p.unidade_venda_id = u.id;

@@ -16,7 +16,6 @@ import { ListaPedidoPageModule } from '../pages/lista-pedido/lista-pedido.module
 import { CadastroFolhacargaPageModule } from '../pages/cadastro-folhacarga/cadastro-folhacarga.module';
 import { ListaFolhacargaPageModule } from '../pages/lista-folhacarga/lista-folhacarga.module';
 
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClientModule } from '@angular/common/http';
@@ -31,6 +30,14 @@ import { CategoriaProvider } from '../providers/categoria/categoria';
 import { MarcaProvider } from '../providers/marca/marca';
 import { TipoProvider } from '../providers/tipo/tipo';
 import { UnidadeVendaProvider } from '../providers/unidade-venda/unidade-venda';
+import { CadastroCategoriaPageModule } from '../pages/cadastro-categoria/cadastro-categoria.module';
+import { ListaCategoriaPageModule } from '../pages/lista-categoria/lista-categoria.module';
+import { CadastroMarcaPageModule } from '../pages/cadastro-marca/cadastro-marca.module';
+import { ListaMarcaPageModule } from '../pages/lista-marca/lista-marca.module';
+import { CadastroTipoPageModule } from '../pages/cadastro-tipo/cadastro-tipo.module';
+import { ListaTipoPageModule } from '../pages/lista-tipo/lista-tipo.module';
+import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/cadastro-unidade-venda.module';
+import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-unidade-venda.module';
 
 @NgModule({
   declarations: [
@@ -51,6 +58,14 @@ import { UnidadeVendaProvider } from '../providers/unidade-venda/unidade-venda';
     ListaPedidoPageModule,
     CadastroFolhacargaPageModule,
     ListaFolhacargaPageModule,
+    CadastroCategoriaPageModule,
+    ListaCategoriaPageModule,
+    CadastroMarcaPageModule,
+    ListaMarcaPageModule,
+    CadastroTipoPageModule,
+    ListaTipoPageModule,
+    CadastroUnidadeVendaPageModule,
+    ListaUnidadeVendaPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

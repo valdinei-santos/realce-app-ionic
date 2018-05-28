@@ -3,10 +3,14 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 
 import { ProdutoProvider, Produto } from '../../providers/produto/produto';
-import { CategoriaProvider, Categoria } from '../../providers/categoria/categoria';
-import { MarcaProvider, Marca } from '../../providers/marca/marca';
-import { TipoProvider, Tipo } from '../../providers/tipo/tipo';
-import { UnidadeVendaProvider, UnidadeVenda } from '../../providers/unidade-venda/unidade-venda';
+import { CategoriaProvider } from '../../providers/categoria/categoria';
+import { MarcaProvider } from '../../providers/marca/marca';
+import { TipoProvider } from '../../providers/tipo/tipo';
+import { UnidadeVendaProvider } from '../../providers/unidade-venda/unidade-venda';
+import { CadastroCategoriaPage } from '../cadastro-categoria/cadastro-categoria';
+import { CadastroMarcaPage } from '../cadastro-marca/cadastro-marca';
+import { CadastroTipoPage } from '../cadastro-tipo/cadastro-tipo';
+import { CadastroUnidadeVendaPage } from '../cadastro-unidade-venda/cadastro-unidade-venda';
 
 @IonicPage()
 @Component({
@@ -47,7 +51,15 @@ export class CadastroProdutoPage {
     }
   }
 
-  ionViewDidLoad() {
+  //ionViewDidLoad() {
+  ionViewDidEnter() {  
+    this.loadCategoria();
+    this.loadMarca();
+    this.loadTipo();
+    this.loadUnidadeVenda();
+  }
+
+  public loadCategoria(){
     this.categoriaProvider.getAll()
       .then((result: any[]) => {
         this.categorias = result;
@@ -55,30 +67,37 @@ export class CadastroProdutoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar as categorias.', duration: 3000, position: 'botton' }).present();
     });
+  }
+
+  private loadMarca(){
     this.marcaProvider.getAll()
       .then((result: any[]) => {
         this.marcas = result;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar as marcas.', duration: 3000, position: 'botton' }).present();
-    });  
+    });
+  }
+
+  private loadTipo(){
     this.tipoProvider.getAll()
       .then((result: any[]) => {
         this.tipos = result;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar os tipos.', duration: 3000, position: 'botton' }).present();
-    });  
+    });
+  }
+
+  private loadUnidadeVenda(){
     this.unidadeVendaProvider.getAll()
       .then((result: any[]) => {
         this.unidades_venda = result;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar as unidades.', duration: 3000, position: 'botton' }).present();
-      });
+    });
   }
-
-
 
   save() {
     if (this.saveProduto()) {
@@ -100,6 +119,23 @@ export class CadastroProdutoPage {
     }
   }
 
+  private addCategoria() {
+    console.log("antes push CadastroCategoria");
+    this.navCtrl.push(CadastroCategoriaPage);
+    console.log("depois push CadastroCategoria");
+  }
+
+  private addMarca() {
+    this.navCtrl.push(CadastroMarcaPage);
+  }
+
+  private addTipo() {
+    this.navCtrl.push(CadastroTipoPage);
+  }
+
+  private addUnidade() {
+    this.navCtrl.push(CadastroUnidadeVendaPage);
+  }
 
   cancelar(){
     //this.navCtrl.setRoot(HomePage);

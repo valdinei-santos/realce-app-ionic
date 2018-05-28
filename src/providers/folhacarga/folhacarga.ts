@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
+//import { Storage } from '@ionic/storage';
 import { Pedido } from '../pedido/pedido';
 
 /*
@@ -12,7 +12,7 @@ import { Pedido } from '../pedido/pedido';
 @Injectable()
 export class FolhacargaProvider {
 
-  constructor(public http: HttpClient, private storage: Storage) {
+  constructor(public http: HttpClient) {
     console.log('Hello FolhacargaProvider Provider');
   }
 

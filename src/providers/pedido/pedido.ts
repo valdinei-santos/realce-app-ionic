@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
-import { DatePipe } from '@angular/common';
+//import { DatePipe } from '@angular/common';
 
-import { Cliente } from '../cliente/cliente';
+//import { Cliente } from '../cliente/cliente';
 
 
 @Injectable()
 export class PedidoProvider {
 
-  constructor(private dbProvider: DatabaseProvider,
-              private datepipe: DatePipe) {
+  constructor(private dbProvider: DatabaseProvider
+              //private datepipe: DatePipe
+            ) {
     console.log('Hello PedidoProvider Provider');
   }
 
@@ -123,7 +124,7 @@ public insert(pedido: Pedido) {
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'SELECT * FROM pedidos ';
+        let sql = 'SELECT * FROM pedidos order by data desc';
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
