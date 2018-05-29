@@ -42,6 +42,16 @@
     </ion-item>  
 
     <ion-item>
+        <ion-label floating>Vasilhame</ion-label>
+        <ion-select interface="popover" name="vasilhame_id" [(ngModel)]="model.vasilhame_id">
+            <ion-option *ngFor="let vasilhame of vasilhames" value="{{ vasilhame.id }}">{{ vasilhame.nome}}</ion-option>
+        </ion-select>
+        <button ion-button item-end >
+            <ion-icon name="add" (click)="addVasilhame()"></ion-icon>
+        </button>
+      </ion-item>
+
+    <ion-item>
       <ion-label floating>Unidade</ion-label>
       <ion-select interface="popover" name="unidade_venda_id" [(ngModel)]="model.unidade_venda_id">
           <ion-option *ngFor="let unidade_venda of unidades_venda" value="{{ unidade_venda.id }}">{{ unidade_venda.nome}}</ion-option>

@@ -80,15 +80,18 @@ export class ProdutoProvider {
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-         let sql = `SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, u.nome as unidade_venda_nome
+         let sql = `SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, 
+                                v.nome as vasilhame_nome, u.nome as unidade_venda_nome
                     FROM produtos p
                     JOIN produtos_categoria c
                       on p.categoria_id = c.id
-                    JOIN produtos_marca m
+                    LEFT JOIN produtos_marca m
                       on p.marca_id = m.id
-                    JOIN produtos_tipo t
+                    LEFT JOIN produtos_tipo t
                       on p.tipo_id = t.id
-                    JOIN produtos_unidade_venda u 
+                    LEFT JOIN produtos_vasilhame v
+                      on p.vasilhame_id = v.id
+                    LEFT JOIN produtos_unidade_venda u 
                       on p.unidade_venda_id = u.id 
                     ORDER BY c.nome`;  
         //let sql = 'select * from produtos';

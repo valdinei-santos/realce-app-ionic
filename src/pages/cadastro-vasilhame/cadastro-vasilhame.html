@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title *ngIf="!editando">Cadastro Vasilhame</ion-title>
+    <ion-title *ngIf="editando">Alteração Vasilhame</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-list>
+    <ion-item>
+		  <ion-label floating>Nome</ion-label>
+		  <ion-input type="text" [(ngModel)]="model.nome"></ion-input>
+	  </ion-item>
+  </ion-list>
+
+  <div padding>
+    <button *ngIf="!editando" ion-button block (click)="save()">Adicionar</button>
+    <button *ngIf="editando" ion-button block (click)="save()">Atualizar</button>
+	  <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
+  </div>
+	
+</ion-content>

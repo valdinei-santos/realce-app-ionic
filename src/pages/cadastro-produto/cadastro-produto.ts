@@ -10,6 +10,7 @@ import { UnidadeVendaProvider } from '../../providers/unidade-venda/unidade-vend
 import { CadastroCategoriaPage } from '../cadastro-categoria/cadastro-categoria';
 import { CadastroMarcaPage } from '../cadastro-marca/cadastro-marca';
 import { CadastroTipoPage } from '../cadastro-tipo/cadastro-tipo';
+import { CadastroVasilhamePage } from '../cadastro-vasilhame/cadastro-vasilhame';
 import { CadastroUnidadeVendaPage } from '../cadastro-unidade-venda/cadastro-unidade-venda';
 
 @IonicPage()
@@ -120,9 +121,7 @@ export class CadastroProdutoPage {
   }
 
   private addCategoria() {
-    console.log("antes push CadastroCategoria");
     this.navCtrl.push(CadastroCategoriaPage);
-    console.log("depois push CadastroCategoria");
   }
 
   private addMarca() {
@@ -131,6 +130,10 @@ export class CadastroProdutoPage {
 
   private addTipo() {
     this.navCtrl.push(CadastroTipoPage);
+  }
+
+  private addVasilhame() {
+    this.navCtrl.push(CadastroVasilhamePage);
   }
 
   private addUnidade() {

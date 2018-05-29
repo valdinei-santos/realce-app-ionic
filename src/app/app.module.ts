@@ -38,6 +38,8 @@ import { CadastroTipoPageModule } from '../pages/cadastro-tipo/cadastro-tipo.mod
 import { ListaTipoPageModule } from '../pages/lista-tipo/lista-tipo.module';
 import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/cadastro-unidade-venda.module';
 import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-unidade-venda.module';
+import { VasilhameProvider } from '../providers/vasilhame/vasilhame';
+import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastro-vasilhame.module';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,7 @@ import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-
     ListaMarcaPageModule,
     CadastroTipoPageModule,
     ListaTipoPageModule,
+    CadastroVasilhamePageModule,
     CadastroUnidadeVendaPageModule,
     ListaUnidadeVendaPageModule,
   ],
@@ -87,7 +90,8 @@ import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-
     CategoriaProvider,
     MarcaProvider,
     TipoProvider,
-    UnidadeVendaProvider
+    UnidadeVendaProvider,
+    VasilhameProvider
   ]
 })
 export class AppModule {}
