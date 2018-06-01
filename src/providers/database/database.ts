@@ -52,11 +52,12 @@ const DATABASES_TABLES = [
                                          cnpj VARCHAR(20),
                                          inscricao_est VARCHAR(20)
                                         )`,
-  `CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        cliente_id INTEGER,
-                                        data TEXT,
-                                        status VARCHAR(30)
-                                        )`,
+  //`CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT,
+  `CREATE TABLE IF NOT EXISTS pedidos (id NOT NULL,
+                                       cliente_id INTEGER,
+                                       data TEXT,
+                                       status VARCHAR(30)
+                                      )`,
   `CREATE TABLE IF NOT EXISTS pedidos_itens (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                               pedido_id INTEGER,
                                               produto_id INTEGER,

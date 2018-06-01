@@ -32,7 +32,12 @@ SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome,
                     JOIN produtos_unidade_venda u
                      on p.unidade_venda_id = u.id;
 
-SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, v.nome as vasilhame_nome, u.nome as unidade_venda_nome
+SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, v.nome as vasilhame_nome, u.nome as unidade_venda_nome,
+            case when c.nome is null then '' else c.nome||' ' end ||
+            case when m.nome is null then '' else m.nome||' ' end ||
+            case when t.nome is null then '' else t.nome||' ' end ||
+            case when v.nome is null then '' else v.nome||' ' end ||
+            case when u.nome is null then '' else u.nome end  as nome_produto
                     FROM produtos p 
                     JOIN produtos_categoria c 
                       on p.categoria_id = c.id 
@@ -44,3 +49,45 @@ SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome,
                       on p.vasilhame_id = v.id
                     LEFT JOIN produtos_unidade_venda u
                      on p.unidade_venda_id = u.id;                     
+
+SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome,
+       (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
+  FROM pedidos p 
+  JOIN clientes c 
+    ON p.cliente_id = c.id;
+
+SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unitario), printf("%.2f",i.valor_total), 
+  case when c.nome is null then '' else c.nome||' ' end ||
+            case when m.nome is null then '' else m.nome||' ' end ||
+            case when t.nome is null then '' else t.nome||' ' end ||
+            case when v.nome is null then '' else v.nome||' ' end ||
+            case when u.nome is null then '' else u.nome end  as nome_produto
+  FROM pedidos_itens i 
+  JOIN produtos p
+    ON i.produto_id = p.id
+  JOIN produtos_categoria c 
+    on p.categoria_id = c.id 
+  LEFT JOIN produtos_marca m 
+    on p.marca_id = m.id 
+  LEFT JOIN produtos_tipo t 
+    on p.tipo_id = t.id 
+  LEFT JOIN produtos_vasilhame v
+    on p.vasilhame_id = v.id
+  LEFT JOIN produtos_unidade_venda u
+    on p.unidade_venda_id = u.id
+ WHERE pedido_id = 5
+
+  coalesce(t.nome, '') || ' - ' || coalesce(v.nome, '') || ' - ' || u.nome
+  .toFixed(2).replace('.',',')
+
+  this.datePicker.show({
+      date: new Date(),
+      mode: 'date',
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+    }).then(
+      date => console.log('Got date: ', date),
+      err => console.log('Error occurred while getting date: ', err)
+    );
+
+pickerFormat="DD/MM/YYYY"
+

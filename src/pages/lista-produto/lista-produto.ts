@@ -6,12 +6,6 @@ import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { CadastroProdutoPage } from '../cadastro-produto/cadastro-produto';
 import { ToastController } from 'ionic-angular';
 
-/**
- * Generated class for the ListaProdutoPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -20,7 +14,8 @@ import { ToastController } from 'ionic-angular';
 })
 export class ListaProdutoPage {
 
-  produto: Produto = {categoria_id:null, marca_id:null, tipo_id:null, unidade_venda_id:null, preco:null, ativo:null, observacao:null};
+  produto: Produto = {id:null, categoria_id:null, marca_id:null, tipo_id:null, vasilhame_id:null, unidade_venda_id:null, 
+                      nome_produto:null, preco:null, ativo:null, observacao:null};
   produtos: any[];
 
   constructor(public navCtrl: NavController, 
@@ -40,6 +35,16 @@ export class ListaProdutoPage {
         this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
     });
   }
+
+ /*  ionViewWillEnter() {
+    this.produtoProvider.getAll()
+      .then((result: any[]) => {
+        this.produtos = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+    });
+  } */
 
 
   addProduto(){

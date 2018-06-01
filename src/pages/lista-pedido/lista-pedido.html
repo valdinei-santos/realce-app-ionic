@@ -20,19 +20,14 @@
   <ion-list>
     <ion-item-sliding *ngFor="let pedido of pedidos2">
       <button ion-item (click)="editPedido(pedido.id)">
-        <h2>{{ pedido.data }} - {{ pedido.cliente_nome }} - {{ pedido.status }}</h2>
+        <h2>Pedido: {{ pedido.id }} - {{ pedido.data }} - {{ pedido.cliente_nome }} </h2>
+        <h2><b ion-text color="danger">Total: {{ pedido.total }} --> {{ pedido.status }}</b></h2>
       </button>
       <ion-item-options side="left">
         <button ion-button color="danger" (click)="removePedido(pedido)">
           <ion-icon name="trash"></ion-icon>
           Excluir
         </button>
-      </ion-item-options>
-      <ion-item-options side="right">
-		<button ion-button color="primary" (click)="pedidoPedido(pedido)">
-		  <ion-icon name="document"></ion-icon>
-			Pedido
-		</button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>

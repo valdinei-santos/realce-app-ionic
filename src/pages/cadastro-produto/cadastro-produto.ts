@@ -6,6 +6,7 @@ import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { CategoriaProvider } from '../../providers/categoria/categoria';
 import { MarcaProvider } from '../../providers/marca/marca';
 import { TipoProvider } from '../../providers/tipo/tipo';
+import { VasilhameProvider } from '../../providers/vasilhame/vasilhame';
 import { UnidadeVendaProvider } from '../../providers/unidade-venda/unidade-venda';
 import { CadastroCategoriaPage } from '../cadastro-categoria/cadastro-categoria';
 import { CadastroMarcaPage } from '../cadastro-marca/cadastro-marca';
@@ -21,14 +22,16 @@ import { CadastroUnidadeVendaPage } from '../cadastro-unidade-venda/cadastro-uni
 export class CadastroProdutoPage {
 
   //produto: Produto = {descricao:'', unidade_venda_id:null, preco:null, categoria_id:null, ativo:null };
-  produto: Produto = {categoria_id:null, marca_id:null, tipo_id:null, unidade_venda_id:null, preco:null, ativo:null, observacao:null };
+//  produto: Produto = {id: null, categoria_id:null, marca_id:null, tipo_id:null, vasilhame_id:null, unidade_venda_id:null, 
+//                      nome_produto:null, preco:null, ativo:null, observacao:null };
   //produtoEditando: Produto;
   editando:boolean = false;	
   model: Produto;
   categorias: any[];
   marcas: any[];
   tipos: any[];
-  unidades_venda: any[]
+  vasilhames: any[];
+  unidades_venda: any[];
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -36,12 +39,14 @@ export class CadastroProdutoPage {
               public categoriaProvider:CategoriaProvider,
               public marcaProvider:MarcaProvider,
               public tipoProvider:TipoProvider,
+              public vasilhameProvider:VasilhameProvider,
   	          public unidadeVendaProvider:UnidadeVendaProvider,
 			        public toast: ToastController) {
 
     this.model = new Produto();
 
     if (this.navParams.data.id) {
+      this.editando = true;
       this.produtoProvider.get(this.navParams.data.id)
         .then((result: any) => {
           this.model = result;
@@ -49,6 +54,8 @@ export class CadastroProdutoPage {
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um produto.', duration: 3000, position: 'botton' }).present();
       });
+    } else {
+      this.editando = false;
     }
   }
 
@@ -57,6 +64,7 @@ export class CadastroProdutoPage {
     this.loadCategoria();
     this.loadMarca();
     this.loadTipo();
+    this.loadVasilhame();
     this.loadUnidadeVenda();
   }
 
@@ -90,6 +98,16 @@ export class CadastroProdutoPage {
     });
   }
 
+  private loadVasilhame(){
+    this.vasilhameProvider.getAll()
+      .then((result: any[]) => {
+        this.vasilhames = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar os vasilhames.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
   private loadUnidadeVenda(){
     this.unidadeVendaProvider.getAll()
       .then((result: any[]) => {
@@ -112,9 +130,12 @@ export class CadastroProdutoPage {
   private saveProduto() {
     if (this.model.id) {
       //this.editando = false;
+      console.log('Vai UPDATE Produto');
+      console.log(this.model);
       return this.produtoProvider.update(this.model);
     } else {
       //this.editando = true;
+      console.log('Vai INSERT Produto');
       console.log(this.model);
       return this.produtoProvider.insert(this.model);
     }

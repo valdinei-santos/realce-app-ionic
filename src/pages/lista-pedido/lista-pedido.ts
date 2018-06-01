@@ -14,8 +14,8 @@ import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 })
 export class ListaPedidoPage {
 
-  pedido: Pedido = {id:null, cliente_id:null, data:'', status:''};
-  pedido2: Pedido2 = {id:null, cliente_id:null, cliente_nome:'', data:'', status:''};
+  pedido: Pedido = {id:null, cliente_id:null, data:null, status:''};
+  pedido2: Pedido2 = {id:null, cliente_id:null, cliente_nome:'', total:null, data:null, status:''};
   pedidos: any[];
   pedidos2: any[];
   cliente: Cliente = {nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
@@ -57,6 +57,12 @@ export class ListaPedidoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao remover o Pedido!', duration: 3000, position: 'center' }).present();
     });
+  }
+
+  editPedido(id: number){
+    console.log('editPedido: ' + id );
+    this.navCtrl.push(CadastroPedidoPage, { id: id });
+
   }
 
 

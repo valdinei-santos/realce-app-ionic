@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Cadastro Pedido</ion-title>
+		<ion-title *ngIf="!editando">Cadastro Pedido - {{ model.id }}</ion-title>
+    <ion-title *ngIf="editando">Alteração Pedido - {{ model.id }}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -15,8 +16,8 @@
 
 	    <ion-item>
 		  <ion-label floating>Data</ion-label>
-		  <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input>  -->
-		  <ion-datetime displayFormat="DD/MM/YYYY" doneText="OK" cancelText="Cancelar" pickerFormat="DD/MM/YYYY" [(ngModel)]="model.data"></ion-datetime>
+		  <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input> --> 
+		  <ion-datetime displayFormat="DD/MM/YYYY" doneText="OK" cancelText="Cancelar" [(ngModel)]="model.data"></ion-datetime>
 	    </ion-item>
 	</ion-list>
     <hr>
@@ -26,7 +27,7 @@
 	    </ion-item>
 		<ion-item-sliding *ngFor="let item of itens">
 	      <button ion-item>
-	        <h2>{{ item.produto_descricao }} - {{ item.quantidade }} - R$ {{ item.valor_unitario }}</h2>
+	        <h2>{{ item.nome_produto }} - {{ item.quantidade }} - R$ {{ item.valor_unitario }}</h2>
 	      </button>
 	      <ion-item-options side="left">
 	        <button ion-button color="danger" (click)="removeProduto(item)">
@@ -40,40 +41,42 @@
 	<ion-list>
 		<ion-grid>
 		  <ion-row>
-		    <ion-col col-4>
+		    <ion-col col-12>
 			    <ion-item>
 					<ion-label floating>Item</ion-label>
 					<ion-select interface="popover" name="id" [(ngModel)]="model_item_pedido.produto_id" (ionChange)="onSelectChange($event);">
-				      <ion-option *ngFor="let produto of produtos" value="{{ produto.id }}">{{ produto.descricao }} - {{ produto.id }}</ion-option>
+				      <ion-option *ngFor="let produto of produtos" value="{{ produto.id }}">{{ produto.nome_produto }}</ion-option>
 				    </ion-select>
 			    </ion-item>
-			</ion-col>
-		    <ion-col col-4>	    
+				</ion-col>
+			</ion-row>
+			<ion-row>
+		    <ion-col col-6>	    
 			    <ion-item>
 				    <ion-label floating>Quantidade</ion-label>
 				    <ion-input type="number" [(ngModel)]="model_item_pedido.quantidade"></ion-input>
 			    </ion-item>
-            </ion-col>
-            <ion-col col-4>	    
+        </ion-col>
+        <ion-col col-6>	    
 			    <ion-item>
 				    <ion-label floating>Preço</ion-label>
 				    <ion-input type="number" [(ngModel)]="model_item_pedido.valor_unitario"></ion-input>
 			    </ion-item>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-          	<ion-col col-8 offset-2>
-          	    <button ion-button block (click)="addItem()" >Adicionar Produto</button>
-          	</ion-col>
-          </ion-row>
-        </ion-grid>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-8 offset-2>
+          <button ion-button block (click)="addItem()" >Adicionar Produto</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 	</ion-list>
     <hr>
 	<div padding>
-      <button *ngIf="!editando" ion-button block (click)="save()">Criar Pedido</button>
-      <button *ngIf="editando" ion-button block (click)="save()">Atualizar Pedido</button>
+    <button *ngIf="!editando" ion-button block (click)="save()">Criar Pedido</button>
+    <button *ngIf="editando" ion-button block (click)="save()">Atualizar Pedido</button>
 	  <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
-    </div>
+  </div>
 
 
 </ion-content>

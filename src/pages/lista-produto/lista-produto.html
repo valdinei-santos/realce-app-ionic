@@ -15,7 +15,7 @@
     <ion-item-sliding *ngFor="let produto of produtos">
       <button ion-item (click)="editProduto(produto.id)">
         <h1>{{ produto.categoria_nome }} {{ produto.marca_nome }} {{ produto.tipo_nome }} {{ produto.vasilhame_nome }} </h1>
-        <h2><b ion-text color="danger">R$ {{ produto.preco }} - {{ produto.unidade_venda_nome }}</b></h2>
+        <h2><b ion-text color="danger">R$ {{ produto.preco.toFixed(2).replace('.',',')  }} - {{ produto.unidade_venda_nome }}</b></h2>
       </button>
       <ion-item-options side="left">
         <button ion-button color="danger" (click)="removeProduto(produto)">

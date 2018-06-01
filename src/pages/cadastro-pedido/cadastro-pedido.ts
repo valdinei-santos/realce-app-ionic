@@ -4,8 +4,6 @@ import { Observable } from 'rxjs';
 //import { forkJoin } from 'rxjs/add/observable/forkJoin';
 //import { forkJoin } from 'rxjs/observable/forkJoin';
 
-
-
 import { PedidoProvider, Pedido, Item_pedido } from '../../providers/pedido/pedido';
 import { ClienteProvider } from '../../providers/cliente/cliente';
 import { ProdutoProvider, Produto } from '../../providers/produto/produto';
@@ -19,8 +17,8 @@ import { ToastController } from 'ionic-angular';
 })
 export class CadastroPedidoPage {
 
-  pedido: Pedido = {id:null, cliente_id:null, data:null, status:'Pendente'};
-  Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, quantidade:null, valor_unitario:null, valor_total:null};
+  pedido: Pedido = {id:null, cliente_id:null, data:null, status:'Inexistente'};
+  Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, nome_produto:null, quantidade:null, valor_unitario:null, valor_total:null};
   //produto: Produto = {id:null, }
   //pedidoEditando: Pedido;
   editando:boolean = false;	
@@ -45,7 +43,10 @@ export class CadastroPedidoPage {
     this.model_produto = new Produto();
     this.model_item_pedido = new Item_pedido();
 
+    console.log('ID Peeee:' + this.navParams.data.id);
     if (this.navParams.data.id) {
+      this.editando = true;
+      console.log('ID Pe:' + this.navParams.data.id);
       this.pedidoProvider.get(this.navParams.data.id)
         .then((result: any) => {
           this.model = result;
@@ -53,6 +54,26 @@ export class CadastroPedidoPage {
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
       });
+      this.pedidoProvider.getItens(this.navParams.data.id)
+        .then((result: any) => {
+          this.itens = result;
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
+      });
+      //this.model.data = this.model.data.toISOString();
+      console.log('Data que veio: ' + this.model.data);
+    } else {
+      this.editando = false;
+      this.model.data = this.data_atual;
+      console.log('Data Val1: ' + this.model.data);
+      this.pedidoProvider.getNewId()
+          .then((result: any) => {
+            this.model.id = result;
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
+        });
     }
 
     this.clienteProvider.getAll()
@@ -70,8 +91,14 @@ export class CadastroPedidoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
       });	 
-     
-    this.model.data = this.data_atual.toISOString();
+    
+    //if (this.model.data == null){
+    //  this.model.data = this.data_atual; //this.data_atual.toISOString();
+    //  console.log('Data Val2: ' + this.model.data);
+   // }
+   
+    //this.model.data = this.data_atual.toString();
+    this.model.status = 'Inexistente';
   }
 
 
@@ -97,7 +124,7 @@ export class CadastroPedidoPage {
                 this.produtoProvider.get(this.model_item_pedido.produto_id)
                   .then((result: any) => {
                     this.model_produto = result;
-                    console.log("Promessa: " + result);
+                    console.log("Promessa: " + this.model_produto);
                   })
                   .catch(() => {
                     this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
@@ -111,38 +138,47 @@ export class CadastroPedidoPage {
 
         console.log(this.model_produto);
         let item = new Item_pedido();
-        item.pedido_id = null; //item.;
+        item.pedido_id = this.model.id; //item.;
         item.produto_id = this.model_produto.id;
+        //item.nome_produto = this.model_produto.marca_id.toString();
+        item.nome_produto = this.model_produto.nome_produto;
         item.quantidade = this.model_item_pedido.quantidade;
         item.valor_unitario = this.model_item_pedido.valor_unitario; //this.model_produto.preco;
         item.valor_total = this.model_item_pedido.quantidade * this.model_item_pedido.valor_unitario; //this.model_produto.preco;
         this.itens.push(item);
-        console.log(item);
-        console.log(this.model_item_pedido);   
+        console.log('ITEM EU: ' + item);
+        console.log(this.model_item_pedido);  
+        this.model_item_pedido.produto_id = null;
+        this.model_item_pedido.quantidade = null;
+        this.model_item_pedido.valor_unitario = null;
+        //this.model_item_pedido.nome_produto = 'Valdi'; //this.model_produto.nome_produto 
       });
   }
 
   onSelectChange(selectedValue: any) {
-    
+    console.log(selectedValue);
     console.log('passou onSelectChange');
-
-    Observable.forkJoin([
-        Observable.fromPromise(
-                this.produtoProvider.get(this.model_item_pedido.produto_id)
-                  .then((result: any) => {
-                    this.model_produto = result;
-                    console.log("Promessa: " + result);
-                  })
-                  .catch(() => {
-                    this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
-                  })
-        )
-      ])
-      .subscribe(data => {
-        console.log(data);
-        //let valor_unitario = this.model_produto.preco;
-        this.model_item_pedido.valor_unitario = this.model_produto.preco;
-      });
+    if (this.model_item_pedido.produto_id !== null) {
+      Observable.forkJoin([
+          Observable.fromPromise(
+                  this.produtoProvider.get(this.model_item_pedido.produto_id)
+                    .then((result: any) => {
+                      this.model_produto = result;
+                      console.log("Promessa: " + result);
+                    })
+                    .catch(() => {
+                      this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
+                    })
+          )
+        ])
+        .subscribe(data => {
+          console.log(data);
+          //let valor_unitario = this.model_produto.preco;
+          console.log("item_pedido: " + this.model_produto);
+          this.model_item_pedido.valor_unitario = this.model_produto.preco;
+          this.model_item_pedido.quantidade = 1;
+        });
+    }
   }
 
   save() {
@@ -155,11 +191,13 @@ export class CadastroPedidoPage {
   }
 
   private savePedido() {
-    if (this.model.id) {
+    if (this.model.status != 'Inexistente') {
+      console.log('Entrou UPDATE - ' + this.model.status);
       //this.editando = false;
       this.pedidoProvider.update(this.model);
       return this.pedidoProvider.update_itens(this.itens);
     } else {
+      console.log('Entrou INSERT');
       //this.editando = true;
       this.model.status = 'Pendente';
       this.pedidoProvider.insert(this.model);
@@ -167,6 +205,13 @@ export class CadastroPedidoPage {
     }
   }
 
+  removeProduto(item: Item_pedido) {
+    this.itens.splice(this.itens.indexOf(item), 1);
+    /* for (let el of this.itens){
+      if (el.produto_id == item.produto_id) {
+
+      } */
+  }
 /*
   	  this.produtoProvider.get(this.model_produto.id)
 		  .then((result: any) => {
