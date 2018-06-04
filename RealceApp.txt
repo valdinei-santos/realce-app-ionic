@@ -18,6 +18,13 @@ sqlite3 realce.db
 5 - Para consultar as tabelas é só fazer SELECT
 
 
+# Para usar o PIPE de data foi incluido os seguintes IMPORTs e a chamada ao registerLocaleData no app.modules.ts
+import { registerLocaleData } from '@angular/common';  // Incluido para funcionar o LOCALE_ID 'pt-BR' e o PIPE de data.
+import localePt from '@angular/common/locales/pt';     // Incluido para funcionar o LOCALE_ID 'pt-BR' e o PIPE de data.
+...
+registerLocaleData(localePt);
+...
+
 
 SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, v.nome as vasilhame_nome, u.nome as unidade_venda_nome
                     FROM produtos p 

@@ -5,28 +5,31 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
   	<button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Lista Pedidos</ion-title>
   </ion-navbar>
-
 </ion-header>
-
 
 <ion-content padding>
   <ion-list>
     <ion-item-sliding *ngFor="let pedido of pedidos2">
-      <button ion-item (click)="editPedido(pedido.id)">
-        <h2>Pedido: {{ pedido.id }} - {{ pedido.data }} - {{ pedido.cliente_nome }} </h2>
+      <button ion-item (click)="showPedido(pedido.id)">
+        <h2>Pedido: {{ pedido.id }} - {{ pedido.data | date :'dd/MM/yyyy' }} - {{ pedido.cliente_nome }} </h2>
         <h2><b ion-text color="danger">Total: {{ pedido.total }} --> {{ pedido.status }}</b></h2>
       </button>
       <ion-item-options side="left">
         <button ion-button color="danger" (click)="removePedido(pedido)">
           <ion-icon name="trash"></ion-icon>
           Excluir
+        </button>
+      </ion-item-options>
+      <ion-item-options side="right">
+        <button ion-button color="primary" (click)="editPedido(pedido.id)">
+          <ion-icon name="document"></ion-icon>
+          Editar
         </button>
       </ion-item-options>
     </ion-item-sliding>

@@ -1,20 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';  // Incluido para funcionar o LOCALE_ID 'pt-BR' e o PIPE de data.
+import localePt from '@angular/common/locales/pt';     // Incluido para funcionar o LOCALE_ID 'pt-BR' e o PIPE de data.
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SQLite } from '@ionic-native/sqlite';
 import { DatePipe } from '@angular/common';
+import { SelectSearchableModule } from 'ionic-select-searchable';
+//import { MomentPipe} from '../pipes/moment/moment';
+//import * as moment from 'moment';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { CadastroClientePageModule } from '../pages/cadastro-cliente/cadastro-cliente.module';
-import { ListaClientePageModule } from '../pages/lista-cliente/lista-cliente.module';
-//import { EditClientePageModule } from '../pages/edit-cliente/edit-cliente.module';
-import { CadastroProdutoPageModule } from '../pages/cadastro-produto/cadastro-produto.module';
-import { ListaProdutoPageModule } from '../pages/lista-produto/lista-produto.module';
-import { CadastroPedidoPageModule } from '../pages/cadastro-pedido/cadastro-pedido.module';
-import { ListaPedidoPageModule } from '../pages/lista-pedido/lista-pedido.module';
-import { CadastroFolhacargaPageModule } from '../pages/cadastro-folhacarga/cadastro-folhacarga.module';
-import { ListaFolhacargaPageModule } from '../pages/lista-folhacarga/lista-folhacarga.module';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -30,6 +26,18 @@ import { CategoriaProvider } from '../providers/categoria/categoria';
 import { MarcaProvider } from '../providers/marca/marca';
 import { TipoProvider } from '../providers/tipo/tipo';
 import { UnidadeVendaProvider } from '../providers/unidade-venda/unidade-venda';
+import { VasilhameProvider } from '../providers/vasilhame/vasilhame';
+
+import { CadastroClientePageModule } from '../pages/cadastro-cliente/cadastro-cliente.module';
+import { ListaClientePageModule } from '../pages/lista-cliente/lista-cliente.module';
+//import { EditClientePageModule } from '../pages/edit-cliente/edit-cliente.module';
+import { CadastroProdutoPageModule } from '../pages/cadastro-produto/cadastro-produto.module';
+import { ListaProdutoPageModule } from '../pages/lista-produto/lista-produto.module';
+import { CadastroPedidoPageModule } from '../pages/cadastro-pedido/cadastro-pedido.module';
+import { ListaPedidoPageModule } from '../pages/lista-pedido/lista-pedido.module';
+import { ShowPedidoPageModule } from '../pages/show-pedido/show-pedido.module';
+import { CadastroFolhacargaPageModule } from '../pages/cadastro-folhacarga/cadastro-folhacarga.module';
+import { ListaFolhacargaPageModule } from '../pages/lista-folhacarga/lista-folhacarga.module';
 import { CadastroCategoriaPageModule } from '../pages/cadastro-categoria/cadastro-categoria.module';
 import { ListaCategoriaPageModule } from '../pages/lista-categoria/lista-categoria.module';
 import { CadastroMarcaPageModule } from '../pages/cadastro-marca/cadastro-marca.module';
@@ -38,8 +46,9 @@ import { CadastroTipoPageModule } from '../pages/cadastro-tipo/cadastro-tipo.mod
 import { ListaTipoPageModule } from '../pages/lista-tipo/lista-tipo.module';
 import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/cadastro-unidade-venda.module';
 import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-unidade-venda.module';
-import { VasilhameProvider } from '../providers/vasilhame/vasilhame';
 import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastro-vasilhame.module';
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
@@ -50,7 +59,8 @@ import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastr
     BrowserModule,
     IonicModule.forRoot(MyApp),
 	  IonicStorageModule.forRoot(),
-	  HttpClientModule,
+    HttpClientModule,
+    SelectSearchableModule,
 	  CadastroClientePageModule,
 	  ListaClientePageModule,
     //EditClientePageModule,
@@ -58,6 +68,7 @@ import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastr
     ListaProdutoPageModule,
     CadastroPedidoPageModule,
     ListaPedidoPageModule,
+    ShowPedidoPageModule,
     CadastroFolhacargaPageModule,
     ListaFolhacargaPageModule,
     CadastroCategoriaPageModule,

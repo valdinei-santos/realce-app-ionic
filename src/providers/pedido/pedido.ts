@@ -149,6 +149,37 @@ public insert(pedido: Pedido) {
       })
       .catch((e) => console.error(e));
   }
+
+  public get2(id: number) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
+                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
+                     FROM pedidos p 
+                     JOIN clientes c 
+                       ON p.cliente_id = c.id
+                    WHERE p.id = ?`;
+        let data = [id];
+        return db.executeSql(sql, data)
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let item = data.rows.item(0);
+              let pedido = new Pedido2();
+              pedido.id = item.id;
+              pedido.cliente_id = item.cliente_id;
+              pedido.cliente_nome = item.cliente_nome;
+              pedido.data = item.data;
+              pedido.status = item.status;
+              pedido.total = item.total;
+              return pedido;
+            }
+            return null;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
  
   public getAll() {
     return this.dbProvider.getDB()

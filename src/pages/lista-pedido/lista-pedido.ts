@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { PedidoProvider, Pedido, Pedido2 } from '../../providers/pedido/pedido';
 import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
+import { ShowPedidoPage } from '../show-pedido/show-pedido';
 import { ToastController } from 'ionic-angular';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 
@@ -31,7 +32,7 @@ export class ListaPedidoPage {
   ionViewDidEnter() {
   	this.pedidoProvider.getAll2()
       .then((result: any[]) => {
-        this.pedidos2 = result;        
+        this.pedidos2 = result;    
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
@@ -62,7 +63,11 @@ export class ListaPedidoPage {
   editPedido(id: number){
     console.log('editPedido: ' + id );
     this.navCtrl.push(CadastroPedidoPage, { id: id });
+  }
 
+  showPedido(id: number){
+    console.log('showPedido: ' + id );
+    this.navCtrl.push(ShowPedidoPage, { id: id });
   }
 
 

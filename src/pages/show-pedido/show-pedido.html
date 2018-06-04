@@ -1,0 +1,38 @@
+<!--
+  Generated template for the ShowPedidoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Pedido {{model.id}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <div ion-row>
+    <div ion-col-12>
+      <h2>Cliente: <b ion-text color="primary">{{model.cliente_nome}}</b></h2>
+      <h2>Data: <b ion-text color="primary">{{model.data| date: 'dd/MM/yyyy'}}</b></h2>
+      <h2>Status: <b ion-text color="primary">{{model.status}}</b></h2>
+    </div>
+  </div>
+  <div ion-row>
+    <br>
+    <h1>Produtos:</h1>
+    <ion-list>
+      <ion-item *ngFor="let item of itens">
+        <b ion-text color="danger">{{ item.nome_produto }}</b><br>
+        Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
+            Preço: <b ion-text color="danger">{{ item.valor_unitario }}</b>
+            Total: <b ion-text color="danger">{{ item.valor_total }}</b>
+      </ion-item>  
+      <ion-item>
+        <h2>Total: <b ion-text color="danger">R$ {{ total.toFixed(2) }}</b> </h2>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

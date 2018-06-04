@@ -60,7 +60,10 @@ export class ProdutoProvider {
   public get(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = `SELECT p.*, c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, 
+        let sql = `SELECT p.id, p.categoria_id, p.marca_id, p.tipo_id, p.vasilhame_id, p.unidade_venda_id, 
+                          printf("%.2f",sum(p.preco)) as preco,
+                          p.ativo, p.observacao, 
+                          c.nome as categoria_nome, m.nome as marca_nome, t.nome as tipo_nome, 
                           v.nome as vasilhame_nome, u.nome as unidade_venda_nome,
                           case when c.nome is null then '' else c.nome||' ' end ||
                           case when m.nome is null then '' else m.nome||' ' end ||

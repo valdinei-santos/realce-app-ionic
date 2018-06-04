@@ -9,6 +9,8 @@ import { ClienteProvider } from '../../providers/cliente/cliente';
 import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { ToastController } from 'ionic-angular';
 
+import { SelectSearchableComponent } from 'ionic-select-searchable';
+
 
 @IonicPage()
 @Component({
@@ -18,7 +20,7 @@ import { ToastController } from 'ionic-angular';
 export class CadastroPedidoPage {
 
   pedido: Pedido = {id:null, cliente_id:null, data:null, status:'Inexistente'};
-  Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, nome_produto:null, quantidade:null, valor_unitario:null, valor_total:null};
+  //Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, nome_produto:null, quantidade:null, valor_unitario:null, valor_total:null};
   //produto: Produto = {id:null, }
   //pedidoEditando: Pedido;
   editando:boolean = false;	
@@ -65,8 +67,10 @@ export class CadastroPedidoPage {
       console.log('Data que veio: ' + this.model.data);
     } else {
       this.editando = false;
-      this.model.data = this.data_atual;
-      console.log('Data Val1: ' + this.model.data);
+      this.model.data = new Date(this.data_atual.toISOString());
+      console.log('Data Val1: ' + this.data_atual.toLocaleDateString('pt-BR'));
+      console.log('Data Val2: ' + new Date().toJSON().slice(0,10).replace(/-/g,'/'));
+      
       this.pedidoProvider.getNewId()
           .then((result: any) => {
             this.model.id = result;
@@ -118,10 +122,10 @@ export class CadastroPedidoPage {
 */
 
   addItem() {
-  	  console.log(this.model_item_pedido.produto_id);
+  	  console.log(this.model_produto.id);
       Observable.forkJoin([
         Observable.fromPromise(
-                this.produtoProvider.get(this.model_item_pedido.produto_id)
+                this.produtoProvider.get(this.model_produto.id)
                   .then((result: any) => {
                     this.model_produto = result;
                     console.log("Promessa: " + this.model_produto);
@@ -132,36 +136,29 @@ export class CadastroPedidoPage {
         )
       ])
       .subscribe(data => {
-        console.log(data);
-        //console.log(data[1]);
-        //console.log(data[2]);
-
-        console.log(this.model_produto);
         let item = new Item_pedido();
         item.pedido_id = this.model.id; //item.;
         item.produto_id = this.model_produto.id;
         //item.nome_produto = this.model_produto.marca_id.toString();
         item.nome_produto = this.model_produto.nome_produto;
-        item.quantidade = this.model_item_pedido.quantidade;
-        item.valor_unitario = this.model_item_pedido.valor_unitario; //this.model_produto.preco;
-        item.valor_total = this.model_item_pedido.quantidade * this.model_item_pedido.valor_unitario; //this.model_produto.preco;
+        item.quantidade = 1;
+        item.valor_unitario = this.model_produto.preco; //this.model_produto.preco;
+        item.valor_total = item.quantidade * this.model_produto.preco; //this.model_produto.preco;
         this.itens.push(item);
-        console.log('ITEM EU: ' + item);
-        console.log(this.model_item_pedido);  
-        this.model_item_pedido.produto_id = null;
+        this.model_produto.id = null;
+        this.model_produto.nome_produto = null;
         this.model_item_pedido.quantidade = null;
-        this.model_item_pedido.valor_unitario = null;
-        //this.model_item_pedido.nome_produto = 'Valdi'; //this.model_produto.nome_produto 
+        this.model_item_pedido.valor_unitario = null; 
       });
   }
 
-  onSelectChange(selectedValue: any) {
+  /* onSelectChange(selectedValue: any) {
     console.log(selectedValue);
     console.log('passou onSelectChange');
-    if (this.model_item_pedido.produto_id !== null) {
+    if (this.model_produto.id !== null) {
       Observable.forkJoin([
           Observable.fromPromise(
-                  this.produtoProvider.get(this.model_item_pedido.produto_id)
+                  this.produtoProvider.get(this.model_produto.id)
                     .then((result: any) => {
                       this.model_produto = result;
                       console.log("Promessa: " + result);
@@ -179,7 +176,7 @@ export class CadastroPedidoPage {
           this.model_item_pedido.quantidade = 1;
         });
     }
-  }
+  } */
 
   save() {
     if (this.savePedido()) {
@@ -229,5 +226,33 @@ export class CadastroPedidoPage {
     //this.navCtrl.setRoot(HomePage);
     this.navCtrl.pop();
   }
+
+  produtoChange(event: { component: SelectSearchableComponent, value: any }) {
+    console.log('port:', event.value);
+    if (this.model_produto.id !== null) {
+      Observable.forkJoin([
+          Observable.fromPromise(
+              this.produtoProvider.get(this.model_produto.id)
+                .then((result: any) => {
+                  this.model_produto = result;
+                  console.log("Promessa: " + result);
+                })
+                .catch(() => {
+                  this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
+                })
+          )
+        ])
+        .subscribe(data => {
+          console.log(data);
+          //let valor_unitario = this.model_produto.preco;
+          console.log("item_pedido: " + this.model_produto);
+          this.model_item_pedido.valor_unitario = this.model_produto.preco;
+          //his.model_item_pedido.valor_unitario.toFixed(2);
+          this.model_item_pedido.quantidade = 1;
+        });
+    }
+  }
+
+
 
 }

@@ -22,9 +22,9 @@
 	</ion-list>
     <hr>
 	<ion-list>
-        <ion-item>
+    <ion-item>
 		  <h1>Produtos</h1>
-	    </ion-item>
+	  </ion-item>
 		<ion-item-sliding *ngFor="let item of itens">
 	      <button ion-item>
 	        <h2>{{ item.nome_produto }} - {{ item.quantidade }} - R$ {{ item.valor_unitario }}</h2>
@@ -40,7 +40,26 @@
 
 	<ion-list>
 		<ion-grid>
-		  <ion-row>
+			<ion-row>
+				<ion-col col-12>
+					<ion-item-group margin-bottom>
+							<ion-item>
+								<select-searchable
+									[(ngModel)]="model_produto"
+									itemValueField="id"
+									itemTextField="nome_produto"
+									[items]="produtos"
+									[canSearch]="true"
+									(onChange)="produtoChange($event)">
+									<ng-template floating selectSearchableLabelTemplate >
+										Item
+									</ng-template>
+								</select-searchable>
+							</ion-item>
+						</ion-item-group>
+				</ion-col>
+			</ion-row>
+		  <!-- <ion-row>
 		    <ion-col col-12>
 			    <ion-item>
 					<ion-label floating>Item</ion-label>
@@ -49,7 +68,7 @@
 				    </ion-select>
 			    </ion-item>
 				</ion-col>
-			</ion-row>
+			</ion-row> -->
 			<ion-row>
 		    <ion-col col-6>	    
 			    <ion-item>
