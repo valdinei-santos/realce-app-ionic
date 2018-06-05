@@ -141,9 +141,10 @@ export class CadastroPedidoPage {
         item.produto_id = this.model_produto.id;
         //item.nome_produto = this.model_produto.marca_id.toString();
         item.nome_produto = this.model_produto.nome_produto;
-        item.quantidade = 1;
-        item.valor_unitario = this.model_produto.preco; //this.model_produto.preco;
-        item.valor_total = item.quantidade * this.model_produto.preco; //this.model_produto.preco;
+        item.quantidade = this.model_item_pedido.quantidade;
+        item.valor_unitario = this.model_item_pedido.valor_unitario; //this.model_produto.preco;
+        item.valor_total = item.quantidade * item.valor_unitario; //this.model_produto.preco;
+        console.log(item);
         this.itens.push(item);
         this.model_produto.id = null;
         this.model_produto.nome_produto = null;

@@ -6,6 +6,7 @@ import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 import { ShowPedidoPage } from '../show-pedido/show-pedido';
 import { ToastController } from 'ionic-angular';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
+import { EmailProvider } from '../../providers/email/email';
 
 
 @IonicPage()
@@ -25,7 +26,8 @@ export class ListaPedidoPage {
   	          public navParams: NavParams,
   	          public pedidoProvider: PedidoProvider,
               public clienteProvider: ClienteProvider,
-  	          public toast: ToastController) {
+              public toast: ToastController,
+              private emailProvider: EmailProvider) {
   }
 
 
@@ -70,7 +72,21 @@ export class ListaPedidoPage {
     this.navCtrl.push(ShowPedidoPage, { id: id });
   }
 
-
+  enviaPedido(id: number){
+    console.log('enviaPedido: ' + id );
+    this.emailProvider.enviaEmail();
+    alert('Sera que foi...');
+    /* if (result == 'OK'){
+      alert('Email enviado!!!');
+    } */
+    /* let to 		    : string  = 'valdinei.vs@gmail.com',
+        cc 		    : string	= null,
+        bcc 		  : string	= null,
+        subject 	: string	= 'Teste e-mail ionic',
+        message 	: string	= 'Teste de e-mail via Ionic';
+    //this.emailProvider.sendEmail(to, cc, bcc, this._attachment, subject, message);
+    this.emailProvider.sendEmail(to, cc, bcc, null, subject, message); */
+  }
 
 
 }

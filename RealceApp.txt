@@ -98,3 +98,20 @@ SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unit
 
 pickerFormat="DD/MM/YYYY"
 
+# Para incluir um plugin para envio de e-mail
+
+1 - ionic cordova plugin add cordova-plugin-email-composer
+2 - npm install --save @ionic-native/email-composer
+3 - Criar um provider para o email
+    ionic g provider email
+4 - Adicionar no NgModule 
+    import { EmailComposer } from '@ionic-native/email-composer';
+    import { EmailProvider } from '../providers/email/email';
+    ...
+    providers: [
+      ...
+      EmailComposer,
+      EmailProvider,
+    ]
+4 - Criar um provider para o email
+    
