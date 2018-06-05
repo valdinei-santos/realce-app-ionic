@@ -7,6 +7,8 @@ import { SQLite } from '@ionic-native/sqlite';
 import { DatePipe } from '@angular/common';
 import { SelectSearchableModule } from 'ionic-select-searchable';
 import { EmailComposer } from '@ionic-native/email-composer';
+import { File } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
 //import { MomentPipe} from '../pipes/moment/moment';
 //import * as moment from 'moment';
 
@@ -48,7 +50,6 @@ import { ListaTipoPageModule } from '../pages/lista-tipo/lista-tipo.module';
 import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/cadastro-unidade-venda.module';
 import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-unidade-venda.module';
 import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastro-vasilhame.module';
-import { EmailProvider } from '../providers/email/email';
 
 registerLocaleData(localePt);
 
@@ -106,8 +107,8 @@ registerLocaleData(localePt);
     TipoProvider,
     UnidadeVendaProvider,
     VasilhameProvider,
-    EmailProvider,
-    
+    File,
+    FileOpener,
   ]
 })
 export class AppModule {}

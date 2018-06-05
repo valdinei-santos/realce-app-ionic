@@ -6,7 +6,7 @@ import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 import { ShowPedidoPage } from '../show-pedido/show-pedido';
 import { ToastController } from 'ionic-angular';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
-import { EmailProvider } from '../../providers/email/email';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 
 @IonicPage()
@@ -27,7 +27,7 @@ export class ListaPedidoPage {
   	          public pedidoProvider: PedidoProvider,
               public clienteProvider: ClienteProvider,
               public toast: ToastController,
-              private emailProvider: EmailProvider) {
+              public emailComposer: EmailComposer) {
   }
 
 
@@ -74,8 +74,34 @@ export class ListaPedidoPage {
 
   enviaPedido(id: number){
     console.log('enviaPedido: ' + id );
-    this.emailProvider.enviaEmail();
-    alert('Sera que foi...');
+    this.pedidoProvider.get2(id)
+      .then((result: any) => {
+        this.pedido2 = result;   
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar pedido!!!', duration: 3000, position: 'botton' }).present();
+      });
+    let email = {
+          to: 'valdinei.vs@gmail.com',
+          cc: [],
+          bcc: [],
+          attachments: [],
+          /*attachments: null, [
+            'file://img/logo.png',
+            'res://icon.png',
+            'base64:icon.png//iVBORw0KGgoAAAANSUhEUg...',
+            'file://README.pdf'
+          ], */
+          subject: 'Pedido ' + this.pedido2.id + ' Emerson',
+          body: 'Segue em anexo o pedido ' + this.pedido2.id + ' do cliente ' + this.pedido2.cliente_nome,
+          isHtml: true,
+          //app: 'Gmail'
+    };
+    this.emailComposer.open(email);
+
+    //this.emailProvider.enviaEmail();
+    
+    //alert('Sera que foi...');
     /* if (result == 'OK'){
       alert('Email enviado!!!');
     } */

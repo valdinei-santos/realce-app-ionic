@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 const DATABASES_TABLES = [
-  /* `DROP TABLE produtos`,
+  `DROP TABLE produtos`,
   `DROP TABLE produtos_categoria`,
   `DROP TABLE produtos_marca`,
   `DROP TABLE produtos_tipo`,
   `DROP TABLE produtos_vasilhame`,
   `DROP TABLE produtos_unidade_venda`,
   `DROP TABLE pedidos`,
-  `DROP TABLE pedidos_itens`, */
+  `DROP TABLE pedidos_itens`, 
+  `DROP TABLE clientes`,
+  
   `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_tipo (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
@@ -223,6 +225,13 @@ const PRODUTOS = [
   // Refri garrafa 600ml                 
   [`insert into produtos (categoria_id, marca_id, tipo_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
                   values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, 13, null, 11, 5, 17.00, true, null]],
+
+  // Clientes
+  [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est) 
+                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [1, 'Bar do Passarinho', 1, '32324543', '999442121', 'Praia de Cima', null, null, null, null]],
+  [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est) 
+                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [2, 'Bar do Zeca', 2, '32324543', '999442121', 'Caminho Novo', null, null, null, null]],
+
  
 ];
 
