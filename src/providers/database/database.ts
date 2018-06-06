@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 const DATABASES_TABLES = [
-  /* `DROP TABLE produtos`,
+  /*`DROP TABLE produtos`,
   `DROP TABLE produtos_categoria`,
   `DROP TABLE produtos_marca`,
   `DROP TABLE produtos_tipo`,

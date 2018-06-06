@@ -21,6 +21,10 @@ export class ShowPedidoPage {
   itens: any[] = [];
   total: number = 0;
 
+  pagePdf = {
+
+  }
+
   letterObj = {
     from: 'Valdinei',
     to: 'Paul',
@@ -64,26 +68,88 @@ export class ShowPedidoPage {
 
   createPdf() {
     console.log('Entrou createPdf');
+    var corpo = '';
+    for (var item of this.itens){
+      corpo = corpo + item.nome_produto;
+      corpo = corpo + 'Quant.: ' + item.quantidade;
+      corpo = corpo + 'Preço: ' + item.valor_unitario;
+      corpo = corpo + 'Total: ' + item.valor_total;
+      corpo = corpo + '\n';
+    }
+    
+    function buildTableBody(data, columns) {
+      var body = [];
+      //body.push(columns);
+      body.push(['Produto', 'Quantidade', 'Valor', 'Total']);
+      data.forEach(function(row) {
+          var dataRow = [];
+          columns.forEach(function(column) {
+              dataRow.push(row[column].toString());
+          })
+          body.push(dataRow);
+      });
+      return body;
+    }
+
+    function table(data, columns) {
+      return {
+        table: {
+            headerRows: 1,
+            body: buildTableBody(data, columns)
+        }
+      };
+    }
+
+    //function (row) {
+    //      return (row + 1) * 25;
+
     var docDefinition = {
       content: [
-        { text: 'REMINDER', style: 'header' },
+        { text: 'DISTRIBUIDORA REALCE', style: 'header' },
         { text: new Date().toTimeString(), alignment: 'right' },
 
-        { text: 'From', style: 'subheader' },
-        { text: this.letterObj.from },
+        { text: 'CLIENTE', style: 'subheader' },
+        //{ text: this.letterObj.from },
+        { text: this.model.cliente_nome },
 
-        { text: 'To', style: 'subheader' },
-        { text: this.letterObj.to },
+        { text: 'DATA', style: 'subheader' },
+        //{ text: this.letterObj.to },
+        { text: this.model.data },
 
-        { text: this.letterObj.text, style: 'story', margin: [0, 20, 0, 20] },
+        { text: 'STATUS', style: 'subheader' },
+        { text: this.model.status },
+        '',
+        table(this.itens, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total'])
 
-        {
-          ul: [
-            'Bacon',
-            'Rips',
-            'BBQ',
-          ]
-        }
+//        {
+//          style: 'tableExample',
+//          table: {
+            //widths: [200, '*', '*', 'auto'],
+            //heights: 40,  // Valor para altura de todas as linhas
+            //heights: [20, 30, 40, 20],  --> Com altura distinta para cada linha
+            //layout: 'noBorders',   ou   layout: 'lightHorizontalLines'   ou    layout: 'headerLineOnly',  ou  
+            //layout: {
+            //  fillColor: function (i, node) {
+            //      return (i % 2 === 0) ? '#CCCCCC' : null;
+            //  }
+            //}
+//            body: this.itens 
+              //[
+              //['Produto', 'Quantidade', 'Valor', 'Total'],
+              //['One value goes here', 'Another one here', 'OK?', 'dadada']
+              //]
+//          }
+//        },
+
+        //{ text: this.letterObj.text, style: 'story', margin: [0, 20, 0, 20] },
+        //{ text: corpo, style: 'story', margin: [0, 20, 0, 20] },
+
+        //{
+        //  ul: [
+        //    'Bacon',
+        //    'Rips',
+        //  ]
+        //}
       ],
       styles: {
         header: {
@@ -97,9 +163,18 @@ export class ShowPedidoPage {
         },
         story: {
           italic: true,
-          alignment: 'center',
+          alignment: 'left',
           width: '50%',
+        },
+        tableExample: {
+          margin: [0, 5, 0, 15]
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 13,
+          color: 'black'
         }
+
       }
     }
     console.log(docDefinition);
