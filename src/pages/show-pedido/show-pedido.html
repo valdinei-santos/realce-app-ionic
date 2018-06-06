@@ -27,6 +27,6 @@
       </ion-item>
     </ion-list>
   </div>
-  <button ion-button full (click)="createPdf">Gerar PDF</button>
-  <button ion-button full (click)="downloadPdf" color="secundary" [disabled]="!pdfObj">Download PDF</button>
+  <button ion-button full (click)="createPdf()">Gerar PDF</button>
+  <button ion-button full (click)="downloadPdf()" color="secundary" [disabled]="!pdfObj">Download PDF</button>
 </ion-content>

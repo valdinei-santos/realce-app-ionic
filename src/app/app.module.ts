@@ -9,8 +9,6 @@ import { SelectSearchableModule } from 'ionic-select-searchable';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
-//import { MomentPipe} from '../pipes/moment/moment';
-//import * as moment from 'moment';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';

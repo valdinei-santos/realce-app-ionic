@@ -90,7 +90,9 @@
     <allow-navigation href="http://192.168.1.16:8100" />
     <allow-navigation href="http://192.168.1.10:8100" />
     <plugin name="cordova-plugin-email-composer" spec="^0.8.15" />
-    <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
+    <allow-navigation href="http://192.168.1.8:8100" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <plugin name="cordova-plugin-file-opener2" spec="https://github.com/JuanjoPP/cordova-plugin-file-opener2" />
     <engine name="android" spec="~7.0.0" />
+    <allow-navigation href="http://192.168.1.8:8101" />
 </widget>

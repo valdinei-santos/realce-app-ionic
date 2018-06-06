@@ -6,16 +6,9 @@ import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { ToastController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
-import { pdfMake } from 'pdfmake/build/pdfmake';
-import { pdfFonts } from 'pdfmake/build/vfs_fonts';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-/**
- * Generated class for the ShowPedidoPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -69,11 +62,12 @@ export class ShowPedidoPage {
     }
   }
 
-  createPDF() {
+  createPdf() {
+    console.log('Entrou createPdf');
     var docDefinition = {
       content: [
         { text: 'REMINDER', style: 'header' },
-        { text: new Date().toString(), alignment: 'right' },
+        { text: new Date().toTimeString(), alignment: 'right' },
 
         { text: 'From', style: 'subheader' },
         { text: this.letterObj.from },
@@ -87,7 +81,7 @@ export class ShowPedidoPage {
           ul: [
             'Bacon',
             'Rips',
-            'BBQ'
+            'BBQ',
           ]
         }
       ],
@@ -108,13 +102,23 @@ export class ShowPedidoPage {
         }
       }
     }
-    this.pdfObj = pdfMake.createPDF(docDefinition);
+    console.log(docDefinition);
+    this.pdfObj = pdfMake.createPdf(docDefinition);
   }
 
   downloadPdf() {
     if (this.plt.is('cordova')) {
-
+      this.pdfObj.getBuffer((buffer) => {
+        var blob = new Blob([buffer], { type: 'application/pdf' });
+ 
+        // Save the PDF to the data Directory of our App
+        this.file.writeFile(this.file.dataDirectory, 'myletter.pdf', blob, { replace: true }).then(fileEntry => {
+          // Open the PDf with the correct OS tools
+          this.fileOpener.open(this.file.dataDirectory + 'myletter.pdf', 'application/pdf');
+        })
+      });
     } else {
+      // On a browser simply use download!
       this.pdfObj.download();
     }
   }

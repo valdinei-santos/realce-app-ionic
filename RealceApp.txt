@@ -150,10 +150,14 @@ enviaPedido(id: number){
 ##############################################
 # Para incluir um plugin para geração de PDF
 ##############################################
-1 - npm install pdfmake @ionic-native/file @ionic-native/file-opener
+1 - npm install pdfmake @ionic-native/file @ionic-native/file-opener @types/pdfmake
 2 - ionic cordova plugin add cordova-plugin-file-opener2
 3 - ionic cordova plugin add cordova-plugin-file
-4 - importar os plugins no app.modules.ts e incluir em PROVIDERS
+4 - Para corrigir um erro que dá após intalar o codova-plugin-file-opener2 
+  cordova plugin add https://github.com/JuanjoPP/cordova-plugin-file-opener2
+  ionic cordova platform rm android
+  ionic cordova platform add android
+5 - importar os plugins no app.modules.ts e incluir em PROVIDERS
 ...
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
@@ -162,5 +166,5 @@ import { FileOpener } from '@ionic-native/file-opener';
     File,
     FileOpener,
   ...
-5 - Ajustado a PAGE show-pedido.ts para criar o PDF
+6 - Ajustado a PAGE show-pedido.ts para criar o PDF
 ...
