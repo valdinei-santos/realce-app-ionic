@@ -68,14 +68,14 @@ export class ShowPedidoPage {
 
   createPdf() {
     console.log('Entrou createPdf');
-    var corpo = '';
+   /*  var corpo = '';
     for (var item of this.itens){
       corpo = corpo + item.nome_produto;
       corpo = corpo + 'Quant.: ' + item.quantidade;
       corpo = corpo + 'Preço: ' + item.valor_unitario;
       corpo = corpo + 'Total: ' + item.valor_total;
       corpo = corpo + '\n';
-    }
+    } */
     
     function buildTableBody(data, columns) {
       var body = [];
@@ -105,22 +105,26 @@ export class ShowPedidoPage {
 
     var docDefinition = {
       content: [
-        { text: 'DISTRIBUIDORA REALCE', style: 'header' },
+        { text: 'DISTRIBUIDORA REALCE - PEDIDO', style: 'header' },
         { text: new Date().toTimeString(), alignment: 'right' },
 
-        { text: 'CLIENTE', style: 'subheader' },
+        { text: 'PEDIDO: ' + this.model.id, style: 'subheader' },
+        //{ text: this.model.id },
+
+        { text: 'CLIENTE: ' + this.model.cliente_nome, style: 'subheader' },
         //{ text: this.letterObj.from },
-        { text: this.model.cliente_nome },
+        //{ text: this.model.cliente_nome },
 
-        { text: 'DATA', style: 'subheader' },
+        { text: 'DATA: ' + this.model.data, style: 'subheader' },
         //{ text: this.letterObj.to },
-        { text: this.model.data },
+        //{ text: this.model.data },
 
-        { text: 'STATUS', style: 'subheader' },
-        { text: this.model.status },
-        '',
-        table(this.itens, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total'])
+        { text: 'STATUS: ' + this.model.status, style: 'subheader' },
+        //{ text: this.model.status },
+        ' ',
+        table(this.itens, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']),
 
+        { text: 'TOTAL: ' + this.model.total, style: 'subheader' },
 //        {
 //          style: 'tableExample',
 //          table: {

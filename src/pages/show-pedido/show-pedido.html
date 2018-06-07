@@ -17,16 +17,17 @@
     <h1>Produtos:</h1>
     <ion-list>
       <ion-item *ngFor="let item of itens">
-        <b ion-text color="danger">{{ item.nome_produto }}</b><br>
-        Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
+        <h2 ion-text color="danger">{{ item.nome_produto }}</h2>
+        <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
             Preço: <b ion-text color="danger">{{ item.valor_unitario }}</b>
-            Total: <b ion-text color="danger">{{ item.valor_total }}</b>
+            Total: <b ion-text color="danger">{{ item.valor_total }}</b></h2>
       </ion-item>  
       <ion-item>
-        <h2>Total: <b ion-text color="danger">R$ {{ total.toFixed(2) }}</b> </h2>
+        <h1>Total: <b ion-text color="danger">R$ {{ total.toFixed(2) }}</b> </h1>
       </ion-item>
     </ion-list>
   </div>
   <button ion-button full (click)="createPdf()">Gerar PDF</button>
+  <br>
   <button ion-button full (click)="downloadPdf()" color="secundary" [disabled]="!pdfObj">Download PDF</button>
 </ion-content>

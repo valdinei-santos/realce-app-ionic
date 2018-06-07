@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 //import { forkJoin } from 'rxjs/observable/forkJoin';
 
 import { PedidoProvider, Pedido, Item_pedido } from '../../providers/pedido/pedido';
-import { ClienteProvider } from '../../providers/cliente/cliente';
+import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { ToastController } from 'ionic-angular';
 
@@ -27,6 +27,7 @@ export class CadastroPedidoPage {
   model: Pedido;
   model_item_pedido: Item_pedido;
   model_produto: Produto;
+  model_cliente: Cliente;
   itens: any[] = [];
   clientes: any[];
   produtos: any[];
@@ -43,6 +44,7 @@ export class CadastroPedidoPage {
 
     this.model = new Pedido();
     this.model_produto = new Produto();
+    this.model_cliente = new Cliente();
     this.model_item_pedido = new Item_pedido();
 
     console.log('ID Peeee:' + this.navParams.data.id);
@@ -250,6 +252,27 @@ export class CadastroPedidoPage {
           this.model_item_pedido.valor_unitario = this.model_produto.preco;
           //his.model_item_pedido.valor_unitario.toFixed(2);
           this.model_item_pedido.quantidade = 1;
+        });
+    }
+  }
+
+  clienteChange(event: { component: SelectSearchableComponent, value: any }) {
+    console.log('clienteChange:', event.value);
+    if (this.model_cliente.id !== null) {
+      Observable.forkJoin([
+          Observable.fromPromise(
+              this.clienteProvider.get(this.model_cliente.id)
+                .then((result: any) => {
+                  this.model_cliente = result;
+                })
+                .catch(() => {
+                  this.toast.create({ message: 'Erro ao carregar Cliente!!!', duration: 3000, position: 'botton' }).present();
+                })
+          )
+        ])
+        .subscribe(data => {
+          console.log(data);
+          this.model.cliente_id = this.model_cliente.id;
         });
     }
   }

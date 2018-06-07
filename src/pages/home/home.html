@@ -10,33 +10,36 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      <ion-col offset-2>
-        <button ion-button color="primary" large round icon-left>
+      <img style="margin:0px auto; display:block" width="180" height="162" src="assets/imgs/logo_realce1.png" /> 
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="primary" full large round icon-left (click)="pedidos()">
           <ion-icon name="md-clipboard"></ion-icon>
           Pedidos
         </button>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col offset-2>
-        <button ion-button color="secondary" large round icon-left>
-          <ion-icon name="ios-trophy-outline"></ion-icon>
+      <ion-col>
+        <button ion-button color="secondary" full large round icon-left (click)="produtos()">
+          <ion-icon name="ios-beer-outline"></ion-icon>
           Produtos
         </button>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col offset-2>
-        <button ion-button color="danger" large round icon-left>
+      <ion-col>
+        <button ion-button color="danger" full large round icon-left (click)="clientes()">
           <ion-icon name="ios-people-outline"></ion-icon>
           Clientes
         </button>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col offset-2>
-        <button ion-button color="dark" large round icon-left>
-          <ion-icon name="ios-train-outline"></ion-icon>
+      <ion-col>
+        <button ion-button color="dark" full large round icon-left (click)="folhasCarga()">
+          <ion-icon name="ios-bus"></ion-icon>
           Folha Carga
         </button>
       </ion-col>

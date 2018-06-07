@@ -7,13 +7,33 @@
 
 <ion-content padding>
 	<ion-list>
-	    <ion-item>
+	    <!-- <ion-item>
 		  <ion-label floating>Cliente</ion-label>
 		  <ion-select interface="popover" name="cliente_id" [(ngModel)]="model.cliente_id">
 	        <ion-option *ngFor="let cliente of clientes" value="{{ cliente.id }}">{{ cliente.nome}}</ion-option>
 	      </ion-select>
-	    </ion-item>
-
+			</ion-item> -->
+			<ion-grid>
+					<ion-row>
+						<ion-col col-12>
+							<ion-item-group margin-bottom>
+									<ion-item>
+										<select-searchable
+											[(ngModel)]="model_cliente"
+											itemValueField="id"
+											itemTextField="nome"
+											[items]="clientes"
+											[canSearch]="true"
+											(onChange)="clienteChange($event)">
+											<ng-template floating selectSearchableLabelTemplate >
+												Cliente
+											</ng-template>
+										</select-searchable>
+									</ion-item>
+								</ion-item-group>
+						</ion-col>
+					</ion-row>
+			</ion-grid>
 	    <ion-item>
 		  <ion-label floating>Data</ion-label>
 		  <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input> --> 

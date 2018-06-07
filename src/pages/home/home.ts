@@ -1,18 +1,34 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-
-//import { ICliente } from '../../interfaces/ICliente';
-import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
+import { ListaPedidoPage} from '../lista-pedido/lista-pedido';
+import { ListaProdutoPage} from '../lista-produto/lista-produto';
+import { ListaClientePage} from '../lista-cliente/lista-cliente';
+import { ListaFolhacargaPage} from '../lista-folhacarga/lista-folhacarga';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  clientes: Cliente[];
   
-  constructor(public navCtrl: NavController, public clienteProvider:ClienteProvider) {
-    //this.clientes = this.clienteProvider.listar();
+  constructor(public navCtrl: NavController) {
+
+  }
+
+  pedidos(){
+    this.navCtrl.push(ListaPedidoPage);
+  }
+
+  produtos(){
+    this.navCtrl.push(ListaProdutoPage);
+  }
+
+  clientes(){
+    this.navCtrl.push(ListaClientePage);
+  }
+
+  folhasCarga(){
+    this.navCtrl.push(ListaFolhacargaPage);
   }
 
 }
