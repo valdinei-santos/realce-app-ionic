@@ -115,7 +115,7 @@ export class ShowPedidoPage {
         //{ text: this.letterObj.from },
         //{ text: this.model.cliente_nome },
 
-        { text: 'DATA: ' + this.model.data, style: 'subheader' },
+        { text: 'DATA: ' + (this.model.data), style: 'subheader' },
         //{ text: this.letterObj.to },
         //{ text: this.model.data },
 
@@ -124,7 +124,7 @@ export class ShowPedidoPage {
         ' ',
         table(this.itens, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']),
 
-        { text: 'TOTAL: ' + this.model.total, style: 'subheader' },
+        { text: 'TOTAL: ' + (this.model.total), style: 'subheader' },
 //        {
 //          style: 'tableExample',
 //          table: {

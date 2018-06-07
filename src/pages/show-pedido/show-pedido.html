@@ -8,7 +8,7 @@
   <div ion-row>
     <div ion-col-12>
       <h2>Cliente: <b ion-text color="primary">{{model.cliente_nome}}</b></h2>
-      <h2>Data: <b ion-text color="primary">{{model.data| date: 'dd/MM/yyyy'}}</b></h2>
+      <h2>Data: <b ion-text color="primary">{{model.data| formatDate}}</b></h2>
       <h2>Status: <b ion-text color="primary">{{model.status}}</b></h2>
     </div>
   </div>
@@ -19,11 +19,11 @@
       <ion-item *ngFor="let item of itens">
         <h2 ion-text color="danger">{{ item.nome_produto }}</h2>
         <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
-            Preço: <b ion-text color="danger">{{ item.valor_unitario }}</b>
-            Total: <b ion-text color="danger">{{ item.valor_total }}</b></h2>
+            Preço: <b ion-text color="danger">{{ item.valor_unitario | formatCurrency }}</b>
+            Total: <b ion-text color="danger">{{ item.valor_total | formatCurrency }}</b></h2>
       </ion-item>  
       <ion-item>
-        <h1>Total: <b ion-text color="danger">R$ {{ total.toFixed(2) }}</b> </h1>
+        <h1>Total: <b ion-text color="danger">R$ {{ total.toFixed(2) | formatCurrency }}</b> </h1>
       </ion-item>
     </ion-list>
   </div>

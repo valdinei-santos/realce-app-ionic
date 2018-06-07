@@ -11,8 +11,8 @@
   <ion-list>
     <ion-item-sliding *ngFor="let pedido of pedidos2">
       <button ion-item (click)="showPedido(pedido.id)">
-        <h2>Pedido: {{ pedido.id }} - {{ pedido.data | date :'dd/MM/yyyy' }} - {{ pedido.cliente_nome }} </h2>
-        <h2><b ion-text color="danger">Total: {{ pedido.total }} --> {{ pedido.status }}</b></h2>
+        <h2>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} - {{ pedido.cliente_nome }} </h2>
+        <h2><b ion-text color="danger">Total: {{ pedido.total | formatCurrency }} --> {{ pedido.status }}</b></h2>
       </button>
       <ion-item-options side="left">
         <button ion-button color="danger" (click)="removePedido(pedido)">

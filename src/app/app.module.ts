@@ -5,6 +5,7 @@ import localePt from '@angular/common/locales/pt';     // Incluido para funciona
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SQLite } from '@ionic-native/sqlite';
 import { DatePipe } from '@angular/common';
+
 import { SelectSearchableModule } from 'ionic-select-searchable';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { File } from '@ionic-native/file';

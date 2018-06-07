@@ -168,3 +168,21 @@ import { FileOpener } from '@ionic-native/file-opener';
   ...
 6 - Ajustado a PAGE show-pedido.ts para criar o PDF
 ...
+
+############################################
+# Criar os PIPEs para formatar data e moeda
+############################################
+1 - ionic g pipe format-currency
+2 - ionic g pipe format-date
+3 - Ajustar os Pipes gerados conforme a necessidade
+4 - na Page que for usar tem que importar o PipesModule no arquivo page-xyz.module.ts 
+    ...
+    import { PipesModule } from '../../pipes/pipes.module';
+    ...
+    imports: [
+      IonicPageModule.forChild(ListaPedidoPage),
+      PipesModule
+    ],
+
+
+
