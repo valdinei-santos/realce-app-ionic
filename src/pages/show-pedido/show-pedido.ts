@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 
-import { PedidoProvider, Pedido, Pedido2 } from '../../providers/pedido/pedido';
+import { PedidoProvider, Pedido, Pedido2, Item_pedido } from '../../providers/pedido/pedido';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { ToastController } from 'ionic-angular';
+import { FormatCurrencyPipe } from '../../pipes/format-currency/format-currency';
+import { FormatDatePipe } from '../../pipes/format-date/format-date';
+
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -14,28 +17,25 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 @Component({
   selector: 'page-show-pedido',
   templateUrl: 'show-pedido.html',
+  providers: [ FormatCurrencyPipe,  FormatDatePipe ]
 })
 export class ShowPedidoPage {
 
   model: Pedido2;
   itens: any[] = [];
+  itens2: any[] = [];
   total: number = 0;
-
-  pagePdf = {
-
-  }
-
-  letterObj = {
-    from: 'Valdinei',
-    to: 'Paul',
-    text: 'Teste de emememasemaske aemas,emasmeas a asemasmeasmeasme asemase as '
-  }
+  dataAtual: Date;
+  horaAtual: string;
+  pagePdf = { 'pedido_id': null, 'cliente_nome': null, 'data': null, 'status': null, 'total': null };
   pdfObj = null;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public pedidoProvider: PedidoProvider,
               public toast: ToastController,
+              private formatDate: FormatDatePipe,
+              private formatCurrency: FormatCurrencyPipe,
               private plt: Platform,
               private file: File,
               private fileOpener: FileOpener) {
@@ -47,7 +47,7 @@ export class ShowPedidoPage {
       })
       .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
-      });
+    });
 
     this.pedidoProvider.getItens(this.navParams.data.id)
       .then((result: any) => {
@@ -57,6 +57,7 @@ export class ShowPedidoPage {
         this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
     });
      
+
   }
 
   ionViewDidEnter() {
@@ -66,17 +67,38 @@ export class ShowPedidoPage {
     }
   }
 
+  getTimestamp() {
+    let now = new Date();
+    let year = "" + now.getFullYear();
+    let month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
+    let day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
+    let hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
+    let minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
+    let second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
+    return day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
+  }
+
   createPdf() {
     console.log('Entrou createPdf');
-   /*  var corpo = '';
-    for (var item of this.itens){
-      corpo = corpo + item.nome_produto;
-      corpo = corpo + 'Quant.: ' + item.quantidade;
-      corpo = corpo + 'Preço: ' + item.valor_unitario;
-      corpo = corpo + 'Total: ' + item.valor_total;
-      corpo = corpo + '\n';
-    } */
-    
+    for (let el of this.itens) {
+      //this.total = this.total + parseFloat(el.valor_total);
+      let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null};
+      item.id = el.id;
+      item.nome_produto = el.nome_produto;
+      item.quantidade = el.quantidade;
+      item.valor_unitario = this.formatCurrency.transform(el.valor_unitario);
+      item.valor_total = this.formatCurrency.transform(el.valor_total);
+      this.itens2.push(item);
+    }
+    this.pagePdf = {
+      'pedido_id': this.model.id,
+      'cliente_nome': this.model.cliente_nome,
+      'data': this.formatDate.transform(this.model.data),
+      'status': this.model.status,
+      'total': this.formatCurrency.transform(this.model.total),
+    }
+    this.horaAtual = this.getTimestamp();
+
     function buildTableBody(data, columns) {
       var body = [];
       //body.push(columns);
@@ -106,25 +128,19 @@ export class ShowPedidoPage {
     var docDefinition = {
       content: [
         { text: 'DISTRIBUIDORA REALCE - PEDIDO', style: 'header' },
-        { text: new Date().toTimeString(), alignment: 'right' },
+        { text: this.horaAtual, alignment: 'right' },
 
-        { text: 'PEDIDO: ' + this.model.id, style: 'subheader' },
-        //{ text: this.model.id },
+        { text: 'PEDIDO: ' + this.pagePdf.pedido_id, style: 'subheader' },
 
-        { text: 'CLIENTE: ' + this.model.cliente_nome, style: 'subheader' },
-        //{ text: this.letterObj.from },
-        //{ text: this.model.cliente_nome },
+        { text: 'CLIENTE: ' + this.pagePdf.cliente_nome, style: 'subheader' },
 
-        { text: 'DATA: ' + (this.model.data), style: 'subheader' },
-        //{ text: this.letterObj.to },
-        //{ text: this.model.data },
+        { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
 
-        { text: 'STATUS: ' + this.model.status, style: 'subheader' },
-        //{ text: this.model.status },
+        { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' },
         ' ',
-        table(this.itens, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']),
+        table(this.itens2, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']),
 
-        { text: 'TOTAL: ' + (this.model.total), style: 'subheader' },
+        { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' },
 //        {
 //          style: 'tableExample',
 //          table: {
@@ -185,7 +201,7 @@ export class ShowPedidoPage {
     this.pdfObj = pdfMake.createPdf(docDefinition);
   }
 
-  downloadPdf() {
+  viewPdf() {
     if (this.plt.is('cordova')) {
       this.pdfObj.getBuffer((buffer) => {
         var blob = new Blob([buffer], { type: 'application/pdf' });
