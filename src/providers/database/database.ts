@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 const DATABASES_TABLES = [
-  `DROP TABLE produtos`,
+  /* `DROP TABLE produtos`,
   `DROP TABLE produtos_categoria`,
   `DROP TABLE produtos_marca`,
   `DROP TABLE produtos_tipo`,
@@ -10,7 +10,7 @@ const DATABASES_TABLES = [
   `DROP TABLE produtos_unidade_venda`,
   `DROP TABLE pedidos`,
   `DROP TABLE pedidos_itens`, 
-  `DROP TABLE clientes`, 
+  `DROP TABLE clientes`,  */
   `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_tipo (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,

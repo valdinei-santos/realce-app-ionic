@@ -33,7 +33,8 @@ export class CadastroPedidoPage {
   produtos: any[];
   //unidades: any[]
   //data_atual: string = new Date().toISOString();
-  data_atual: Date = new Date();
+  data_atual: any = new Date();
+  data_atual_aux: any = new Date();
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -54,6 +55,7 @@ export class CadastroPedidoPage {
       this.pedidoProvider.get(this.navParams.data.id)
         .then((result: any) => {
           this.model = result;
+          console.log('Data que veio dentro promise: ' + this.model.data);
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
@@ -66,10 +68,9 @@ export class CadastroPedidoPage {
           this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
       });
       //this.model.data = this.model.data.toISOString();
-      console.log('Data que veio: ' + this.model.data);
     } else {
       this.editando = false;
-      this.model.data = new Date(this.data_atual.toISOString());
+      this.model.data = this.data_atual.toISOString();
       console.log('Data Val1: ' + this.data_atual.toLocaleDateString('pt-BR'));
       console.log('Data Val2: ' + new Date().toJSON().slice(0,10).replace(/-/g,'/'));
       
@@ -105,6 +106,7 @@ export class CadastroPedidoPage {
    
     //this.model.data = this.data_atual.toString();
     this.model.status = 'Inexistente';
+    
   }
 
 
@@ -191,6 +193,9 @@ export class CadastroPedidoPage {
   }
 
   private savePedido() {
+    this.data_atual_aux = this.model.data;
+    this.model.data = this.data_atual_aux.substring(0,10);
+
     if (this.model.status != 'Inexistente') {
       console.log('Entrou UPDATE - ' + this.model.status);
       //this.editando = false;

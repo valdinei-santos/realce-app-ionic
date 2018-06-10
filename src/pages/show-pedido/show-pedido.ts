@@ -4,8 +4,9 @@ import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { PedidoProvider, Pedido, Pedido2, Item_pedido } from '../../providers/pedido/pedido';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { ToastController } from 'ionic-angular';
-import { FormatCurrencyPipe } from '../../pipes/format-currency/format-currency';
+//import { FormatCurrencyPipe } from '../../pipes/format-currency/format-currency';
 import { FormatDatePipe } from '../../pipes/format-date/format-date';
+import { DecimalPipe } from '@angular/common';
 
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
@@ -17,7 +18,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 @Component({
   selector: 'page-show-pedido',
   templateUrl: 'show-pedido.html',
-  providers: [ FormatCurrencyPipe,  FormatDatePipe ]
+  providers: [ /* FormatCurrencyPipe,  */ FormatDatePipe ]
 })
 export class ShowPedidoPage {
 
@@ -35,7 +36,7 @@ export class ShowPedidoPage {
               public pedidoProvider: PedidoProvider,
               public toast: ToastController,
               private formatDate: FormatDatePipe,
-              private formatCurrency: FormatCurrencyPipe,
+              private decimalPipe: DecimalPipe,
               private plt: Platform,
               private file: File,
               private fileOpener: FileOpener) {
@@ -65,6 +66,7 @@ export class ShowPedidoPage {
     for (let el of this.itens) {
       this.total = this.total + parseFloat(el.valor_total);
     }
+    console.log(this.itens[0].valor_unitario);
   }
 
   getTimestamp() {
@@ -86,8 +88,8 @@ export class ShowPedidoPage {
       item.id = el.id;
       item.nome_produto = el.nome_produto;
       item.quantidade = el.quantidade;
-      item.valor_unitario = this.formatCurrency.transform(el.valor_unitario);
-      item.valor_total = this.formatCurrency.transform(el.valor_total);
+      item.valor_unitario = this.decimalPipe.transform(el.valor_unitario, '1.2-2');
+      item.valor_total = this.decimalPipe.transform(el.valor_total, '1.2-2');
       this.itens2.push(item);
     }
     this.pagePdf = {
@@ -95,7 +97,7 @@ export class ShowPedidoPage {
       'cliente_nome': this.model.cliente_nome,
       'data': this.formatDate.transform(this.model.data),
       'status': this.model.status,
-      'total': this.formatCurrency.transform(this.model.total),
+      'total': this.decimalPipe.transform(this.model.total, '1.2-2'),
     }
     this.horaAtual = this.getTimestamp();
 

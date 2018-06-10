@@ -186,3 +186,28 @@ import { FileOpener } from '@ionic-native/file-opener';
 
 
 
+
+getDate() {
+    let now = new Date();
+    let year = "" + now.getFullYear();
+    let month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
+    let day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
+    //let hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
+    //let minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
+    //let second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
+    //return day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
+    return day + "/" + month + "/" + year;
+  }
+
+  getStringToDate(data: string){ // string no formato yyyy-mm-dd
+    let year = Number(data.substring(0,4));
+    let month = Number(data.substring(5,7));
+    let day = Number(data.substring(8,10));
+    console.log('ano: '+ year);
+    console.log('mes: '+ month);
+    console.log('dia: '+ day);
+    return new Date(year, month, day)
+  }
+
+
+

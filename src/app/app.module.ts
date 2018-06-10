@@ -5,6 +5,7 @@ import localePtBr from '@angular/common/locales/pt';     // Incluido para funcio
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SQLite } from '@ionic-native/sqlite';
 import { DatePipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 
 import { SelectSearchableModule } from 'ionic-select-searchable';
 import { EmailComposer } from '@ionic-native/email-composer';
@@ -96,6 +97,7 @@ registerLocaleData(localePtBr);
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SQLite,
     DatePipe,
+    DecimalPipe,
     ClienteProvider,
     ProdutoProvider,
     PedidoProvider,
