@@ -208,10 +208,11 @@ export class ShowPedidoPage {
       this.pdfObj.getBuffer((buffer) => {
         var blob = new Blob([buffer], { type: 'application/pdf' });
  
-        // Save the PDF to the data Directory of our App
-        this.file.writeFile(this.file.dataDirectory, 'myletter.pdf', blob, { replace: true }).then(fileEntry => {
+        // Save the PDF to the data Directory of our App 
+        // Gera em /data/data/br.com.valdinei.realceapp/files
+        this.file.writeFile(this.file.dataDirectory, 'pedido_'+this.model.id+'.pdf', blob, { replace: true }).then(fileEntry => {
           // Open the PDf with the correct OS tools
-          this.fileOpener.open(this.file.dataDirectory + 'myletter.pdf', 'application/pdf');
+          this.fileOpener.open(this.file.dataDirectory + 'pedido_'+this.model.id+'.pdf', 'application/pdf');
         })
       });
     } else {

@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the ListaFolhacargaPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { CadastroFolhacargaPage } from '../cadastro-folhacarga/cadastro-folhacarga';
 
 @IonicPage()
 @Component({
@@ -21,5 +15,11 @@ export class ListaFolhacargaPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ListaFolhacargaPage');
   }
+
+  addFolhaCarga(){
+    console.log('addFolhaCarga');
+	  this.navCtrl.push(CadastroFolhacargaPage);
+  }
+
 
 }

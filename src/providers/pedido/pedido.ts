@@ -232,6 +232,34 @@ public insert(pedido: Pedido) {
       .catch((e) => console.error(e));
   }
 
+  public getAll3() {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        //let sql = `SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome,
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
+                         (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
+                     FROM pedidos p 
+                     JOIN clientes c 
+                       ON p.cliente_id = c.id
+                    WHERE upper(p.status) = 'PENDENTE' `;              
+        return db.executeSql(sql, [])
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let pedidos: any[] = [];
+              for (var i = 0; i < data.rows.length; i++) {
+                var pedido = data.rows.item(i);
+                pedidos.push(pedido);
+              }
+              return pedidos;
+            } else {
+              return [];
+            }
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
   public getItens(pedido_id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {

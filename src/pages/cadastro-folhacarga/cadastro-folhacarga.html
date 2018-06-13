@@ -1,18 +1,42 @@
-<!--
-  Generated template for the CadastroFolhacargaPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>CadastroFolhacarga</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Cadastro Folha de Carga</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
+
+  <ion-list>
+        <ion-item *ngFor="let pedido of pedidos2">
+          <ion-label>
+            <h2>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} - {{ pedido.cliente_nome }} </h2>
+            <h2><b ion-text color="danger">Total: {{ pedido.total | number:'1.2-2' }} --> {{ pedido.status }}</b></h2>
+          </ion-label>
+          <ion-checkbox (ionChange)="onChange(pedido.id, $event.checked)" value="pedido.id"></ion-checkbox>
+        </ion-item>
+        <ion-item *ngFor="let c of check; let i = index">
+            {{ c.id }}
+        </ion-item>
+        
+
+<!--         <div *ngFor="let option of question.questionOptions"> -->
+        <!-- <div *ngFor="let pedido of pedidos2">
+          <ion-item-group [formControl]="checkboxes">
+            <ion-item>
+              <ion-label>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} - {{ pedido.cliente_nome }}</ion-label>
+              <ion-checkbox (click)="changeRadioStatus(pedido, pedidos2)"></ion-checkbox>
+              <ion-checkbox (ionChange)="onChange(choice.id, $event._checked)" value="choice.id"></ion-checkbox>
+            </ion-item>
+          </ion-item-group>
+        </div> -->
+
+  </ion-list>
+
+  <div padding>
+      <button *ngIf="!editando" ion-button block (click)="save()">Criar Folha de Carga</button>
+      <button *ngIf="editando" ion-button block (click)="save()">Atualizar Folha de Carga</button>
+      <br>
+      <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
+    </div>
 
 </ion-content>
