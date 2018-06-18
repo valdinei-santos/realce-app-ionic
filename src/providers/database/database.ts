@@ -69,15 +69,15 @@ const DATABASES_TABLES = [
                                               FOREIGN KEY(produto_id) REFERENCES produtos(id)
                                               )`,
   `CREATE TABLE IF NOT EXISTS folhas_carga (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                             data TEXT,
-                                             status VARCHAR(30)
-                                            )`,
+                                            data TEXT,
+                                            status VARCHAR(30)
+                                           )`,
   `CREATE TABLE IF NOT EXISTS folhas_carga_itens (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                   pedido_id INTEGER,
-                                                   folha_carga_id INTEGER,
-                                                   FOREIGN KEY(pedido_id) REFERENCES pedidos(id),
-                                                   FOREIGN KEY(folha_carga_id) REFERENCES folhas_carga(id)
-                                                  )`
+                                                  pedido_id INTEGER,
+                                                  folha_carga_id INTEGER,
+                                                  FOREIGN KEY(pedido_id) REFERENCES pedidos(id),
+                                                  FOREIGN KEY(folha_carga_id) REFERENCES folhas_carga(id)
+                                                 )`
 ];
 
 /* const UNIDADES = [

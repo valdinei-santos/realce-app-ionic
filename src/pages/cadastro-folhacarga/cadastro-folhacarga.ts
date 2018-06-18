@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { PedidoProvider, Pedido, Pedido2 } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
+import { PreviewFolhacargaPage } from '../preview-folhacarga/preview-folhacarga';
 
 @IonicPage()
 @Component({
@@ -16,12 +17,13 @@ export class CadastroFolhacargaPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public pedidoProvider: PedidoProvider,
-              public toast: ToastController
+              public toast: ToastController,
+              public modalCtrl: ModalController
              ) {
 
   }
 
-  ionViewDidEnter() {
+  ionViewDidLoad() {
     console.log('ionViewDidLoad CadastroFolhacargaPage');
     this.pedidoProvider.getAll3()
       .then((result: any[]) => {
@@ -36,14 +38,36 @@ export class CadastroFolhacargaPage {
     if(isChecked) {
       let item = { "id": id };
       this.check.push(item);
+      console.log('Item checked: ' + id);
     } else {
       let item = { "id": id };
-      this.check.splice(this.check.indexOf(item), 1);
+      let index = this.check.findIndex(function(item) {
+        return item.id == id
+      });
+      console.log('quem remove: ' + this.check.indexOf(index));
+      this.check.splice(this.check.indexOf(item.id), 1);
+      console.log('Item unchecked: ' + id);
     }
- }
+    console.log(this.check);
+  }
+
+  /* createFolhaCarga() {
+    //let profileModal = this.modalCtrl.create(Profile, { userId: 8675309 });
+    let profileModal = this.modalCtrl.create(Profile, { userId: 8675309 });
+    profileModal.present();
+
+    profileModal.onDidDismiss(data => {
+      console.log(data);
+    });
+  } */
+
+  previewFolhacarga(){
+    console.log('previewFolhacarga: ');
+    this.navCtrl.push(PreviewFolhacargaPage, { lista_pedidos: this.check });
+  }
 
   save() {
-    if (this.savePedido()) {
+    if (this.saveFolhacarga()) {
       this.toast.create({ message: 'Pedido salvo!', duration: 3000, position: 'center' }).present();
       this.navCtrl.pop();
     } else {
@@ -51,7 +75,8 @@ export class CadastroFolhacargaPage {
     }
   }
 
-  private savePedido() {
+  private saveFolhacarga() {
+    
     /* this.data_atual_aux = this.model.data;
     this.model.data = this.data_atual_aux.substring(0,10);
 

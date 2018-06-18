@@ -41,6 +41,8 @@ import { ListaPedidoPageModule } from '../pages/lista-pedido/lista-pedido.module
 import { ShowPedidoPageModule } from '../pages/show-pedido/show-pedido.module';
 import { CadastroFolhacargaPageModule } from '../pages/cadastro-folhacarga/cadastro-folhacarga.module';
 import { ListaFolhacargaPageModule } from '../pages/lista-folhacarga/lista-folhacarga.module';
+import { ShowFolhacargaPageModule } from '../pages/show-folhacarga/show-folhacarga.module';
+import { PreviewFolhacargaPageModule } from '../pages/preview-folhacarga/preview-folhacarga.module';
 import { CadastroCategoriaPageModule } from '../pages/cadastro-categoria/cadastro-categoria.module';
 import { ListaCategoriaPageModule } from '../pages/lista-categoria/lista-categoria.module';
 import { CadastroMarcaPageModule } from '../pages/cadastro-marca/cadastro-marca.module';
@@ -74,6 +76,8 @@ registerLocaleData(localePtBr);
     ShowPedidoPageModule,
     CadastroFolhacargaPageModule,
     ListaFolhacargaPageModule,
+    ShowFolhacargaPageModule,
+    PreviewFolhacargaPageModule,
     CadastroCategoriaPageModule,
     ListaCategoriaPageModule,
     CadastroMarcaPageModule,

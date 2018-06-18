@@ -14,9 +14,9 @@
           </ion-label>
           <ion-checkbox (ionChange)="onChange(pedido.id, $event.checked)" value="pedido.id"></ion-checkbox>
         </ion-item>
-        <ion-item *ngFor="let c of check; let i = index">
+        <!-- <ion-item *ngFor="let c of check; let i = index">
             {{ c.id }}
-        </ion-item>
+        </ion-item> -->
         
 
 <!--         <div *ngFor="let option of question.questionOptions"> -->
@@ -33,7 +33,7 @@
   </ion-list>
 
   <div padding>
-      <button *ngIf="!editando" ion-button block (click)="save()">Criar Folha de Carga</button>
+      <button *ngIf="!editando" ion-button block (click)="previewFolhacarga()">Preview Folha de Carga</button>
       <button *ngIf="editando" ion-button block (click)="save()">Atualizar Folha de Carga</button>
       <br>
       <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>

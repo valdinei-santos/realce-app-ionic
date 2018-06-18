@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Preview Folha de Carga</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div ion-row>
+    <div ion-col-12>
+      <!-- <h2>Cliente: <b ion-text color="primary">{{model.cliente_nome}}</b></h2> -->
+      <h2>Pedidos: {{ pedidos }}</h2>
+    </div>
+  </div>
+  <div ion-row>
+    <h2>Produtos:</h2>
+    <ion-list>
+      <ion-item *ngFor="let item of itens">
+        <h2 ion-text color="danger">{{ item.nome_produto }}</h2>
+        <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b></h2>
+      </ion-item>  
+    </ion-list>
+  </div>
+  <button ion-button full (click)="save()">Criar Folha de Carga</button>
+  <br>
+  <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
+</ion-content>
