@@ -4,6 +4,7 @@ import { PedidoProvider, Pedido, Pedido2 } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
 import { PreviewFolhacargaPage } from '../preview-folhacarga/preview-folhacarga';
 
+
 @IonicPage()
 @Component({
   selector: 'page-cadastro-folhacarga',
@@ -12,7 +13,7 @@ import { PreviewFolhacargaPage } from '../preview-folhacarga/preview-folhacarga'
 export class CadastroFolhacargaPage {
 
   pedidos2: any[];
-  check: any[] = [];
+  check: number[] = [];
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -20,7 +21,7 @@ export class CadastroFolhacargaPage {
               public toast: ToastController,
               public modalCtrl: ModalController
              ) {
-
+    
   }
 
   ionViewDidLoad() {
@@ -36,17 +37,18 @@ export class CadastroFolhacargaPage {
 
   onChange(id, isChecked) {
     if(isChecked) {
-      let item = { "id": id };
-      this.check.push(item);
-      console.log('Item checked: ' + id);
+      //let item = { "id": id };
+      this.check.push(id);
+      //console.log('Item checked: ' + id);
     } else {
-      let item = { "id": id };
-      let index = this.check.findIndex(function(item) {
+      //let item = { "id": id };
+      /* let index = this.check.findIndex(function(item) {
         return item.id == id
-      });
-      console.log('quem remove: ' + this.check.indexOf(index));
-      this.check.splice(this.check.indexOf(item.id), 1);
-      console.log('Item unchecked: ' + id);
+      }); */
+      //console.log('quem remove: ' + this.check.indexOf(index));
+      //console.log('quem remove: ' + this.check.indexOf(id));
+      this.check.splice(this.check.indexOf(id), 1);
+      //console.log('Item unchecked: ' + id);
     }
     console.log(this.check);
   }

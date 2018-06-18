@@ -307,7 +307,7 @@ public insert(pedido: Pedido) {
     let lista: string = '0';
     for (let el of lista_pedidos) {
       //this.total = this.total + parseFloat(el.valor_total);
-      lista = lista +','+el.id;
+      lista = lista +','+el;
     }
     let lista2: number = 1;
     console.log('lista in AllItens: '+ lista);

@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { PedidoProvider, Pedido, Pedido2, Item_pedido } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
+import { Folhacarga, FolhacargaProvider } from '../../providers/folhacarga/folhacarga';
 
 @IonicPage()
 @Component({
@@ -11,6 +12,7 @@ import { ToastController } from 'ionic-angular';
 })
 export class PreviewFolhacargaPage {
 
+  model: Folhacarga;
   //pedido: Pedido2;
   itens: any[] = [];
   lista_pedidos: any[] = [];
@@ -21,15 +23,18 @@ export class PreviewFolhacargaPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public pedidoProvider: PedidoProvider,
+              public folhacargaProvider: FolhacargaProvider,
               public toast: ToastController
              ) {
+    this.model = new Folhacarga;
+    this.model.status = 'Inexistente';
     this.lista_pedidos = this.navParams.data.lista_pedidos;
     console.log(this.lista_pedidos);
     for (let i = 0; i < this.lista_pedidos.length; i++) {
       if (i == 0){
-        this.pedidos = this.lista_pedidos[i].id;  
+        this.pedidos = this.lista_pedidos[i];  
       } else {
-        this.pedidos = this.pedidos + ' - ' + this.lista_pedidos[i].id;
+        this.pedidos = this.pedidos + ' - ' + this.lista_pedidos[i];
       }
     }
     this.pedidoProvider.getAllItens(this.navParams.data.lista_pedidos)
@@ -59,19 +64,19 @@ export class PreviewFolhacargaPage {
     
     /* this.data_atual_aux = this.model.data;
     this.model.data = this.data_atual_aux.substring(0,10);
-
+    */
     if (this.model.status != 'Inexistente') {
-      console.log('Entrou UPDATE - ' + this.model.status);
+      console.log('Entrou UPDATE Folha - ' + this.model.status);
       //this.editando = false;
-      this.pedidoProvider.update(this.model);
-      return this.pedidoProvider.update_itens(this.itens);
+      this.folhacargaProvider.update(this.model);
+      return this.folhacargaProvider.update_itens(this.itens);
     } else {
       console.log('Entrou INSERT');
       //this.editando = true;
       this.model.status = 'Pendente';
-      this.pedidoProvider.insert(this.model);
-      return this.pedidoProvider.insert_itens(this.itens);
-    } */
+      this.folhacargaProvider.insert(this.model);
+      return this.folhacargaProvider.insert_itens(this.itens);
+    } 
   }
 
   cancelar(){
