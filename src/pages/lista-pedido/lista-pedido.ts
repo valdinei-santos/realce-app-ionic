@@ -39,7 +39,6 @@ export class ListaPedidoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
       });
-
   }
 
 

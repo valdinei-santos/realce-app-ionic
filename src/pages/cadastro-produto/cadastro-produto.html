@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title *ngIf="!editando">Cadastro Produto</ion-title>
-    <ion-title *ngIf="editando">Alteração Produto</ion-title>
+  <ion-navbar class="energized" >
+    <ion-title *ngIf="!editando"><h1>Cadastro de Produto</h1></ion-title>
+    <ion-title *ngIf="editando"><h1>Alteração de Produto</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -16,7 +16,7 @@
 		  <ion-select interface="popover" name="categoria_id" [(ngModel)]="model.categoria_id"> 
           <ion-option *ngFor="let categoria of categorias" value="{{ categoria.id }}">{{ categoria.nome}}</ion-option>
       </ion-select>
-      <button ion-button item-end >
+      <button ion-button color="dark" item-end >
           <ion-icon name="add" (click)="addCategoria()"></ion-icon>
       </button>
     </ion-item>
@@ -26,7 +26,7 @@
       <ion-select interface="popover" name="marca_id" [(ngModel)]="model.marca_id">
           <ion-option *ngFor="let marca of marcas" value="{{ marca.id }}">{{ marca.nome}}</ion-option>
       </ion-select>
-      <button ion-button item-end >
+      <button ion-button color="dark" item-end >
           <ion-icon name="add" (click)="addMarca()"></ion-icon>
       </button>
     </ion-item>
@@ -36,7 +36,7 @@
       <ion-select interface="popover" name="tipo_id" [(ngModel)]="model.tipo_id">
           <ion-option *ngFor="let tipo of tipos" value="{{ tipo.id }}">{{ tipo.nome}}</ion-option>
       </ion-select>
-      <button ion-button item-end >
+      <button ion-button color="dark" item-end >
           <ion-icon name="add" (click)="addTipo()"></ion-icon>
       </button>
     </ion-item>  
@@ -46,7 +46,7 @@
         <ion-select interface="popover" name="vasilhame_id" [(ngModel)]="model.vasilhame_id">
             <ion-option *ngFor="let vasilhame of vasilhames" value="{{ vasilhame.id }}">{{ vasilhame.nome}}</ion-option>
         </ion-select>
-        <button ion-button item-end >
+        <button ion-button color="dark" item-end >
             <ion-icon name="add" (click)="addVasilhame()"></ion-icon>
         </button>
       </ion-item>
@@ -56,7 +56,7 @@
       <ion-select interface="popover" name="unidade_venda_id" [(ngModel)]="model.unidade_venda_id">
           <ion-option *ngFor="let unidade_venda of unidades_venda" value="{{ unidade_venda.id }}">{{ unidade_venda.nome}}</ion-option>
       </ion-select>
-      <button ion-button item-end >
+      <button ion-button color="dark" item-end >
           <ion-icon name="add" (click)="addUnidade()"></ion-icon>
       </button>
     </ion-item>
@@ -72,7 +72,7 @@
     	
 	  <ion-item>
       <ion-label>Ativo</ion-label>
-      <ion-checkbox name="ativo" [(ngModel)]="model.ativo"></ion-checkbox>
+      <ion-checkbox color="dark" name="ativo" [(ngModel)]="model.ativo"></ion-checkbox>
     </ion-item>
 
     <ion-item>
@@ -83,8 +83,9 @@
   </ion-list>
 
   <div padding>
-    <button *ngIf="!editando" ion-button block (click)="save()">Adicionar</button>
-    <button *ngIf="editando" ion-button block (click)="save()">Atualizar</button>
+    <button *ngIf="!editando" ion-button color="dark" block (click)="save()">Adicionar</button>
+    <br>
+    <button *ngIf="editando" ion-button color="dark" block (click)="save()">Atualizar</button>
 	<button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
   </div>
 	

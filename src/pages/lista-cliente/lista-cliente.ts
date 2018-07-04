@@ -34,6 +34,7 @@ export class ListaClientePage {
         this.toast.create({ message: 'Erro ao carregar os clientes.', duration: 3000, position: 'botton' }).present();
     });
   }
+  
 
   addCliente(){
     console.log('addCliente');

@@ -55,7 +55,8 @@ export class CadastroPedidoPage {
       this.pedidoProvider.get(this.navParams.data.id)
         .then((result: any) => {
           this.model = result;
-          console.log('Data que veio dentro promise: ' + this.model.data);
+          console.log('Pedido que veio dentro promise: ' + this.model);
+          this.model_cliente.id = this.model.cliente_id;
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
@@ -73,6 +74,7 @@ export class CadastroPedidoPage {
       this.model.data = this.data_atual.toISOString();
       console.log('Data Val1: ' + this.data_atual.toLocaleDateString('pt-BR'));
       console.log('Data Val2: ' + new Date().toJSON().slice(0,10).replace(/-/g,'/'));
+      this.model.status = 'Inexistente';
       
       this.pedidoProvider.getNewId()
           .then((result: any) => {
@@ -105,7 +107,7 @@ export class CadastroPedidoPage {
    // }
    
     //this.model.data = this.data_atual.toString();
-    this.model.status = 'Inexistente';
+    
     
   }
 

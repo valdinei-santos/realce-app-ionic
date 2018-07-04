@@ -89,6 +89,22 @@ public insert(pedido: Pedido) {
       .catch((e) => console.error(e)); */
   }
 
+  public update_status(lista_pedidos: number[], status: string) {
+    let lista: string = '0';
+    for (let el of lista_pedidos) {
+      //this.total = this.total + parseFloat(el.valor_total);
+      lista = lista +','+el;
+    }
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = `update pedidos set status = '${status}' where id in (${lista})`;
+        //let data = [status, lista_pedidos];
+        let data = [];
+        return db.executeSql(sql, data)
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
 
   public remove(id: number) {
     this.remove_itens(id);
@@ -319,7 +335,7 @@ public insert(pedido: Pedido) {
                          case when t.nome is null then '' else t.nome||' ' end ||
                          case when v.nome is null then '' else v.nome||' ' end ||
                          case when u.nome is null then '' else u.nome end  as nome_produto,
-                         i.produto_id, sum(i.quantidade) as quantidade
+                         i.produto_id, sum(i.quantidade) as quantidade, sum(i.valor_total) as valor
                     FROM pedidos_itens i 
                     JOIN produtos p
                       ON i.produto_id = p.id
@@ -359,6 +375,29 @@ public insert(pedido: Pedido) {
       })
       .catch((e) => console.error(e));
   }
+
+  public getTotalPedido(id: number) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
+        let sql = `SELECT printf("%.2f",sum(valor_total)) as total 
+                     FROM pedidos_itens 
+                    WHERE pedido_id = ?`;
+        let data = [id];
+        return db.executeSql(sql, data)
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let item = data.rows.item(0);
+              return item.total;
+            }
+            return null;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
+  
 
 
 }

@@ -31,10 +31,10 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Clientes', component: ListaClientePage },
+      /* { title: 'Clientes', component: ListaClientePage },
       { title: 'Folha de Carga', component: ListaFolhacargaPage },     
       { title: 'Pedidos', component: ListaPedidoPage },
-      { title: 'Produtos', component: ListaProdutoPage },
+      { title: 'Produtos', component: ListaProdutoPage }, */
 
     ];
 
@@ -71,7 +71,7 @@ export class MyApp {
 
   private openHomePage(splashScreen: SplashScreen) {
     splashScreen.hide();
-    this.rootPage = ListaPedidoPage;
+    //this.rootPage = ListaPedidoPage;
     this.rootPage = HomePage;
   }
 }

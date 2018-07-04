@@ -1,16 +1,40 @@
 <ion-header>
-  <ion-navbar color="primary">
-  	<button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Lista Folhas de Carga</ion-title>
+  <ion-navbar color="secondary">
+    <ion-title><h1>Lista de Folhas de Carga</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
+    <ion-list>
+        <ion-item-sliding *ngFor="let folha of folhas">
+          <button ion-item (click)="showFolha(folha.id)">
+              <h2>Folha Carga: {{ folha.id }} - {{ folha.data | formatDate }} </h2>
+              <h2><b ion-text color="danger">
+                    Total: {{ folha.total | number:'1.2-2' }} 
+                    <ion-icon name="md-arrow-forward"></ion-icon> 
+                    <span *ngIf="folha.status == 'Pendente' " style="background-color:red;color:white;">{{ folha.status }}</span>
+                    <span *ngIf="folha.status == 'Alocado' " style="background-color:blue;color:white;">{{ folha.status }}</span>
+                    <span *ngIf="folha.status == 'Entregue' " style="background-color:green;color:white;">{{ folha.status }}</span>
+                </b>
+              </h2>
+          </button>
+          <ion-item-options side="left">
+            <button ion-button color="danger" (click)="removeFolha(folha)">
+              <ion-icon name="trash"></ion-icon>
+              Excluir
+            </button>
+          </ion-item-options>
+          <ion-item-options side="right">
+            <button ion-button color="primary" (click)="editFolha(folha.id)">
+              <ion-icon name="document"></ion-icon>
+              Editar
+            </button>
+          </ion-item-options>
+    
+        </ion-item-sliding>
+    </ion-list>
 
     <ion-fab right bottom>
-        <button ion-fab color="blue" (click)="addFolhaCarga()"><ion-icon name="add"></ion-icon></button>
+        <button ion-fab color="secondary" (click)="addFolha()"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 </ion-content>

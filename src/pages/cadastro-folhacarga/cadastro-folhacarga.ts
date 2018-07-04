@@ -21,7 +21,6 @@ export class CadastroFolhacargaPage {
               public toast: ToastController,
               public modalCtrl: ModalController
              ) {
-    
   }
 
   ionViewDidLoad() {

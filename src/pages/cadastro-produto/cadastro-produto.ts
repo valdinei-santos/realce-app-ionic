@@ -66,6 +66,7 @@ export class CadastroProdutoPage {
     this.loadTipo();
     this.loadVasilhame();
     this.loadUnidadeVenda();
+    this.model.ativo = 1;
   }
 
   public loadCategoria(){

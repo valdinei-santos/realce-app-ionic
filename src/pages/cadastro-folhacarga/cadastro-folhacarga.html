@@ -1,6 +1,6 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Cadastro Folha de Carga</ion-title>
+  <ion-navbar color="secondary">
+    <ion-title><h1>Cadastro de Folha de Carga</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -12,7 +12,7 @@
             <h2>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} - {{ pedido.cliente_nome }} </h2>
             <h2><b ion-text color="danger">Total: {{ pedido.total | number:'1.2-2' }} --> {{ pedido.status }}</b></h2>
           </ion-label>
-          <ion-checkbox (ionChange)="onChange(pedido.id, $event.checked)" value="pedido.id"></ion-checkbox>
+          <ion-checkbox color="secondary" (ionChange)="onChange(pedido.id, $event.checked)" value="pedido.id"></ion-checkbox>
         </ion-item>
         <!-- <ion-item *ngFor="let c of check; let i = index">
             {{ c.id }}
@@ -33,7 +33,7 @@
   </ion-list>
 
   <div padding>
-      <button *ngIf="!editando" ion-button block (click)="previewFolhacarga()">Preview Folha de Carga</button>
+      <button *ngIf="!editando" ion-button color="secondary" block (click)="previewFolhacarga()">Preview Folha de Carga</button>
       <!-- <button *ngIf="editando" ion-button block (click)="save()">Atualizar Folha de Carga</button> -->
       <br>
       <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>

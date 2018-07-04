@@ -1,9 +1,6 @@
 <ion-header>
-  <ion-navbar>
-  	<button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Lista Categorias</ion-title>
+  <ion-navbar color="dark">
+    <ion-title><h1>Lista de Categorias</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -24,6 +21,6 @@
   </ion-list>
   <button ion-button color="light" block (click)="cancelar()" >Voltar</button>
   <ion-fab right bottom>
-    <button ion-fab color="blue" (click)="addCategoria()"><ion-icon name="add"></ion-icon></button>
+    <button ion-fab color="dark" (click)="addCategoria()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 </ion-content>

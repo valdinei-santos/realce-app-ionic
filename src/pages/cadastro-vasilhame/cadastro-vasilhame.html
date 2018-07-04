@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title *ngIf="!editando">Cadastro Vasilhame</ion-title>
-    <ion-title *ngIf="editando">Alteração Vasilhame</ion-title>
+  <ion-navbar color="dark">
+    <ion-title *ngIf="!editando"><h1>Cadastro de Vasilhame</h1></ion-title>
+    <ion-title *ngIf="editando"><h1>Alteração de Vasilhame</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -14,8 +14,9 @@
   </ion-list>
 
   <div padding>
-    <button *ngIf="!editando" ion-button block (click)="save()">Adicionar</button>
-    <button *ngIf="editando" ion-button block (click)="save()">Atualizar</button>
+    <button *ngIf="!editando" ion-button color="dark" block (click)="save()">Adicionar</button>
+    <br>
+    <button *ngIf="editando" ion-button color="dark" block (click)="save()">Atualizar</button>
 	  <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
   </div>
 	

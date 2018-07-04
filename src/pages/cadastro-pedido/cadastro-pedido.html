@@ -1,7 +1,7 @@
 <ion-header>
-  <ion-navbar>
-		<ion-title *ngIf="!editando">Cadastro Pedido - {{ model.id }}</ion-title>
-    <ion-title *ngIf="editando">Alteração Pedido - {{ model.id }}</ion-title>
+  <ion-navbar color="primary">
+		<ion-title *ngIf="!editando"><h1>Cadastro de Pedido - {{ model.id }}</h1></ion-title>
+    <ion-title *ngIf="editando"><h1>Alteração de Pedido - {{ model.id }}</h1></ion-title>
   </ion-navbar>
 </ion-header>
 

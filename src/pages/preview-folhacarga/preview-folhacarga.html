@@ -1,14 +1,14 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Preview Folha de Carga</ion-title>
+  <ion-navbar color="secondary">
+    <ion-title><h1>Preview da Folha de Carga</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <div ion-row>
     <div ion-col-12>
-      <!-- <h2>Cliente: <b ion-text color="primary">{{model.cliente_nome}}</b></h2> -->
-      <h2>Pedidos: {{ pedidos }}</h2>
+      <h2>Folha Carga: <b ion-text color="primary">{{model.id}}</b></h2>
+      <h2>Pedidos: <b ion-text color="primary">{{ pedidos }}</b></h2>
     </div>
   </div>
   <div ion-row>
@@ -16,11 +16,16 @@
     <ion-list>
       <ion-item *ngFor="let item of itens">
         <h2 ion-text color="danger">{{ item.nome_produto }}</h2>
-        <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b></h2>
+        <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }} </b>
+            Total: <b ion-text color="danger">{{ item.valor | number:'1.2-2' }}</b>
+        </h2>
       </ion-item>  
+      <ion-item>
+        <h2>Total: <b ion-text color="danger">{{ total_geral | number:'1.2-2' }}</b></h2>
+      </ion-item>
     </ion-list>
   </div>
-  <button ion-button full (click)="save()">Criar Folha de Carga</button>
+  <button ion-button color="secondary" full (click)="save()">Criar Folha de Carga</button>
   <br>
   <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
 </ion-content>

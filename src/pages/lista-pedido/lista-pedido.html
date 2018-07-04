@@ -1,9 +1,6 @@
 <ion-header>
   <ion-navbar color="primary">
-  	<button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Lista Pedidos</ion-title>
+    <ion-title><h1>Lista de Pedidos</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -12,7 +9,14 @@
     <ion-item-sliding *ngFor="let pedido of pedidos2">
       <button ion-item (click)="showPedido(pedido.id)">
         <h2>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} - {{ pedido.cliente_nome }} </h2>
-        <h2><b ion-text color="danger">Total: {{ pedido.total | number:'1.2-2' }} --> {{ pedido.status }}</b></h2>
+        <h2><b ion-text color="danger">
+               Total: {{ pedido.total | number:'1.2-2' }} 
+               <ion-icon name="md-arrow-forward"></ion-icon> 
+               <span *ngIf="pedido.status == 'Pendente' " style="background-color:red;color:white;">{{ pedido.status }}</span>
+               <span *ngIf="pedido.status == 'Alocado' " style="background-color:blue;color:white;">{{ pedido.status }}</span>
+               <span *ngIf="pedido.status == 'Entregue' " style="background-color:green;color:white;">{{ pedido.status }}</span>
+            </b>
+        </h2>
       </button>
       <ion-item-options side="left">
         <button ion-button color="danger" (click)="removePedido(pedido)">
@@ -25,10 +29,10 @@
           <ion-icon name="document"></ion-icon>
           Editar
         </button>
-        <button ion-button color="secondary" (click)="enviaPedido(pedido.id)">
+        <!-- <button ion-button color="secondary" (click)="enviaPedido(pedido.id)">
           <ion-icon name="document"></ion-icon>
           Enviar
-        </button>
+        </button> -->
       </ion-item-options>
 
     </ion-item-sliding>
