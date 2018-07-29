@@ -4,10 +4,14 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-list>
     <ion-item-sliding *ngFor="let pedido of pedidos2">
       <button ion-item (click)="showPedido(pedido.id)">
+        <ion-icon name="information-circle" item-start *ngIf="pedido.status == 'Pendente' " style="color:red;"></ion-icon>
+        <ion-icon name="checkmark-circle" item-start *ngIf="pedido.status == 'Alocado' " style="color:blue;"></ion-icon>
+        <ion-icon name="lock" item-start *ngIf="pedido.status == 'Entregue' " style="color:green;"></ion-icon>
+
         <h2>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} - {{ pedido.cliente_nome }} </h2>
         <h2><b ion-text color="danger">
                Total: {{ pedido.total | number:'1.2-2' }} 
