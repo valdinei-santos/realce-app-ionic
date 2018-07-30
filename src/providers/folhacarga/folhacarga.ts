@@ -94,6 +94,37 @@ export class FolhacargaProvider {
       .catch((e) => console.error(e));
   }
 
+
+  public get2(id: number) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
+                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
+                     FROM pedidos p 
+                     JOIN clientes c 
+                       ON p.cliente_id = c.id
+                    WHERE p.id = ?`;
+        let data = [id];
+        return db.executeSql(sql, data)
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let item = data.rows.item(0);
+              let folhacarga = new Folhacarga2();
+              folhacarga.id = item.id;
+              folhacarga.data = item.data;
+              folhacarga.status = item.status;
+              folhacarga.total = item.total;
+              return folhacarga;
+            }
+            return null;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
+
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
@@ -118,12 +149,15 @@ export class FolhacargaProvider {
       .catch((e) => console.error(e));
   }
 
+
   public getAll2() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         let sql = `SELECT id, data, status, sum(total) as total
                     FROM (SELECT f.id, f.data, f.status, i.pedido_id,
-                                 (SELECT printf("%.2f",sum(valor_total)) as total FROM pedidos_itens WHERE pedido_id = i.pedido_id) as total
+                                 (SELECT printf("%.2f",sum(valor_total)) as total 
+                                    FROM pedidos_itens 
+                                   WHERE pedido_id = i.pedido_id) as total
                           FROM folhas_carga f
                           JOIN folhas_carga_itens i
                             ON f.id = i.folha_carga_id) tab
@@ -198,6 +232,34 @@ export class FolhacargaProvider {
       .catch((e) => console.error(e));
   }
 
+
+  public getPedidos(folha_carga_id: number) {
+    console.log(folha_carga_id);
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = `SELECT pedido_id, folha_carga_id 
+                     FROM folhas_carga_itens
+                    WHERE folha_carga_id = ?`;
+        let data = [folha_carga_id];
+        return db.executeSql(sql, data)
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let itens: any[] = [];
+              for (var i = 0; i < data.rows.length; i++) {
+                var item = data.rows.item(i);
+                itens.push(item);
+              }
+              return itens;
+            } else {
+              return [];
+            }
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
+
   /* public getAllItens(lista_folhas: any[]) {
     let lista: string = '0';
     for (let el of lista_folhas) {
@@ -270,6 +332,13 @@ export class Folhacarga{
   id: number;
   data: Date;
   status: string;
+}
+
+export class Folhacarga2{
+  id: number;
+  data: Date;
+  status: string;
+  total: number;
 }
 
 export class Item_folhacarga{

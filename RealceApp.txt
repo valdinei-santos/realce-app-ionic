@@ -111,6 +111,13 @@ SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unit
                             case when u.nome is null then '' else u.nome end,
                             i.produto_id
                             
+SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
+                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
+                     FROM pedidos p 
+                     JOIN clientes c 
+                       ON p.cliente_id = c.id
+                    WHERE p.id = ?
+
 
   coalesce(t.nome, '') || ' - ' || coalesce(v.nome, '') || ' - ' || u.nome
   .toFixed(2).replace('.',',')

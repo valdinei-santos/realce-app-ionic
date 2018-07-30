@@ -14,12 +14,22 @@ export class ListaFolhacargaPage {
 
   folhacarga: Folhacarga = { id:null, data:null, status:null };
   folhas: any[];
+  pedidos: any[];
+  pedidos2: string;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public folhacargaProvider: FolhacargaProvider,
               public toast: ToastController
              ){
+    this.folhacargaProvider.getAll2()
+      .then((result: any[]) => {
+        this.folhas = result; 
+    })
+    .catch(() => {
+      this.toast.create({ message: 'Erro ao carregar folhas de carga!!!', duration: 3000, position: 'botton' }).present();
+    });
+    //console.log(this.folhas);
   }
 
   ionViewDidLoad() {
@@ -27,14 +37,29 @@ export class ListaFolhacargaPage {
   }
 
   ionViewDidEnter() {
-  	this.folhacargaProvider.getAll2()
-      .then((result: any[]) => {
-        this.folhas = result; 
+    let itens: any[] = [];
+    for (let el of this.folhas) {
+      console.log('folha_id: ' + el.id);
+      //this.total = this.total + parseFloat(el.valor_total);
+      this.folhacargaProvider.getPedidos(el.id)
+        .then((result: any[]) => {
+          //this.pedidos = result; 
+          itens.push(result);
+          
+          /*let pedidos_aux = '';
+          for (let p of this.pedidos) {
+            pedidos_aux = pedidos_aux + ', ' + p.pedido_id;
+          }
+          this.pedidos2 = pedidos_aux; */
+          console.log('Retorno getPedidos: ' + result);
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
       });
-    console.log(this.folhas)
+    }
+    this.pedidos = itens;
+    //console.log(this.folhas);
+    console.log(this.pedidos);
   }
 
   addFolha(){

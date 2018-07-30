@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
     <ion-list>
         <ion-item-sliding *ngFor="let folha of folhas">
           <button ion-item (click)="showFolha(folha.id)">
@@ -12,6 +12,10 @@
             <ion-icon name="checkmark-circle" item-start *ngIf="folha.status == 'Alocado' " style="color:blue;"></ion-icon>
             <ion-icon name="lock" item-start *ngIf="folha.status == 'Entregue' " style="color:green;"></ion-icon>
               <h2>Folha Carga: {{ folha.id }} - {{ folha.data | formatDate }} </h2>
+              <div *ngFor="let pedido of pedidos">
+                <h2 *ngIf="pedido.folha_carga_id == folha.id">Pedidos: {{ pedido.pedido_id }} </h2>
+
+              </div>
               <h2><b ion-text color="danger">
                     Total: {{ folha.total | number:'1.2-2' }} 
                     <ion-icon name="md-arrow-forward"></ion-icon> 
