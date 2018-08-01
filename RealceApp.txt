@@ -245,4 +245,28 @@ getDate() {
   }
 
 
+let itens: any[] = [];
+    for (let el of this.folhas) {
+      console.log('folha_id: ' + el.id);
+      //this.total = this.total + parseFloat(el.valor_total);
+      this.folhacargaProvider.getPedidos(el.id)
+        .then((result: any[]) => {
+          //this.pedidos = result; 
+          itens.push(result);
+          
+          /*let pedidos_aux = '';
+          for (let p of this.pedidos) {
+            pedidos_aux = pedidos_aux + ', ' + p.pedido_id;
+          }
+          this.pedidos2 = pedidos_aux; */
+          console.log('Retorno getPedidos: ' + result);
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
+      });
+    }
+    this.pedidos = itens;
+
+    
+
 

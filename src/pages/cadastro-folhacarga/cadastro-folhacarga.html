@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
 
   <ion-list>
         <ion-item *ngFor="let pedido of pedidos2">
@@ -34,6 +34,8 @@
 
   <div padding>
       <button *ngIf="!editando" ion-button color="secondary" block (click)="previewFolhacarga()">Preview Folha de Carga</button>
+      <br>
+      <button ion-button color="light" block (click)="loadPedidos()">Atualizar Lista Pedidos</button>
       <!-- <button *ngIf="editando" ion-button block (click)="save()">Atualizar Folha de Carga</button> -->
       <br>
       <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>

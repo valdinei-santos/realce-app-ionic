@@ -22,13 +22,8 @@ export class ListaFolhacargaPage {
               public folhacargaProvider: FolhacargaProvider,
               public toast: ToastController
              ){
-    this.folhacargaProvider.getAll2()
-      .then((result: any[]) => {
-        this.folhas = result; 
-    })
-    .catch(() => {
-      this.toast.create({ message: 'Erro ao carregar folhas de carga!!!', duration: 3000, position: 'botton' }).present();
-    });
+    console.log("Constructor ListaFolhacargaPage");
+    
     //console.log(this.folhas);
   }
 
@@ -37,20 +32,25 @@ export class ListaFolhacargaPage {
   }
 
   ionViewDidEnter() {
+    console.log("ionViewDidEnter ListaFolhacargaPage");
+    this.folhacargaProvider.getAll2()
+      .then((result: any[]) => {
+        this.folhas = result; 
+
+        this.loadPedidos(); 
+    })
+    .catch(() => {
+      this.toast.create({ message: 'Erro ao carregar folhas de carga!!!', duration: 3000, position: 'botton' }).present();
+    });
+    
+  }
+
+  loadPedidos(){
     let itens: any[] = [];
     for (let el of this.folhas) {
-      console.log('folha_id: ' + el.id);
-      //this.total = this.total + parseFloat(el.valor_total);
       this.folhacargaProvider.getPedidos(el.id)
         .then((result: any[]) => {
-          //this.pedidos = result; 
           itens.push(result);
-          
-          /*let pedidos_aux = '';
-          for (let p of this.pedidos) {
-            pedidos_aux = pedidos_aux + ', ' + p.pedido_id;
-          }
-          this.pedidos2 = pedidos_aux; */
           console.log('Retorno getPedidos: ' + result);
       })
       .catch(() => {
@@ -58,7 +58,6 @@ export class ListaFolhacargaPage {
       });
     }
     this.pedidos = itens;
-    //console.log(this.folhas);
     console.log(this.pedidos);
   }
 

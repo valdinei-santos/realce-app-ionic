@@ -14,6 +14,7 @@ export class CadastroFolhacargaPage {
 
   pedidos2: any[];
   check: number[] = [];
+  return_preview: boolean = false;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -21,20 +22,43 @@ export class CadastroFolhacargaPage {
               public toast: ToastController,
               public modalCtrl: ModalController
              ) {
+    this.return_preview = false;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CadastroFolhacargaPage');
-    this.pedidoProvider.getAll3()
-      .then((result: any[]) => {
-        this.pedidos2 = result;    
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
-      });
+    //this.loadNewId();
+    this.loadPedidos();
+  }
+  ionViewWillEnter(){
+    console.log('ionViewWillEnter CadastroFolhacargaPage');
+    console.log(this.return_preview);
+    this.return_preview = this.navParams.get('vem_preview');
+    console.log(this.return_preview);
+  }
+
+  ionViewWillLeave(){
+    console.log('ionViewWillLeave CadastroFolhacargaPage');
+  }
+  ionViewDidLeave(){
+    console.log('ionViewDidLeave CadastroFolhacargaPage');
+  }
+  ionViewWillUnload(){
+    console.log('ionViewWillUnload CadastroFolhacargaPage');
+  }
+  ionViewCanEnter(){
+    console.log('ionViewCanEnter CadastroFolhacargaPage');
+  }
+  ionViewCanLeave(){
+    console.log('ionViewCanLeave CadastroFolhacargaPage');
+  }
+
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter CadastroFolhacargaPage');
   }
 
   onChange(id, isChecked) {
+    console.log("onChange");
     if(isChecked) {
       //let item = { "id": id };
       this.check.push(id);
@@ -51,6 +75,17 @@ export class CadastroFolhacargaPage {
     }
     console.log(this.check);
   }
+
+  loadPedidos(){
+    this.pedidoProvider.getAll3()
+      .then((result: any[]) => {
+        this.pedidos2 = result;    
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
+      });
+  }
+
 
   /* createFolhaCarga() {
     //let profileModal = this.modalCtrl.create(Profile, { userId: 8675309 });

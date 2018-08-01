@@ -29,17 +29,11 @@ export class PreviewFolhacargaPage {
               public folhacargaProvider: FolhacargaProvider,
               public toast: ToastController
              ) {
-    console.log('Entrou preview-folhacarga...');
+    console.log('constructor PreviewFolhacargaPage');
     this.model = new Folhacarga;
     this.model.status = 'Inexistente';
     this.model.data = this.data_atual.toISOString();
-    this.pedidoProvider.getNewId()
-      .then((result: any) => {
-          this.model.id = result;
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
-      });
+    this.loadNewId();
     this.lista_pedidos = this.navParams.data.lista_pedidos;
     console.log(this.lista_pedidos);
     for (let i = 0; i < this.lista_pedidos.length; i++) {
@@ -75,26 +69,14 @@ export class PreviewFolhacargaPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PreviewFolhacargaPage');
+    //this.loadNewId();
   }
   ionViewWillEnter(){
     console.log('ionViewWillEnter PreviewFolhacargaPage');
   }
 
-  ionViewWDidEnter(){
+  ionViewDidEnter(){
     console.log('ionViewWDidEnter PreviewFolhacargaPage');
-    this.pedidoProvider.getNewId()
-      .then((result: any) => {
-          this.model.id = result;
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
-      });
-      //console.log('A:' + this.itens.length);
-      //console.log('B:' + this.itens);
-
-      /* for (let i=0; i < this.itens.length; i++){
-        this.total_geral = this.total_geral + this.itens[i].valor;
-      } */
   }
   ionViewWillLeave(){
     console.log('ionViewWillLeave PreviewFolhacargaPage');
@@ -112,9 +94,20 @@ export class PreviewFolhacargaPage {
     console.log('ionViewCanLeave PreviewFolhacargaPage');
   }
 
+  loadNewId(){
+    this.folhacargaProvider.getNewId()
+    .then((result: any) => {
+        this.model.id = result;
+    })
+    .catch(() => {
+      this.toast.create({ message: 'Erro ao carregar New ID!!!', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
   save() {
     if (this.saveFolhacarga()) {
       this.toast.create({ message: 'Folha de Carga salva!', duration: 3000, position: 'center' }).present();
+      this.navCtrl.getPrevious().data.vem_preview = true;
       this.navCtrl.pop();
     } else {
       this.toast.create({ message: 'Erro ao salvar a Folha de Carga!', duration: 3000, position: 'center' }).present();
