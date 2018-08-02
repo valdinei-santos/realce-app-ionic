@@ -237,9 +237,14 @@ export class FolhacargaProvider {
     console.log(folha_carga_id);
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = `SELECT pedido_id, folha_carga_id 
+        let sql = `SELECT f.id, f.data, f.status, i.pedido_id
+                     FROM folhas_carga f
+                     JOIN folhas_carga_itens i
+                       ON f.id = i.folha_carga_id
+                    WHERE i.folha_carga_id = ?`;
+/*                     `SELECT pedido_id, folha_carga_id 
                      FROM folhas_carga_itens
-                    WHERE folha_carga_id = ?`;
+                    WHERE folha_carga_id = ?`; */  
         let data = [folha_carga_id];
         return db.executeSql(sql, data)
           .then((data: any) => {

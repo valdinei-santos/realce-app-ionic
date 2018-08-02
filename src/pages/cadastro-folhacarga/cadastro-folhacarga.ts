@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angu
 import { PedidoProvider, Pedido, Pedido2 } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
 import { PreviewFolhacargaPage } from '../preview-folhacarga/preview-folhacarga';
+import { FolhacargaProvider } from '../../providers/folhacarga/folhacarga';
 
 
 @IonicPage()
@@ -15,26 +16,43 @@ export class CadastroFolhacargaPage {
   pedidos2: any[];
   check: number[] = [];
   return_preview: boolean = false;
+  folha_id: number;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public pedidoProvider: PedidoProvider,
               public toast: ToastController,
-              public modalCtrl: ModalController
+              public modalCtrl: ModalController,
+              public folhacargaProvider: FolhacargaProvider
              ) {
+    console.log('constructor CadastroFolhacargaPage');
     this.return_preview = false;
+    this.folha_id = this.navParams.data.id;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CadastroFolhacargaPage');
     //this.loadNewId();
     this.loadPedidos();
+    if (this.navParams.data.id) {
+      //this.loadPedidos();
+      console.log('Veio parametro: ' + this.navParams.data.id);
+      console.log('Array de pedidos: ' + this.pedidos2);
+      this.loadPedidosDaFolhacarga(this.navParams.data.id);
+    } 
   }
   ionViewWillEnter(){
     console.log('ionViewWillEnter CadastroFolhacargaPage');
-    console.log(this.return_preview);
-    this.return_preview = this.navParams.get('vem_preview');
-    console.log(this.return_preview);
+    //console.log(this.return_preview);
+    //this.return_preview = this.navParams.get('vem_preview');
+    //console.log(this.return_preview);
+    console.log('antes: ' + this.check.length);
+    if (this.navParams.get('vem_preview')){
+      this.loadPedidos();
+      this.return_preview = false;
+      this.check = [];
+    }
+    console.log('depois: ' + this.check.length);
   }
 
   ionViewWillLeave(){
@@ -79,7 +97,19 @@ export class CadastroFolhacargaPage {
   loadPedidos(){
     this.pedidoProvider.getAll3()
       .then((result: any[]) => {
-        this.pedidos2 = result;    
+        this.pedidos2 = result;
+        console.log('Pedidos2 loadPedidos: ' + this.pedidos2);  
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
+      });
+  }
+
+  loadPedidosDaFolhacarga(folha_id: number){
+    this.folhacargaProvider.getPedidos(folha_id)
+      .then((result: any[]) => {
+        this.pedidos2.push(result);    
+        console.log('Pedidos2 loadPedidosDaFolhacarga: ' + this.pedidos2); 
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
@@ -99,7 +129,18 @@ export class CadastroFolhacargaPage {
 
   previewFolhacarga(){
     console.log('previewFolhacarga: ');
-    this.navCtrl.push(PreviewFolhacargaPage, { lista_pedidos: this.check });
+    if (this.check.length === 0) {
+      this.toast.create({ 
+        message: 'Selecione algum pedido!!!', 
+        duration: 3000, 
+        position: 'middle',
+      }).present();
+      //alert('Selecione um ou mais pedidos!!!');
+    } else {
+      this.return_preview = false;
+      this.navCtrl.push(PreviewFolhacargaPage, { lista_pedidos: this.check });
+    }
+    
   }
 
   save() {
