@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
-//import { Pedido } from '../pedido/pedido';
+import { ToastController } from 'ionic-angular';
+import { Pedido2, PedidoProvider } from '../pedido/pedido';
+import { resolveDefinition } from '../../../node_modules/@angular/core/src/view/util';
 
 @Injectable()
 export class FolhacargaProvider {
 
-  constructor(private dbProvider: DatabaseProvider) {
+  private pedidos2: Pedido2[] = [];
+
+  constructor(private dbProvider: DatabaseProvider, 
+              public toast: ToastController,
+              public pedidoProvider: PedidoProvider) {
     console.log('Hello FolhacargaProvider Provider');
   }
 
@@ -49,7 +55,7 @@ export class FolhacargaProvider {
           db.executeSql(sql, data)
             .catch((e) => console.error(e));
         } */
-        return;
+        return true;
       })
       .catch((e) => console.error(e));
   }
@@ -72,6 +78,20 @@ export class FolhacargaProvider {
   }
 
   public remove(id: number) {
+    let pedidos: any[] = [];
+    let listaPedidosExistentes: any[] = [];
+    this.getPedidos(id)
+      .then((result: any[]) => {
+        pedidos = result;
+        for (let p of pedidos){
+          listaPedidosExistentes.push(p.pedido_id);
+        } 
+        console.log('LISTA PEDIDOS EXISTENTES: ' + listaPedidosExistentes);
+        this.pedidoProvider.update_status(listaPedidosExistentes, 'Pendente');
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar lista de pedidos existentes!!!', duration: 3000, position: 'botton' }).present();
+      });
     this.remove_itens(id);
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
@@ -82,6 +102,7 @@ export class FolhacargaProvider {
       })
       .catch((e) => console.error(e));
   }
+
 
   public remove_itens(folhacarga_id: number) {
     return this.dbProvider.getDB()
@@ -94,6 +115,28 @@ export class FolhacargaProvider {
       .catch((e) => console.error(e));
   }
 
+  public get(id: number) {
+    console.log('fohacarga - get - ' + id);
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
+        let sql = `SELECT id, data, status 
+                     FROM folhas_carga
+                    WHERE id = ?`;
+        let data = [id];
+        return db.executeSql(sql, data)
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let folhacarga = new Folhacarga();
+              folhacarga = data.rows.item(0);
+              return folhacarga;
+            }
+            return null;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
 
   public get2(id: number) {
     return this.dbProvider.getDB()
@@ -232,16 +275,60 @@ export class FolhacargaProvider {
       .catch((e) => console.error(e));
   }
 
+/*   getPedidosDaFolhacarga(folha_id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getPedidos(folha_id)
+      .then((result: any[]) => {
+        this.pedidos2 = result;    
+        console.log('Pedidos2 loadPedidosDaFolhacarga da folhacarga.ts ' + this.pedidos2); 
+        //return this.pedidos2;
+        return resolve(this.pedidos2);
+      })
+      .catch(() => {
+        console.log('Erro metodo getPedidosDaFolhacarga - folhacarga.ts');
+      });
+    })
+  }   */
+    /* this.getPedidos(folha_id)
+      .then((result: any[]) => {
+        this.pedidos2 = result;    
+        console.log('Pedidos2 loadPedidosDaFolhacarga da folhacarga.ts ' + this.pedidos2); 
+        //return this.pedidos2;
+        return Promise.resolve(this.pedidos2);
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar pedidos da Folhacarga!!!', duration: 3000, position: 'botton' }).present();
+      }); */
+
+ /*  login(): Promise<{ firstname: string}> {
+    return new Promise((resolve, reject) => {
+      this.getUsers().then(data => {
+        this.films = data;
+        resolve(this.films.customer_info);
+      });
+    });
+  } */
+  
 
   public getPedidos(folha_carga_id: number) {
     console.log(folha_carga_id);
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = `SELECT f.id, f.data, f.status, i.pedido_id
+        let sql = `SELECT f.id, f.data, f.status, i.pedido_id, c.nome as cliente_nome
                      FROM folhas_carga f
                      JOIN folhas_carga_itens i
                        ON f.id = i.folha_carga_id
+                     JOIN pedidos p
+                       ON i.pedido_id = p.id 
+                     JOIN clientes c
+                       ON p.cliente_id = c.id
                     WHERE i.folha_carga_id = ?`;
+
+        /* let sql = `SELECT f.id, f.data, f.status, i.pedido_id
+                     FROM folhas_carga f
+                     JOIN folhas_carga_itens i
+                       ON f.id = i.folha_carga_id
+                    WHERE i.folha_carga_id = ?`; */
 /*                     `SELECT pedido_id, folha_carga_id 
                      FROM folhas_carga_itens
                     WHERE folha_carga_id = ?`; */  
@@ -363,3 +450,4 @@ export class FolhacargaList {
   folhacarga: Folhacarga;
 }
 */
+

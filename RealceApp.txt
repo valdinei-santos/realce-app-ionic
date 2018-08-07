@@ -269,4 +269,26 @@ let itens: any[] = [];
 
     
 
+SELECT id, data, status, sum(total) as total
+                    FROM (SELECT f.id, f.data, f.status, i.pedido_id,
+                                 (SELECT printf("%.2f",sum(valor_total)) as total 
+                                    FROM pedidos_itens 
+                                   WHERE pedido_id = i.pedido_id) as total
+                          FROM folhas_carga f
+                          JOIN folhas_carga_itens i
+                            ON f.id = i.folha_carga_id) tab
+                    GROUP BY id, data, status
+                    ORDER BY data desc;
+
+select * from folhas_carga_itens;
+
+SELECT f.id, f.data, f.status, i.pedido_id, c.nome
+                     FROM folhas_carga f
+                     JOIN folhas_carga_itens i
+                       ON f.id = i.folha_carga_id
+                     JOIN pedidos p
+                       ON i.pedido_id = p.id 
+                     JOIN clientes c
+                       ON p.cliente_id = c.id
+                    WHERE i.folha_carga_id = 2;
 

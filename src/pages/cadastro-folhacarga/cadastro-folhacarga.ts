@@ -13,10 +13,13 @@ import { FolhacargaProvider } from '../../providers/folhacarga/folhacarga';
 })
 export class CadastroFolhacargaPage {
 
-  pedidos2: any[];
+  pedidos2: any[] = [];
+  pedidos3: any[] = [];
   check: number[] = [];
   return_preview: boolean = false;
   folha_id: number;
+  editando: boolean = false;
+  listaPedidosExistentes: any[] = [];
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -25,16 +28,20 @@ export class CadastroFolhacargaPage {
               public modalCtrl: ModalController,
               public folhacargaProvider: FolhacargaProvider
              ) {
-    console.log('constructor CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - constructor');
     this.return_preview = false;
-    this.folha_id = this.navParams.data.id;
+    if (this.navParams.data.id) {  // eh Edit
+      this.folha_id = this.navParams.data.id;
+    }
+    
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - ionViewDidLoad');
     //this.loadNewId();
     this.loadPedidos();
-    if (this.navParams.data.id) {
+    if (this.navParams.data.id) { // eh Edit
+      this.editando = true;
       //this.loadPedidos();
       console.log('Veio parametro: ' + this.navParams.data.id);
       console.log('Array de pedidos: ' + this.pedidos2);
@@ -42,41 +49,54 @@ export class CadastroFolhacargaPage {
     } 
   }
   ionViewWillEnter(){
-    console.log('ionViewWillEnter CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - ionViewWillEnter');
     //console.log(this.return_preview);
     //this.return_preview = this.navParams.get('vem_preview');
     //console.log(this.return_preview);
     console.log('antes: ' + this.check.length);
-    if (this.navParams.get('vem_preview')){
+    if (this.navParams.get('vem_preview')){ // Esta voltando do Preview
       this.loadPedidos();
       this.return_preview = false;
       this.check = [];
+      this.editando = false;
     }
     console.log('depois: ' + this.check.length);
+/*     if (this.navParams.data.id) { // eh Edit
+      let pedidos: any[] = [];
+      this.folhacargaProvider.getPedidos(this.folha_id)
+        .then((result: any[]) => {
+          pedidos = result;
+          for (let p of pedidos){
+            this.listaPedidosExistentes.push(p.pedido_id);
+          } 
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar lista de pedidos existentes!!!', duration: 3000, position: 'botton' }).present();
+        });
+    } */
   }
 
   ionViewWillLeave(){
-    console.log('ionViewWillLeave CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - ionViewWillLeave');
   }
   ionViewDidLeave(){
-    console.log('ionViewDidLeave CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - ionViewDidLeave');
   }
   ionViewWillUnload(){
-    console.log('ionViewWillUnload CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - ionViewWillUnload');
   }
   ionViewCanEnter(){
-    console.log('ionViewCanEnter CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - ionViewCanEnter');
   }
   ionViewCanLeave(){
-    console.log('ionViewCanLeave CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - ionViewCanLeave');
   }
-
   ionViewDidEnter() {
-    console.log('ionViewDidEnter CadastroFolhacargaPage');
+    console.log('cadastro-folhacarga - ionViewDidEnter');
   }
 
   onChange(id, isChecked) {
-    console.log("onChange");
+    console.log("cadastro-folhacarga - onChange");
     if(isChecked) {
       //let item = { "id": id };
       this.check.push(id);
@@ -98,21 +118,26 @@ export class CadastroFolhacargaPage {
     this.pedidoProvider.getAll3()
       .then((result: any[]) => {
         this.pedidos2 = result;
-        console.log('Pedidos2 loadPedidos: ' + this.pedidos2);  
+        console.log('Pedidos2 loadPedidos: ' + this.pedidos2); 
       })
       .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
+        this.toast.create({ message: 'Erro ao carregar pedidos2!!!', duration: 3000, position: 'botton' }).present();
       });
   }
 
   loadPedidosDaFolhacarga(folha_id: number){
+    console.log('cadastro-folhacarga - loadPedidosDaFolhacarga');
     this.folhacargaProvider.getPedidos(folha_id)
       .then((result: any[]) => {
-        this.pedidos2.push(result);    
-        console.log('Pedidos2 loadPedidosDaFolhacarga: ' + this.pedidos2); 
+        for (let res of result) {
+          res.checked = true;
+          this.pedidos3.push(res);
+          this.check.push(res.pedido_id);
+        }
+        console.log('cadastro-folhacarga - loadPedidosDaFolhacarga: ' + this.pedidos3); 
       })
       .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
+        this.toast.create({ message: 'Erro ao carregar pedidos3!!!', duration: 3000, position: 'botton' }).present();
       });
   }
 
@@ -128,17 +153,20 @@ export class CadastroFolhacargaPage {
   } */
 
   previewFolhacarga(){
-    console.log('previewFolhacarga: ');
+    console.log('cadastro-folhacarga - previewFolhacarga');
+    console.log('Edit cadastro: ' + this.editando);
     if (this.check.length === 0) {
-      this.toast.create({ 
-        message: 'Selecione algum pedido!!!', 
-        duration: 3000, 
-        position: 'middle',
-      }).present();
+      this.toast.create({message: 'Selecione algum pedido!!!', duration: 3000, position: 'middle'}).present();
       //alert('Selecione um ou mais pedidos!!!');
     } else {
       this.return_preview = false;
-      this.navCtrl.push(PreviewFolhacargaPage, { lista_pedidos: this.check });
+      this.navCtrl.push(PreviewFolhacargaPage, {
+        lista_pedidos: this.check, 
+        //lista_pedidos_existentes: this.listaPedidosExistentes,
+        fromCadastro: true, 
+        isEdit: this.editando,
+        id: this.folha_id
+      });
     }
     
   }

@@ -14,14 +14,13 @@
               <h2>Folha Carga: {{ folha.id }} - {{ folha.data | formatDate }} </h2>
               <div *ngFor="let pedido of pedidos">
                 <h2 *ngIf="pedido.folha_carga_id == folha.id">Pedidos: {{ pedido.pedido_id }} </h2>
-
               </div>
               <h2><b ion-text color="danger">
                     Total: {{ folha.total | number:'1.2-2' }} 
-                    <ion-icon name="md-arrow-forward"></ion-icon> 
+                    <!-- <ion-icon name="md-arrow-forward"></ion-icon> 
                     <span *ngIf="folha.status == 'Pendente' " style="background-color:red;color:white;">{{ folha.status }}</span>
                     <span *ngIf="folha.status == 'Alocado' " style="background-color:blue;color:white;">{{ folha.status }}</span>
-                    <span *ngIf="folha.status == 'Entregue' " style="background-color:green;color:white;">{{ folha.status }}</span>
+                    <span *ngIf="folha.status == 'Entregue' " style="background-color:green;color:white;">{{ folha.status }}</span> -->
                 </b>
               </h2>
           </button>

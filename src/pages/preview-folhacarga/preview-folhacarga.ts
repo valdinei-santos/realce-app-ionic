@@ -22,6 +22,8 @@ export class PreviewFolhacargaPage {
   data_atual: any = new Date();
   data_atual_aux: any = new Date();
   total_geral: number = 0;
+  editando: boolean = false;
+  isShow: boolean = false;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -29,11 +31,28 @@ export class PreviewFolhacargaPage {
               public folhacargaProvider: FolhacargaProvider,
               public toast: ToastController
              ) {
-    console.log('constructor PreviewFolhacargaPage');
+    console.log('preview-folhacarga - constructor');
     this.model = new Folhacarga;
-    this.model.status = 'Inexistente';
-    this.model.data = this.data_atual.toISOString();
-    this.loadNewId();
+    
+  }
+
+  ionViewDidLoad() {
+    console.log('preview-folhacarga - ionViewDidLoad');
+    if (!this.navParams.data.isEdit) {
+      console.log('preview-folhacarga - isEdit: ' + this.navParams.data.isEdit);
+      this.model.status = 'Inexistente';
+      this.model.data = this.data_atual.toISOString();
+      this.loadNewId();
+    } else {
+      console.log('preview-folhacarga - Não é isEdit: ' + this.navParams.data.isEdit);
+      this.folhacargaProvider.get(this.navParams.data.id)
+         .then((result: any) => {
+          this.model = result;
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar uma folhacarga.', duration: 3000, position: 'botton' }).present();
+      });
+    }
     this.lista_pedidos = this.navParams.data.lista_pedidos;
     console.log(this.lista_pedidos);
     for (let i = 0; i < this.lista_pedidos.length; i++) {
@@ -52,14 +71,6 @@ export class PreviewFolhacargaPage {
         for (let i=0; i < this.itens.length; i++){
           this.total_geral = this.total_geral + this.itens[i].valor;
         }
-        /* this.itens.forEach((el) => {
-          console.log(el.valor);
-          //this.total_geral = this.total_geral + el.valor;
-        }); */
-        /* for (let el of this.itens){
-          this.total_geral = this.total_geral + (el.valor as number);
-          console.log(el.valor as number);
-        } */
         console.log(this.total_geral);
       })
       .catch(() => {
@@ -67,31 +78,31 @@ export class PreviewFolhacargaPage {
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PreviewFolhacargaPage');
-    //this.loadNewId();
-  }
   ionViewWillEnter(){
-    console.log('ionViewWillEnter PreviewFolhacargaPage');
+    console.log('preview-folhacarga - ionViewWillEnter');
+    if (this.navParams.data.isShow) {
+      this.isShow = this.navParams.data.isShow;
+    }
   }
 
   ionViewDidEnter(){
-    console.log('ionViewWDidEnter PreviewFolhacargaPage');
+    console.log('preview-folhacarga - ionViewWDidEnter');
+    this.editando = this.navParams.data.isEdit;
   }
   ionViewWillLeave(){
-    console.log('ionViewWillLeave PreviewFolhacargaPage');
+    console.log('preview-folhacarga - ionViewWillLeave');
   }
   ionViewDidLeave(){
-    console.log('ionViewDidLeave PreviewFolhacargaPage');
+    console.log('preview-folhacarga - ionViewDidLeave');
   }
   ionViewWillUnload(){
-    console.log('ionViewWillUnload PreviewFolhacargaPage');
+    console.log('preview-folhacarga - ionViewWillUnload');
   }
   ionViewCanEnter(){
-    console.log('ionViewCanEnter PreviewFolhacargaPage');
+    console.log('preview-folhacarga - ionViewCanEnter');
   }
   ionViewCanLeave(){
-    console.log('ionViewCanLeave PreviewFolhacargaPage');
+    console.log('preview-folhacarga - ionViewCanLeave');
   }
 
   loadNewId(){
@@ -105,16 +116,70 @@ export class PreviewFolhacargaPage {
   }
 
   save() {
-    if (this.saveFolhacarga()) {
-      this.toast.create({ message: 'Folha de Carga salva!', duration: 3000, position: 'center' }).present();
-      this.navCtrl.getPrevious().data.vem_preview = true;
-      this.navCtrl.pop();
-    } else {
-      this.toast.create({ message: 'Erro ao salvar a Folha de Carga!', duration: 3000, position: 'center' }).present();
+    if (!this.navParams.data.isEdit) { // eh cadastro
+      if (this.saveFolhacarga()) {
+        this.toast.create({ message: 'Folha de Carga salva!', duration: 3000, position: 'center' }).present();
+        this.navCtrl.getPrevious().data.vem_preview = true;
+        this.navCtrl.pop();
+      } else {
+        this.toast.create({ message: 'Erro ao salvar a Folha de Carga!', duration: 3000, position: 'center' }).present();
+      }
+    } else { // eh Edit
+      if (this.saveFolhacarga()) {
+        this.toast.create({ message: 'Folha de Carga alterada!', duration: 3000, position: 'center' }).present();
+        this.navCtrl.pop();
+      } else {
+        this.toast.create({ message: 'Erro ao alterar a Folha de Carga!', duration: 3000, position: 'center' }).present();
+      }
     }
   }
 
   private saveFolhacarga() {
+    //if (this.model.status != 'Inexistente') {
+    if (this.editando) {
+      console.log('Entrou UPDATE Folha - ' + this.model.status);
+      //this.folhacargaProvider.remove(this.model.id);
+      this.folhacargaProvider.remove(this.model.id)
+        .then(() => {
+          console.log('Folha carga removida para UPDATE1');
+          this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
+          console.log('Folha carga removida para UPDATE2');
+          let insert_folha = this.folhacargaProvider.insert(this.model);
+          console.log('Folha carga removida para UPDATE3');  
+          return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
+          //   .then((res) => {
+          //    console.log('RES: ' + res);
+          //  })
+          //  .catch(() => {
+          //    console.log('RES - ERRO: ');
+          //  });
+          //return true; 
+        })
+        .catch(() => {
+          console.log('Erro ao remover a Folha de Carga para UPDATE!');
+        });
+/*         console.log('Folha carga removida para UPDATE1');
+        this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
+        console.log('Folha carga removida para UPDATE2');
+        let insert_folha = this.folhacargaProvider.insert(this.model);
+        console.log('Folha carga removida para UPDATE3');  
+        return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id); */
+        //return true;
+    } else {
+      console.log('Entrou INSERT Folha - ' + this.model.status);
+      this.data_atual_aux = this.model.data;
+      this.model.data = this.data_atual_aux.substring(0,10);
+      this.model.status = 'Pendente';
+      this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
+      let insert_folha = this.folhacargaProvider.insert(this.model);  
+      return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
+    } 
+/*     this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
+    let insert_folha = this.folhacargaProvider.insert(this.model);  
+    return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id); */
+  }
+
+/*   private updateFolhacarga() {
     this.data_atual_aux = this.model.data;
     this.model.data = this.data_atual_aux.substring(0,10);
     if (this.model.status != 'Inexistente') {
@@ -132,7 +197,7 @@ export class PreviewFolhacargaPage {
       this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
       return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
     } 
-  }
+  } */
 
   cancelar(){
     //this.navCtrl.setRoot(HomePage);

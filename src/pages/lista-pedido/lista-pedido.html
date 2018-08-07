@@ -15,10 +15,10 @@
         <h2>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} - {{ pedido.cliente_nome }} </h2>
         <h2><b ion-text color="danger">
                Total: {{ pedido.total | number:'1.2-2' }} 
-               <ion-icon name="md-arrow-forward"></ion-icon> 
+               <!-- <ion-icon name="md-arrow-forward"></ion-icon> 
                <span *ngIf="pedido.status == 'Pendente' " style="background-color:red;color:white;">{{ pedido.status }}</span>
                <span *ngIf="pedido.status == 'Alocado' " style="background-color:blue;color:white;">{{ pedido.status }}</span>
-               <span *ngIf="pedido.status == 'Entregue' " style="background-color:green;color:white;">{{ pedido.status }}</span>
+               <span *ngIf="pedido.status == 'Entregue' " style="background-color:green;color:white;">{{ pedido.status }}</span> -->
             </b>
         </h2>
       </button>

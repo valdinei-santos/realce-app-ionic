@@ -25,7 +25,8 @@
       </ion-item>
     </ion-list>
   </div>
-  <button ion-button color="secondary" full (click)="save()">Criar Folha de Carga</button>
+  <button *ngIf="!editando && !isShow" ion-button color="secondary" full (click)="save()">Criar Folha de Carga</button>
+  <button *ngIf="editando && !isShow" ion-button color="secondary" block (click)="save()">Alterar Folha de Carga</button>
   <br>
   <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
 </ion-content>

@@ -4,6 +4,8 @@ import { ToastController } from 'ionic-angular';
 import { CadastroFolhacargaPage } from '../cadastro-folhacarga/cadastro-folhacarga';
 import { ShowFolhacargaPage } from '../show-folhacarga/show-folhacarga';
 import { FolhacargaProvider, Folhacarga  } from '../../providers/folhacarga/folhacarga';
+import { PedidoProvider } from '../../providers/pedido/pedido';
+import { PreviewFolhacargaPage } from '../preview-folhacarga/preview-folhacarga';
 
 @IonicPage()
 @Component({
@@ -14,12 +16,13 @@ export class ListaFolhacargaPage {
 
   folhacarga: Folhacarga = { id:null, data:null, status:null };
   folhas: any[];
-  pedidos: any[];
+  pedidos: any[] = [];
   pedidos2: string;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public folhacargaProvider: FolhacargaProvider,
+              public pedidoProvider: PedidoProvider,
               public toast: ToastController
              ){
     console.log("Constructor ListaFolhacargaPage");
@@ -36,7 +39,6 @@ export class ListaFolhacargaPage {
     this.folhacargaProvider.getAll2()
       .then((result: any[]) => {
         this.folhas = result; 
-
         this.loadPedidos(); 
     })
     .catch(() => {
@@ -51,23 +53,25 @@ export class ListaFolhacargaPage {
       this.folhacargaProvider.getPedidos(el.id)
         .then((result: any[]) => {
           itens.push(result);
+          //this.pedidos.push(result);
           console.log('Retorno getPedidos: ' + result);
+          return;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();
       });
     }
     this.pedidos = itens;
-    console.log(this.pedidos);
+    console.log('Pedidos: ' + this.pedidos);
   }
 
   addFolha(){
     console.log('addFolha');
-	  this.navCtrl.push(CadastroFolhacargaPage);
+	  this.navCtrl.push(CadastroFolhacargaPage, { isCadastro: true });
   }
 
   removeFolha(folha: Folhacarga){
-    console.log('removePedido');
+    console.log('lista-folhacarga - removeFolha');
     this.folhacargaProvider.remove(folha.id)
       .then(() => {
         var index = this.folhas.indexOf(folha);
@@ -81,12 +85,31 @@ export class ListaFolhacargaPage {
 
   editFolha(id: number){
     console.log('editFolha: ' + id );
-    this.navCtrl.push(CadastroFolhacargaPage, { id: id });
+    this.navCtrl.push(CadastroFolhacargaPage, { id: id, isEdit: true });
   }
 
   showFolha(id: number){
     console.log('showFolha: ' + id );
-    this.navCtrl.push(ShowFolhacargaPage, { id: id });
+    console.log('showFolha - Pedidos: ' + this.pedidos);
+    //this.navCtrl.push(ShowFolhacargaPage, { id: id, isShow: true });
+    let lista_p: number[] = [];
+    for (let el1 of this.pedidos){
+      for (let el2 of el1){
+        console.log('pedido_id: ' + el2.pedido_id);
+        lista_p.push(el2.pedido_id);
+      }
+    }
+    console.log('lista_p: ' + lista_p);
+    this.navCtrl.push(PreviewFolhacargaPage, 
+      { id: id, 
+        lista_pedidos: lista_p,
+        isShow: true,
+        isEdit: false,
+        fromCadastro: false,
+        fromLista: true
+      }
+    );
   }
+
 
 }
