@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar color="secondary">
-    <ion-title><h1>Cadastro de Folha de Carga</h1></ion-title>
+    <ion-title *ngIf="!editando"><h1>Cadastro de Folha de Carga</h1></ion-title>
+    <ion-title *ngIf="editando"><h1>Edição de Folha de Carga</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -41,13 +42,22 @@
 
   </ion-list>
 
+  <ion-item>
+    <ion-label>Status</ion-label>
+    <ion-select interface="popover" [(ngModel)]="model.status">
+      <ion-option value="Pendente">Pendente</ion-option>
+      <ion-option value="Enviada">Enviada</ion-option>
+      <ion-option value="Entregue">Entregue</ion-option>
+    </ion-select>
+  </ion-item>
+
   <div padding>
       <button *ngIf="!editando" ion-button color="secondary" block (click)="previewFolhacarga()">Preview Folha de Carga</button>
       <button *ngIf="editando" ion-button color="secondary" block (click)="previewFolhacarga()">Preview Atualização Folha de Carga</button>
       <br>
       <!-- <button ion-button color="light" block (click)="loadPedidos()">Atualizar Lista Pedidos</button> -->
       <!-- <button *ngIf="editando" ion-button block (click)="save()">Atualizar Folha de Carga</button> -->
-      <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
+      <!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
     </div>
 
 </ion-content>

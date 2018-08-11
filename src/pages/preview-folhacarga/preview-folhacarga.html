@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar color="secondary">
-    <ion-title><h1>Preview da Folha de Carga</h1></ion-title>
+    <ion-title *ngIf="!isShow" ><h1>Preview da Folha de Carga</h1></ion-title>
+    <ion-title *ngIf="isShow"><h1>Folha de Carga</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -9,6 +10,7 @@
     <div ion-col-12>
       <h2>Folha Carga: <b ion-text color="primary">{{model.id}}</b></h2>
       <h2>Pedidos: <b ion-text color="primary">{{ pedidos }}</b></h2>
+      <h2>Status: <b ion-text color="primary">{{ model.status }}</b></h2>
     </div>
   </div>
   <div ion-row>
@@ -27,6 +29,7 @@
   </div>
   <button *ngIf="!editando && !isShow" ion-button color="secondary" full (click)="save()">Criar Folha de Carga</button>
   <button *ngIf="editando && !isShow" ion-button color="secondary" block (click)="save()">Alterar Folha de Carga</button>
+  <button *ngIf="isShow" ion-button full (click)="createPdf()">Gerar PDF</button>
   <br>
-  <button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
+  <button *ngIf="isShow" ion-button full (click)="viewPdf()" color="secundary" [disabled]="!pdfObj">Visualizar PDF</button>
 </ion-content>

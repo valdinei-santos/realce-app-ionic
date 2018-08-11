@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar class="energized" >
+  <ion-navbar class="energized" color="dark">
     <ion-title *ngIf="!editando"><h1>Cadastro de Produto</h1></ion-title>
     <ion-title *ngIf="editando"><h1>Alteração de Produto</h1></ion-title>
   </ion-navbar>
@@ -86,7 +86,7 @@
     <button *ngIf="!editando" ion-button color="dark" block (click)="save()">Adicionar</button>
     <br>
     <button *ngIf="editando" ion-button color="dark" block (click)="save()">Atualizar</button>
-	<button ion-button color="light" block (click)="cancelar()" >Cancelar</button>
+	<!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
   </div>
 	
 </ion-content>

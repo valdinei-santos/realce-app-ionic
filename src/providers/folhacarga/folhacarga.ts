@@ -77,6 +77,18 @@ export class FolhacargaProvider {
     return true;
   }
 
+  public update_status(folha_carga_id: number, status: string) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = 'update folhas_carga set status = ? where id = ?';
+        let data = [status, folha_carga_id];
+        //let data = [];
+        return db.executeSql(sql, data)
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
   public remove(id: number) {
     let pedidos: any[] = [];
     let listaPedidosExistentes: any[] = [];
@@ -431,6 +443,14 @@ export class Folhacarga2{
   data: Date;
   status: string;
   total: number;
+}
+
+export class Folhacarga3{
+  id: number;
+  data: Date;
+  status: string;
+  pedidos: string;
+  total: string;
 }
 
 export class Item_folhacarga{

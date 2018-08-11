@@ -201,7 +201,7 @@ export class ShowPedidoPage {
     }
     console.log(docDefinition);
     this.pdfObj = pdfMake.createPdf(docDefinition);
-  }
+  } // Fim createPdf()
 
   viewPdf() {
     if (this.plt.is('cordova')) {

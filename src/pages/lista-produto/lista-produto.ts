@@ -17,6 +17,7 @@ export class ListaProdutoPage {
   produto: Produto = {id:null, categoria_id:null, marca_id:null, tipo_id:null, vasilhame_id:null, unidade_venda_id:null, 
                       nome_produto:null, preco:null, ativo:null, observacao:null};
   produtos: any[];
+  //searchQuery: string = '';
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -26,14 +27,8 @@ export class ListaProdutoPage {
   }
 
 
-  ionViewDidEnter() {
-  	this.produtoProvider.getAll()
-      .then((result: any[]) => {
-        this.produtos = result;
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
-    });
+  ionViewDidLoad() {
+    this.getProdutos();
   }
 
  /*  ionViewWillEnter() {
@@ -74,9 +69,9 @@ export class ListaProdutoPage {
   }
 
 
-  filterProduto(ev: any) {
-    //this.getAllProdutos();
-  }
+  /* filterProduto(ev: any) {
+    this.getProdutos();
+  } */
 
 
   cancelar(){
@@ -84,6 +79,34 @@ export class ListaProdutoPage {
     //this.navCtrl.pop();
   }
 
+  getProdutos(){
+    this.produtoProvider.getAll()
+      .then((result: any[]) => {
+        this.produtos = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
+  getItems(ev: any) {
+    // Reset items back to all of the items
+    //this.getProdutos();
+    this.produtoProvider.getAll()
+      .then((result: any[]) => {
+        this.produtos = result;
+        // Lógica para povoar o array só com os produtos que atendem o filtro.
+        const val = ev.target.value;
+        if (val && val.trim() != '') {
+          this.produtos = this.produtos.filter((item) => {
+            return (item.nome_produto.toLowerCase().indexOf(val.toLowerCase()) > -1);
+          })
+        }
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+    });
+  }
 
 
 }

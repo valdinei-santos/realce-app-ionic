@@ -6,6 +6,7 @@
 
 <ion-content padding>
   <!-- <ion-searchbar (ionInput)="filterProducts($event)" [(ngModel)]="searchText"></ion-searchbar> -->
+  <ion-searchbar autocomplete="on" (ionInput)="getItems($event)"></ion-searchbar>
   <ion-list>
     <ion-item-sliding *ngFor="let produto of produtos">
       <button ion-item (click)="editProduto(produto.id)">
@@ -28,7 +29,7 @@
     </ion-item-sliding>
   </ion-list>
   
-  <button ion-button color="light" block (click)="cancelar()" >Voltar</button>
+  <!-- <button ion-button color="light" block (click)="cancelar()" >Voltar</button> -->
  
   <ion-fab right bottom>
     <button ion-fab color="dark" (click)="addProduto()"><ion-icon name="add"></ion-icon></button>

@@ -430,3 +430,17 @@ export class Item_pedido{
   valor_total: number;
 }
 
+export class PedidoAllItens {
+  produto_id: number;
+  nome_produto: string;
+  quantidade: number;
+  valor: number;
+}
+
+export class PedidoAllItens2 {
+  produto_id: number;
+  nome_produto: string;
+  quantidade: number;
+  valor: string;
+}
+

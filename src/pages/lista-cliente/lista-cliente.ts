@@ -25,14 +25,8 @@ export class ListaClientePage {
   }
 
 
-  ionViewDidEnter() {
-    this.clienteProvider.getAll()
-      .then((results: any[]) => {
-        this.clientes = results;
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar os clientes.', duration: 3000, position: 'botton' }).present();
-    });
+  ionViewDidLoad() {
+    this.getClientes();
   }
   
 
@@ -65,6 +59,33 @@ export class ListaClientePage {
   cancelar(){
     this.navCtrl.setRoot(HomePage);
     //this.navCtrl.pop();
+  }
+
+  getClientes() {
+    this.clienteProvider.getAll()
+      .then((results: any[]) => {
+        this.clientes = results;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar os clientes.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
+  getItems(ev: any) {
+    this.clienteProvider.getAll()
+      .then((results: any[]) => {
+        this.clientes = results;
+        // Lógica para povoar o array só com os produtos que atendem o filtro.
+        const val = ev.target.value;
+        if (val && val.trim() != '') {
+          this.clientes = this.clientes.filter((item) => {
+            return (item.nome.toLowerCase().indexOf(val.toLowerCase()) > -1);
+          })
+        }
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar os clientes.', duration: 3000, position: 'botton' }).present();
+    });
   }
 
 

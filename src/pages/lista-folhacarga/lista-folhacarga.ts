@@ -95,10 +95,16 @@ export class ListaFolhacargaPage {
     let lista_p: number[] = [];
     for (let el1 of this.pedidos){
       for (let el2 of el1){
-        console.log('pedido_id: ' + el2.pedido_id);
-        lista_p.push(el2.pedido_id);
+        if (el2.id === id) {
+          console.log('pedido_id: ' + el2.pedido_id);
+          lista_p.push(el2.pedido_id);
+        }
       }
     }
+    lista_p.sort;
+    //let str_lista_p: string;
+    let str_lista_p: string = lista_p.toString();
+
     console.log('lista_p: ' + lista_p);
     this.navCtrl.push(PreviewFolhacargaPage, 
       { id: id, 
@@ -106,7 +112,8 @@ export class ListaFolhacargaPage {
         isShow: true,
         isEdit: false,
         fromCadastro: false,
-        fromLista: true
+        fromLista: true,
+        lista_pedidos_str: str_lista_p
       }
     );
   }

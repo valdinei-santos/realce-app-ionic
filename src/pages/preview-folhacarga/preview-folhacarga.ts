@@ -1,35 +1,54 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 
-import { PedidoProvider, Pedido, Pedido2, Item_pedido } from '../../providers/pedido/pedido';
+import { PedidoProvider, Pedido, Pedido2, Item_pedido, PedidoAllItens, PedidoAllItens2 } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
-import { Folhacarga, FolhacargaProvider } from '../../providers/folhacarga/folhacarga';
+import { Folhacarga, FolhacargaProvider, Folhacarga2, Folhacarga3 } from '../../providers/folhacarga/folhacarga';
+import { FormatDatePipe } from '../../pipes/format-date/format-date';
+import { DecimalPipe } from '@angular/common';
+import { File } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @IonicPage()
 @Component({
   selector: 'page-preview-folhacarga',
   templateUrl: 'preview-folhacarga.html',
+  providers: [ /* FormatCurrencyPipe,  */ FormatDatePipe ]
 })
 export class PreviewFolhacargaPage {
 
   model: Folhacarga;
   //pedido: Pedido2;
-  itens: any[] = [];
+  itens: PedidoAllItens[] = [];
+  itens2: PedidoAllItens2[] = [];
   lista_pedidos: any[] = [];
+  lista_pedidos_str: string;
   //lista_pedidos: string = '';
   pedidos: string = '';
-  //itens2: any[] = [];
   data_atual: any = new Date();
   data_atual_aux: any = new Date();
   total_geral: number = 0;
   editando: boolean = false;
   isShow: boolean = false;
+  horaAtual: string;
+  //pagePdf = { 'produto_id': null, 'cliente_nome': null, 'data': null, 'status': null, 'total': null };
+  pagePdf: Folhacarga3;
+  pdfObj = null;
+
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public pedidoProvider: PedidoProvider,
               public folhacargaProvider: FolhacargaProvider,
-              public toast: ToastController
+              public toast: ToastController,
+              private formatDate: FormatDatePipe,
+              private decimalPipe: DecimalPipe,
+              private plt: Platform,
+              private file: File,
+              private fileOpener: FileOpener
              ) {
     console.log('preview-folhacarga - constructor');
     this.model = new Folhacarga;
@@ -38,22 +57,26 @@ export class PreviewFolhacargaPage {
 
   ionViewDidLoad() {
     console.log('preview-folhacarga - ionViewDidLoad');
-    if (!this.navParams.data.isEdit) {
+    if (!this.navParams.data.isEdit && !this.navParams.data.isShow) { // Eh CADASTRO
       console.log('preview-folhacarga - isEdit: ' + this.navParams.data.isEdit);
       this.model.status = 'Inexistente';
       this.model.data = this.data_atual.toISOString();
       this.loadNewId();
     } else {
-      console.log('preview-folhacarga - Não é isEdit: ' + this.navParams.data.isEdit);
+      console.log('preview-folhacarga - Não é cadastro: ' + this.navParams.data.isEdit);
       this.folhacargaProvider.get(this.navParams.data.id)
-         .then((result: any) => {
+         .then((result: Folhacarga) => {
           this.model = result;
+          if (this.navParams.data.isEdit) {
+            this.model.status = this.navParams.data.status;
+          }
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar uma folhacarga.', duration: 3000, position: 'botton' }).present();
       });
     }
     this.lista_pedidos = this.navParams.data.lista_pedidos;
+    this.lista_pedidos_str = this.navParams.data.lista_pedidos_str;
     console.log(this.lista_pedidos);
     for (let i = 0; i < this.lista_pedidos.length; i++) {
       if (i == 0){
@@ -63,7 +86,7 @@ export class PreviewFolhacargaPage {
       }
     }
     this.pedidoProvider.getAllItens(this.navParams.data.lista_pedidos)
-      .then((result: any[]) => {
+      .then((result: PedidoAllItens[]) => {
         this.itens = result;
         //console.log('Itenss: ' + this.itens);
         console.log('A:' + this.itens.length);
@@ -203,5 +226,126 @@ export class PreviewFolhacargaPage {
     //this.navCtrl.setRoot(HomePage);
     this.navCtrl.pop();
   }
+
+  private getTimestamp() {
+    let now = new Date();
+    let year = "" + now.getFullYear();
+    let month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
+    let day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
+    let hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
+    let minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
+    let second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
+    return day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
+  }
+
+
+  createPdf() {
+    console.log('preview-folhacarga - Entrou createPdf');
+    for (let el of this.itens) {
+      console.log('Entrou lopp this.itens ' + el.produto_id );
+      //this.total = this.total + parseFloat(el.valor_total);
+      //let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null};
+      let item: PedidoAllItens2 = new PedidoAllItens2;
+      item.produto_id = el.produto_id;
+      item.nome_produto = el.nome_produto;
+      item.quantidade = el.quantidade;
+      item.valor = this.decimalPipe.transform(el.valor, '1.2-2'); //el.valor;
+      this.itens2.push(item);
+    }
+    this.pagePdf = {
+      'id': this.model.id,
+      'data': this.formatDate.transform(this.model.data),
+      //'data': this.model.data,
+      'status': this.model.status,
+      'pedidos': this.lista_pedidos_str,
+      'total': this.decimalPipe.transform(this.total_geral, '1.2-2'), //this.total_geral
+    }
+    console.log('Antes getTime' );
+    this.horaAtual = this.getTimestamp();
+    console.log('Depois getTime' );
+    function buildTableBody(data, columns) {
+      var body = [];
+      //body.push(columns);
+      body.push(['ID', 'Produto', 'Quantidade', 'Total']);
+      data.forEach(function(row) {
+          var dataRow = [];
+          columns.forEach(function(column) {
+              dataRow.push(row[column].toString());
+          })
+          body.push(dataRow);
+      });
+      return body;
+    }
+
+    function table(data, columns) {
+      return {
+        table: {
+            headerRows: 1,
+            body: buildTableBody(data, columns)
+        }
+      };
+    }
+
+    var docDefinition = {
+      content: [
+        { text: 'DISTRIBUIDORA REALCE - FOLHA DE CARGA', style: 'header' },
+        { text: this.horaAtual, alignment: 'right' },
+        { text: 'FOLHA CARGA: ' + this.pagePdf.id, style: 'subheader' },
+        { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
+        { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' },
+        { text: 'PEDIDOS: ' + this.pagePdf.pedidos, style: 'subheader' },
+        ' ',
+        table(this.itens2, ['produto_id', 'nome_produto', 'quantidade', 'valor']),
+        { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,  
+        },
+        subheader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 15, 0, 0]
+        },
+        story: {
+          italic: true,
+          alignment: 'left',
+          width: '50%',
+        },
+        tableExample: {
+          margin: [0, 5, 0, 15]
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 13,
+          color: 'black'
+        }
+
+      }
+    }
+    console.log(docDefinition);
+    this.pdfObj = pdfMake.createPdf(docDefinition);
+  } // Fim createPdf()
+
+  viewPdf() {
+    if (this.plt.is('cordova')) {
+      this.pdfObj.getBuffer((buffer) => {
+        var blob = new Blob([buffer], { type: 'application/pdf' });
+ 
+        // Save the PDF to the data Directory of our App 
+        // Gera em /data/data/br.com.valdinei.realceapp/files
+        this.file.writeFile(this.file.dataDirectory, 'folha_'+this.model.id+'.pdf', blob, { replace: true }).then(fileEntry => {
+          // Open the PDf with the correct OS tools
+          this.fileOpener.open(this.file.dataDirectory + 'folha_'+this.model.id+'.pdf', 'application/pdf');
+        })
+      });
+    } else {
+      // On a browser simply use download!
+      this.pdfObj.download();
+    }
+  }
+
+
 
 }
