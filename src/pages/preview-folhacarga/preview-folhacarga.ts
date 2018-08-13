@@ -59,7 +59,7 @@ export class PreviewFolhacargaPage {
     console.log('preview-folhacarga - ionViewDidLoad');
     if (!this.navParams.data.isEdit && !this.navParams.data.isShow) { // Eh CADASTRO
       console.log('preview-folhacarga - isEdit: ' + this.navParams.data.isEdit);
-      this.model.status = 'Inexistente';
+      this.model.status = 'Pendente';
       this.model.data = this.data_atual.toISOString();
       this.loadNewId();
     } else {

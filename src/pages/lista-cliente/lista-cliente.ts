@@ -5,6 +5,7 @@ import { HomePage } from '../home/home';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { CadastroClientePage } from '../cadastro-cliente/cadastro-cliente';
 import { ToastController } from 'ionic-angular';
+import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 
 
 @IonicPage()
@@ -21,30 +22,36 @@ export class ListaClientePage {
               public navParams: NavParams,
 			        public clienteProvider: ClienteProvider,
               public toast: ToastController) {
-	  console.log('constructor ListaClientePage');
+	  console.log('lista-cliente - constructor');
   }
 
 
   ionViewDidLoad() {
     this.getClientes();
   }
+
+  ionViewWillEnter() {
+    console.log('lista-cliente - ionViewWillEnter');
+    if (this.navParams.get('editBack')) {
+      this.getClientes();
+    }
+  }
   
 
   addCliente(){
-    console.log('addCliente');
+    console.log('lista-cliente - addCliente');
     this.navCtrl.push(CadastroClientePage);
   }
 
 
   editCliente(id: number){
-    console.log('editCliente');
-    //console.log(cliente);
-    this.navCtrl.push(CadastroClientePage, { id: id });
+    console.log('lista-cliente - editCliente');
+    this.navCtrl.push(CadastroClientePage, { id: id, isEdit: true });
   }
 
 
   removeCliente(cliente: Cliente) {
-    console.log('removeCliente');
+    console.log('lista-cliente - removeCliente');
     this.clienteProvider.remove(cliente.id) 
       .then(() => {
         var index = this.clientes.indexOf(cliente);
@@ -88,5 +95,8 @@ export class ListaClientePage {
     });
   }
 
+  pedidoCliente(cliente: Cliente) {
+    this.navCtrl.push(CadastroPedidoPage, {cliente: cliente});
+  }
 
 }

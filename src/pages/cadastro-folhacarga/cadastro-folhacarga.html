@@ -42,9 +42,9 @@
 
   </ion-list>
 
-  <ion-item>
+  <ion-item *ngIf="editando">
     <ion-label>Status</ion-label>
-    <ion-select interface="popover" [(ngModel)]="model.status">
+    <ion-select interface="popover" [(ngModel)]="model.status" (ionChange)="changeStatus()">
       <ion-option value="Pendente">Pendente</ion-option>
       <ion-option value="Enviada">Enviada</ion-option>
       <ion-option value="Entregue">Entregue</ion-option>

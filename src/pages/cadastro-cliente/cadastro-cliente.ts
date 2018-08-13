@@ -27,7 +27,6 @@ export class CadastroClientePage {
     this.model = new Cliente();
 
     if (this.navParams.data.id) {
-      console.log('ID: ' + this.navParams.data.id);
       this.clienteProvider.get(this.navParams.data.id)
         .then((result: any) => {
           this.model = result;
@@ -42,6 +41,9 @@ export class CadastroClientePage {
   save() {
     if (this.saveCliente()) {
       this.toast.create({ message: 'Cliente salvo!', duration: 3000, position: 'center' }).present();
+      if (this.navParams.data.isEdit) {
+        this.navCtrl.getPrevious().data.editBack = true;
+      }
       this.navCtrl.pop();
     } else {
       this.toast.create({ message: 'Erro ao salvar o Cliente!', duration: 3000, position: 'center' }).present();
@@ -49,12 +51,9 @@ export class CadastroClientePage {
   }
 
   private saveCliente() {
-    console.log('ID saveClientr: ' + this.model.id);
     if (this.model.id) {
-      //this.editando = false;
       return this.clienteProvider.update(this.model);
     } else {
-      //this.editando = true;
       return this.clienteProvider.insert(this.model);
     }
   }

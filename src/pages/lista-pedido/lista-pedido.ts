@@ -50,20 +50,40 @@ export class ListaPedidoPage {
 
   removePedido(pedido: Pedido2){
     console.log('removePedido');
-    this.pedidoProvider.remove(pedido.id)
-      .then(() => {
-        var index = this.pedidos2.indexOf(pedido);
-        this.pedidos2.splice(index, 1);
-        this.toast.create({ message: 'Pedido removido!', duration: 3000, position: 'botton' }).present();
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao remover o Pedido!', duration: 3000, position: 'center' }).present();
-    });
+    let status_pedido: string = '';
+    for (let el of this.pedidos2) {
+      if (el.id === pedido.id) {
+        status_pedido = el.status;
+      }
+    }
+    if (status_pedido !== 'Pendente'){
+      this.toast.create({ message: 'Somente pedidos PENDENTE podem ser removidos!', duration: 3000, position: 'botton' }).present();
+    } else {
+      this.pedidoProvider.remove(pedido.id)
+        .then(() => {
+          var index = this.pedidos2.indexOf(pedido);
+          this.pedidos2.splice(index, 1);
+          this.toast.create({ message: 'Pedido removido!', duration: 3000, position: 'botton' }).present();
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao remover o Pedido!', duration: 3000, position: 'center' }).present();
+      });
+    }
   }
 
   editPedido(id: number){
     console.log('editPedido: ' + id );
-    this.navCtrl.push(CadastroPedidoPage, { id: id });
+    let status_pedido: string = '';
+    for (let el of this.pedidos2) {
+      if (el.id === id) {
+        status_pedido = el.status;
+      }
+    }
+    if (status_pedido !== 'Pendente'){
+      this.toast.create({ message: 'Somente pedidos PENDENTE podem ser alterados!', duration: 3000, position: 'botton' }).present();
+    } else {
+      this.navCtrl.push(CadastroPedidoPage, { id: id });
+    }
   }
 
   showPedido(id: number){

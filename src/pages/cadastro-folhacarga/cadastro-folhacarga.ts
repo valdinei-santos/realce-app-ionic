@@ -23,6 +23,8 @@ export class CadastroFolhacargaPage {
   folha_id: number;
   editando: boolean = false;
   listaPedidosExistentes: any[] = [];
+  status: string = '';
+  check_original: number[] = [];
 
 
   constructor(public navCtrl: NavController, 
@@ -52,6 +54,7 @@ export class CadastroFolhacargaPage {
       this.folhacargaProvider.get(this.navParams.data.id)
         .then((result: Folhacarga) => {
           this.model = result;
+          this.status = this.model.status;
           console.log('MODEL: ' + this.model);
         })
         .catch(() => {
@@ -63,8 +66,10 @@ export class CadastroFolhacargaPage {
       this.loadPedidosDaFolhacarga(this.navParams.data.id);
     } 
   }
+  
   ionViewWillEnter(){
     console.log('cadastro-folhacarga - ionViewWillEnter');
+    this.status = this.model.status;
     //console.log(this.return_preview);
     //this.return_preview = this.navParams.get('vem_preview');
     //console.log(this.return_preview);
@@ -148,6 +153,7 @@ export class CadastroFolhacargaPage {
           res.checked = true;
           this.pedidos3.push(res);
           this.check.push(res.pedido_id);
+          this.check_original.push(res.pedido_id);
         }
         console.log('cadastro-folhacarga - loadPedidosDaFolhacarga: ' + this.pedidos3); 
       })
@@ -183,20 +189,28 @@ export class CadastroFolhacargaPage {
         id: this.folha_id,
         status: this.model.status
       });
-    }
-    
+    } 
   }
 
-  save() {
+  changeStatus() {
+    console.log('cadastro-folhacarga - changeStatus');
+    if (this.model.status !== this.status) {
+      this.folhacargaProvider.update_status(this.model.id, this.model.status);
+      if (this.model.status === 'Entregue') {
+        this.pedidoProvider.update_status(this.check_original, this.model.status);
+      }
+    }
+  }
+/*   save() {
     if (this.saveFolhacarga()) {
       this.toast.create({ message: 'Pedido salvo!', duration: 3000, position: 'center' }).present();
       this.navCtrl.pop();
     } else {
       this.toast.create({ message: 'Erro ao salvar o Pedido!', duration: 3000, position: 'center' }).present();
     }
-  }
+  } */
 
-  private saveFolhacarga() {
+  //private saveFolhacarga() {
     
     /* this.data_atual_aux = this.model.data;
     this.model.data = this.data_atual_aux.substring(0,10);
@@ -213,7 +227,7 @@ export class CadastroFolhacargaPage {
       this.pedidoProvider.insert(this.model);
       return this.pedidoProvider.insert_itens(this.itens);
     } */
-  }
+  //}
 
   cancelar(){
     //this.navCtrl.setRoot(HomePage);

@@ -228,7 +228,8 @@ public insert(pedido: Pedido) {
                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
                      FROM pedidos p 
                      JOIN clientes c 
-                       ON p.cliente_id = c.id`;              
+                       ON p.cliente_id = c.id
+                    ORDER BY p.data desc`;              
         //"SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome FROM pedidos p join clientes c on p.cliente_id = c.id";
         return db.executeSql(sql, [])
           .then((data: any) => {
@@ -257,7 +258,8 @@ public insert(pedido: Pedido) {
                      FROM pedidos p 
                      JOIN clientes c 
                        ON p.cliente_id = c.id
-                    WHERE upper(p.status) = 'PENDENTE' `;              
+                    WHERE upper(p.status) = 'PENDENTE' 
+                    ORDER BY p.data DESC`;              
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -299,7 +301,8 @@ public insert(pedido: Pedido) {
                       on p.vasilhame_id = v.id
                     LEFT JOIN produtos_unidade_venda u
                       on p.unidade_venda_id = u.id
-                  WHERE pedido_id = ?`;
+                  WHERE pedido_id = ?
+                  ORDER BY 7`;
         let data = [pedido_id];
         return db.executeSql(sql, data)
           .then((data: any) => {
@@ -355,7 +358,8 @@ public insert(pedido: Pedido) {
                             case when t.nome is null then '' else t.nome||' ' end ||
                             case when v.nome is null then '' else v.nome||' ' end ||
                             case when u.nome is null then '' else u.nome end,
-                            i.produto_id`;
+                            i.produto_id
+                   ORDER BY 1`;
         //let data = [lista];
         //console.log(sql);
         return db.executeSql(sql, [])

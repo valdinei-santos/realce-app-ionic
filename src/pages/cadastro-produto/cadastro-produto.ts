@@ -122,6 +122,9 @@ export class CadastroProdutoPage {
   save() {
     if (this.saveProduto()) {
       this.toast.create({ message: 'Produto salvo!', duration: 3000, position: 'center' }).present();
+      if (this.navParams.data.isEdit) {
+        this.navCtrl.getPrevious().data.editBack = true;
+      }
       this.navCtrl.pop();
     } else {
       this.toast.create({ message: 'Erro ao salvar o Produto!', duration: 3000, position: 'center' }).present();
@@ -130,14 +133,8 @@ export class CadastroProdutoPage {
 
   private saveProduto() {
     if (this.model.id) {
-      //this.editando = false;
-      console.log('Vai UPDATE Produto');
-      console.log(this.model);
       return this.produtoProvider.update(this.model);
     } else {
-      //this.editando = true;
-      console.log('Vai INSERT Produto');
-      console.log(this.model);
       return this.produtoProvider.insert(this.model);
     }
   }

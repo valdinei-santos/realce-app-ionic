@@ -84,9 +84,9 @@ export class FolhacargaProvider {
         let data = [status, folha_carga_id];
         //let data = [];
         return db.executeSql(sql, data)
-          .catch((e) => console.error(e));
-      })
       .catch((e) => console.error(e));
+    })
+    .catch((e) => console.error(e));
   }
 
   public remove(id: number) {
@@ -243,7 +243,8 @@ export class FolhacargaProvider {
                      FROM folhas_carga f
                      JOIN folhas_carga_itens i
                        ON f.id = i.folha_carga_id
-                    WHERE upper(f.status) = 'PENDENTE' `;
+                    WHERE upper(f.status) = 'PENDENTE' 
+                    ORDER BY f.data DESC`;
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -267,7 +268,8 @@ export class FolhacargaProvider {
       .then((db: SQLiteObject) => {
         let sql = `SELECT id, pedido_id, folha_carga_id 
                      FROM folhas_carga_itens
-                    WHERE folha_carga_id = ?`;
+                    WHERE folha_carga_id = ?
+                    ORDER BY pedido_id`;
         let data = [folha_carga_id];
         return db.executeSql(sql, data)
           .then((data: any) => {
@@ -334,7 +336,8 @@ export class FolhacargaProvider {
                        ON i.pedido_id = p.id 
                      JOIN clientes c
                        ON p.cliente_id = c.id
-                    WHERE i.folha_carga_id = ?`;
+                    WHERE i.folha_carga_id = ?
+                    ORDER BY i.pedido_id`;
 
         /* let sql = `SELECT f.id, f.data, f.status, i.pedido_id
                      FROM folhas_carga f

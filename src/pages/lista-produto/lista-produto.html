@@ -4,14 +4,14 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <!-- <ion-searchbar (ionInput)="filterProducts($event)" [(ngModel)]="searchText"></ion-searchbar> -->
   <ion-searchbar autocomplete="on" (ionInput)="getItems($event)"></ion-searchbar>
   <ion-list>
     <ion-item-sliding *ngFor="let produto of produtos">
       <button ion-item (click)="editProduto(produto.id)">
         <h1>{{ produto.categoria_nome }} {{ produto.marca_nome }} {{ produto.tipo_nome }} {{ produto.vasilhame_nome }} </h1>
-        <h2><b ion-text color="danger">R$ {{ produto.preco.toFixed(2) | formatCurrency }} - {{ produto.unidade_venda_nome }}</b></h2>
+        <h2><b ion-text color="danger">R$ {{ produto.preco | number:'1.2-2' }} - {{ produto.unidade_venda_nome }}</b></h2>
         <!-- Para string com valor decimal o replace funcionava, mas troquei pelo PIPE     .replace('.',',') -->
       </button>
       <ion-item-options side="left">

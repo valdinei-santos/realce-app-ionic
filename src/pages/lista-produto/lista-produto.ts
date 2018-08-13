@@ -5,6 +5,7 @@ import { HomePage } from '../home/home';
 import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { CadastroProdutoPage } from '../cadastro-produto/cadastro-produto';
 import { ToastController } from 'ionic-angular';
+import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 
 
 @IonicPage()
@@ -23,40 +24,37 @@ export class ListaProdutoPage {
   	          public navParams: NavParams,
   	          public produtoProvider: ProdutoProvider,
   	          public toast: ToastController) {
-	  console.log('constructor ListaProdutoPage');
+	  console.log('lista-produto - constructor');
   }
 
 
   ionViewDidLoad() {
+    console.log('lista-produto - ionViewDidLoad');
     this.getProdutos();
   }
 
- /*  ionViewWillEnter() {
-    this.produtoProvider.getAll()
-      .then((result: any[]) => {
-        this.produtos = result;
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
-    });
-  } */
+  ionViewWillEnter() {
+    console.log('lista-produto - ionViewWillEnter');
+    if (this.navParams.get('editBack')) {
+      this.getProdutos();
+    }
+  }
 
 
   addProduto(){
-    console.log('addProduto');
+    console.log('lista-produto - addProduto');
 	  this.navCtrl.push(CadastroProdutoPage);
   }
 
 
   editProduto(id: number){
-    console.log('editProduto');
-    //console.log(produto);
-    this.navCtrl.push(CadastroProdutoPage, { id: id });
+    console.log('lista-produto - editProduto');
+    this.navCtrl.push(CadastroProdutoPage, { id: id, isEdit: true });
   }
 
 
   removeProduto(produto: Produto) {
-    console.log('removeProduto');
+    console.log('lista-produto - removeProduto');
     this.produtoProvider.remove(produto.id) 
       .then(() => {
         var index = this.produtos.indexOf(produto);
@@ -67,11 +65,6 @@ export class ListaProdutoPage {
         this.toast.create({ message: 'Erro ao remover produto.', duration: 3000, position: 'botton' }).present();
     });
   }
-
-
-  /* filterProduto(ev: any) {
-    this.getProdutos();
-  } */
 
 
   cancelar(){
@@ -106,6 +99,10 @@ export class ListaProdutoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
     });
+  }
+
+  pedidoProduto(produto: Produto) {
+    this.navCtrl.push(CadastroPedidoPage, {produto: produto});
   }
 
 
