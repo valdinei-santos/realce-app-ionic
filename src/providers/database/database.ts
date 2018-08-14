@@ -51,7 +51,8 @@ const DATABASES_TABLES = [
                                          bairro VARCHAR(50),
                                          cidade VARCHAR(50),
                                          cnpj VARCHAR(20),
-                                         inscricao_est VARCHAR(20)
+                                         inscricao_est VARCHAR(20),
+                                         ativo INTEGER
                                         )`,
   //`CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT,
   `CREATE TABLE IF NOT EXISTS pedidos (id NOT NULL,

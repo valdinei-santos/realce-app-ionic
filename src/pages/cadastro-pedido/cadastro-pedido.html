@@ -5,7 +5,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
 	<ion-list>
 	    <!-- <ion-item>
 		  <ion-label floating>Cliente</ion-label>
@@ -16,7 +16,7 @@
 			<ion-grid>
 					<ion-row>
 						<ion-col col-12>
-							<ion-item-group margin-bottom>
+							<ion-item-group >
 									<ion-item>
 										<select-searchable
 											[(ngModel)]="model_cliente"
@@ -25,7 +25,7 @@
 											[items]="clientes"
 											[canSearch]="true"
 											(onChange)="clienteChange($event)">
-											<ng-template floating selectSearchableLabelTemplate >
+											<ng-template selectSearchableLabelTemplate >
 												Cliente
 											</ng-template>
 										</select-searchable>
@@ -35,19 +35,24 @@
 					</ion-row>
 			</ion-grid>
 	    <ion-item>
-		  <ion-label floating>Data</ion-label>
+		  <ion-label >Data</ion-label>
 		  <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input> --> 
 			<ion-datetime displayFormat="DD/MM/YYYY" doneText="OK" cancelText="Cancelar" [(ngModel)]="model.data"></ion-datetime>
 			</ion-item>
 	</ion-list>
-    <hr>
+    <!-- <hr> -->
 	<ion-list>
-    <ion-item>
+			<ion-item-divider color="primary"><h1>Produtos</h1></ion-item-divider>	
+    <!-- <ion-item>
 		  <h1>Produtos</h1>
-	  </ion-item>
+	  </ion-item> -->
 		<ion-item-sliding *ngFor="let item of itens">
 	      <button ion-item>
-	        <h2>{{ item.nome_produto }} - {{ item.quantidade }} - R$ {{ item.valor_unitario }}</h2>
+					<h2>{{ item.nome_produto }}</h2>
+					<h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
+						  Valor: <b ion-text color="danger">{{ item.valor_unitario| number:'1.2-2' }}</b>
+						  Total: <b ion-text color="danger">{{ item.quantidade * item.valor_unitario | number:'1.2-2' }}</b>
+					</h2>
 	      </button>
 	      <ion-item-options side="left">
 	        <button ion-button color="danger" (click)="removeProduto(item)">
