@@ -19,7 +19,7 @@ import { SelectSearchableComponent } from 'ionic-select-searchable';
 })
 export class CadastroPedidoPage {
 
-  pedido: Pedido = {id:null, cliente_id:null, data:null, status:'Inexistente'};
+  pedido: Pedido = new Pedido(); //{id:null, cliente_id:null, data:null, status:'Inexistente'};
   //Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, nome_produto:null, quantidade:null, valor_unitario:null, valor_total:null};
   //produto: Produto = {id:null, }
   //pedidoEditando: Pedido;
@@ -31,6 +31,7 @@ export class CadastroPedidoPage {
   itens: any[] = [];
   clientes: any[];
   produtos: any[];
+  total: number = 0;
   //unidades: any[]
   //data_atual: string = new Date().toISOString();
   data_atual: any = new Date();
@@ -46,9 +47,11 @@ export class CadastroPedidoPage {
     this.model = new Pedido();
     this.model_produto = new Produto();
     this.model_cliente = new Cliente();
-    this.model_item_pedido = new Item_pedido();
+    this.model_item_pedido = new Item_pedido(); 
+  }
 
-    console.log('ID Peeee:' + this.navParams.data.id);
+  ionViewDidLoad() {
+  	console.log('ID Peeee:' + this.navParams.data.id);
     if (this.navParams.data.id) {
       this.editando = true;
       console.log('ID Pe:' + this.navParams.data.id);
@@ -64,6 +67,9 @@ export class CadastroPedidoPage {
       this.pedidoProvider.getItens(this.navParams.data.id)
         .then((result: any) => {
           this.itens = result;
+          for (let el of this.itens){
+            this.total += el.valor_total;
+          }
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
@@ -100,32 +106,8 @@ export class CadastroPedidoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
       });	 
-    
-    //if (this.model.data == null){
-    //  this.model.data = this.data_atual; //this.data_atual.toISOString();
-    //  console.log('Data Val2: ' + this.model.data);
-   // }
-   
-    //this.model.data = this.data_atual.toString();
-    
-    
-  }
-
-
-/*
-  ionViewDidLoad() {
-  	if (this.editando) {
-	    this.pedidoProvider.getAllItens()
-	      .then((result: any[]) => {
-	        this.itens = result;
-	      })
-	      .catch(() => {
-	        this.toast.create({ message: 'Erro ao carregar itens!!!', duration: 3000, position: 'botton' }).present();
-	      });
-  	}
 
   }
-*/
 
   addItem() {
   	  console.log(this.model_produto.id);
@@ -155,7 +137,8 @@ export class CadastroPedidoPage {
         this.model_produto.id = null;
         this.model_produto.nome_produto = null;
         this.model_item_pedido.quantidade = null;
-        this.model_item_pedido.valor_unitario = null; 
+        this.model_item_pedido.valor_unitario = null;
+        this.total = this.total + item.valor_total;
       });
   }
 
@@ -198,7 +181,8 @@ export class CadastroPedidoPage {
     this.data_atual_aux = this.model.data;
     this.model.data = this.data_atual_aux.substring(0,10);
 
-    if (this.model.status != 'Inexistente') {
+    //if (this.model.status != 'Inexistente') {
+    if (this.editando) {
       console.log('Entrou UPDATE - ' + this.model.status);
       //this.editando = false;
       this.pedidoProvider.update(this.model);
@@ -214,6 +198,7 @@ export class CadastroPedidoPage {
 
   removeProduto(item: Item_pedido) {
     this.itens.splice(this.itens.indexOf(item), 1);
+    this.total -= item.valor_total; 
     /* for (let el of this.itens){
       if (el.produto_id == item.produto_id) {
 

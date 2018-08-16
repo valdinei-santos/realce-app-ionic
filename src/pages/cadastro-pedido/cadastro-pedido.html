@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar color="primary">
-		<ion-title *ngIf="!editando"><h1>Cadastro de Pedido - {{ model.id }}</h1></ion-title>
+		<ion-title *ngIf="!editando"><h1>Cadastro de Pedido</h1></ion-title>
+		<!-- <ion-title *ngIf="!editando"><h1>Cadastro de Pedido - {{ model.id }}</h1></ion-title> -->
     <ion-title *ngIf="editando"><h1>Alteração de Pedido - {{ model.id }}</h1></ion-title>
   </ion-navbar>
 </ion-header>
@@ -16,8 +17,8 @@
 			<ion-grid>
 					<ion-row>
 						<ion-col col-12>
-							<ion-item-group >
-									<ion-item>
+							<ion-item-group margin-top>
+									<!-- <ion-item> -->
 										<select-searchable
 											[(ngModel)]="model_cliente"
 											itemValueField="id"
@@ -29,15 +30,15 @@
 												Cliente
 											</ng-template>
 										</select-searchable>
-									</ion-item>
+									<!-- </ion-item> -->
 								</ion-item-group>
 						</ion-col>
 					</ion-row>
 			</ion-grid>
 	    <ion-item>
-		  <ion-label >Data</ion-label>
-		  <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input> --> 
-			<ion-datetime displayFormat="DD/MM/YYYY" doneText="OK" cancelText="Cancelar" [(ngModel)]="model.data"></ion-datetime>
+		    <ion-label >Data</ion-label>
+		    <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input> --> 
+			  <ion-datetime displayFormat="DD/MM/YYYY" doneText="OK" cancelText="Cancelar" [(ngModel)]="model.data"></ion-datetime>
 			</ion-item>
 	</ion-list>
     <!-- <hr> -->
@@ -60,15 +61,19 @@
 	          Excluir
 	        </button>
 	      </ion-item-options>
-	    </ion-item-sliding>
+			</ion-item-sliding>
+			<ion-item>
+				<h2>Total: {{total | number:'1.2-2'}} </h2>
+			</ion-item>
+
 	</ion-list>
 
 	<ion-list>
 		<ion-grid>
 			<ion-row>
-				<ion-col col-12>
+				<ion-col>
 					<ion-item-group margin-bottom>
-							<ion-item>
+							<!-- <ion-item> -->
 								<select-searchable
 									[(ngModel)]="model_produto"
 									itemValueField="id"
@@ -77,10 +82,10 @@
 									[canSearch]="true"
 									(onChange)="produtoChange($event)">
 									<ng-template floating selectSearchableLabelTemplate >
-										Item
+										Produto
 									</ng-template>
 								</select-searchable>
-							</ion-item>
+							<!-- </ion-item> -->
 						</ion-item-group>
 				</ion-col>
 			</ion-row>
@@ -122,5 +127,13 @@
 	  <!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
   </div>
 
+	<ion-item>
+		<ion-label floating>Total com Desc.</ion-label>
+		<ion-input type="number" [(ngModel)]="model.total_ajustado"></ion-input>
+	</ion-item>
+	<ion-item>
+		<ion-label floating>Valor Pago</ion-label>
+		<ion-input type="number" [(ngModel)]="model.valor_pago"></ion-input>
+	</ion-item>
 
 </ion-content>

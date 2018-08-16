@@ -16,8 +16,8 @@ import { EmailComposer } from '@ionic-native/email-composer';
 })
 export class ListaPedidoPage {
 
-  pedido: Pedido = {id:null, cliente_id:null, data:null, status:''};
-  pedido2: Pedido2 = {id:null, cliente_id:null, cliente_nome:'', total:null, data:null, status:''};
+  pedido: Pedido = new Pedido(); //{id:null, cliente_id:null, data:null, status:''};
+  pedido2: Pedido2 = new Pedido2(); //{id:null, cliente_id:null, cliente_nome:'', total:null, data:null, status:''};
   pedidos: any[];
   pedidos2: any[];
   cliente: Cliente = {nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};

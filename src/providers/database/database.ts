@@ -10,7 +10,7 @@ const DATABASES_TABLES = [
   `DROP TABLE produtos_unidade_venda`,
   `DROP TABLE pedidos`,
   `DROP TABLE pedidos_itens`, 
-  `DROP TABLE clientes`,  */
+  `DROP TABLE clientes`, */ 
   `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_tipo (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
@@ -52,13 +52,15 @@ const DATABASES_TABLES = [
                                          cidade VARCHAR(50),
                                          cnpj VARCHAR(20),
                                          inscricao_est VARCHAR(20),
-                                         ativo INTEGER
+                                         ativo INTEGER default 1
                                         )`,
   //`CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT,
   `CREATE TABLE IF NOT EXISTS pedidos (id NOT NULL,
                                        cliente_id INTEGER,
                                        data TEXT,
-                                       status VARCHAR(30)
+                                       status VARCHAR(30),
+                                       total_ajustado NUMERIC(10,2),
+                                       valor_pago NUMERIC(10,2)
                                       )`,
   `CREATE TABLE IF NOT EXISTS pedidos_itens (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                               pedido_id INTEGER,
@@ -227,16 +229,20 @@ const PRODUTOS = [
                   values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, 13, null, 11, 5, 17.00, true, null]],
 
   // Clientes
-  [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [1, 'Bar do Passarinho', 1, '32324543', '999442121', 'Praia de Cima', null, null, null, null]],
-  [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [2, 'Bar do Zeca', 2, '32324543', '999442121', 'Caminho Novo', null, null, null, null]],
+  [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est, ativo) 
+                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [1, 'Bar do Passarinho', 1, '32324543', '999442121', 'Praia de Cima', null, null, null, null, 1]],
+  [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est, ativo) 
+                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [2, 'Bar do Zeca', 2, '32324543', '999442121', 'Caminho Novo', null, null, null, null, 1]],
   
   // Pedidos
-  [`insert into pedidos (id, cliente_id, data, status) 
-                  values (?, ?, ?, ?)`, [1, 1, '2018-06-07', 'Pendente']],
+  [`insert into pedidos (id, cliente_id, data, status, total_ajustado, valor_pago) 
+                  values (?, ?, ?, ?, ?, ?)`, [1, 1, '2018-06-07', 'Pendente', 0, 0]],
   [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_total) 
                   values (?, ?, ?, ?, ?, ?)`, [1, 1, 1, 2, 33.43, 66.86]],
+  [`insert into pedidos (id, cliente_id, data, status, total_ajustado, valor_pago) 
+                  values (?, ?, ?, ?, ?, ?)`, [2, 2, '2018-06-07', 'Pendente', 0, 0]],
+  [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_total) 
+                  values (?, ?, ?, ?, ?, ?)`, [2, 2, 1, 2, 33.43, 66.86]],
 
  
 ];

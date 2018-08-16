@@ -13,7 +13,7 @@ import { ToastController } from 'ionic-angular';
 })
 export class CadastroClientePage {
 	
-  cliente: Cliente = {nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
+  cliente: Cliente = new Cliente(); //{nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
   //clienteEditando: Cliente;
   editando:boolean = false;
   model: Cliente;

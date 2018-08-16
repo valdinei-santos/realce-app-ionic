@@ -35,9 +35,9 @@ export class ListaProdutoPage {
 
   ionViewWillEnter() {
     console.log('lista-produto - ionViewWillEnter');
-    if (this.navParams.get('editBack')) {
-      this.getProdutos();
-    }
+    this.getProdutos();
+    //if (this.navParams.get('editBack')) {
+    //}
   }
 
 

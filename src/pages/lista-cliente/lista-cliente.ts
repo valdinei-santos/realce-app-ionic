@@ -15,7 +15,7 @@ import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 })
 export class ListaClientePage {
 
-  cliente: Cliente = {nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
+  cliente: Cliente = new Cliente(); //{nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
   clientes: any[];
   
   constructor(public navCtrl: NavController, 
@@ -32,9 +32,9 @@ export class ListaClientePage {
 
   ionViewWillEnter() {
     console.log('lista-cliente - ionViewWillEnter');
-    if (this.navParams.get('editBack')) {
-      this.getClientes();
-    }
+    this.getClientes();
+    //if (this.navParams.get('editBack')) {
+    //}
   }
   
 

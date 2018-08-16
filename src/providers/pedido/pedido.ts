@@ -19,8 +19,8 @@ export class PedidoProvider {
 public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'insert into pedidos (id, cliente_id, data, status) values (?, ?, ?, ?)';
-        let data = [pedido.id, pedido.cliente_id, pedido.data, pedido.status];
+        let sql = 'insert into pedidos (id, cliente_id, data, status, total_ajustado, valor_pago) values (?, ?, ?, ?, ?, ?)';
+        let data = [pedido.id, pedido.cliente_id, pedido.data, pedido.status, pedido.total_ajustado, pedido.valor_pago];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
  
@@ -62,8 +62,8 @@ public insert(pedido: Pedido) {
   public update(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'update pedidos set cliente_id = ?, data = ?, status = ? where id = ?';
-        let data = [pedido.cliente_id, pedido.data, pedido.status, pedido.id];
+        let sql = 'update pedidos set cliente_id = ?, data = ?, status = ?, total_ajustado = ?, valor_pago = ? where id = ?';
+        let data = [pedido.cliente_id, pedido.data, pedido.status, pedido.id, pedido.total_ajustado, pedido.valor_pago];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -146,17 +146,18 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
-        let sql = "select id, cliente_id, data, status from pedidos where id = ?";
+        let sql = "select id, cliente_id, data, status, total_ajustado, valor_pago from pedidos where id = ?";
         let data = [id];
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
-              let item = data.rows.item(0);
+              //let item = data.rows.item(0);
               let pedido = new Pedido();
-              pedido.id = item.id;
-              pedido.cliente_id = item.cliente_id;
-              pedido.data = item.data;
-              pedido.status = item.status;
+              pedido = data.rows.item(0);
+              //pedido.id = item.id;
+              //pedido.cliente_id = item.cliente_id;
+              //pedido.data = item.data;
+              //pedido.status = item.status;
               return pedido;
             }
             return null;
@@ -170,7 +171,7 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.total_ajustado, p.valor_pago,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
                      FROM pedidos p 
                      JOIN clientes c 
@@ -201,7 +202,7 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "SELECT id, cliente_id, strftime('%d/%m/%Y', data) as data, status FROM pedidos order by data desc";
-        let sql = "SELECT id, cliente_id, data, status FROM pedidos order by data desc";
+        let sql = "SELECT id, cliente_id, data, status, total_ajustado, valor_pago FROM pedidos order by data desc";
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -224,7 +225,7 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = `SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome,
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.total_ajustado, p.valor_pago,
                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
                      FROM pedidos p 
                      JOIN clientes c 
@@ -253,7 +254,7 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = `SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome,
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.total_ajustado, p.valor_pago,
                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
                      FROM pedidos p 
                      JOIN clientes c 
@@ -328,7 +329,7 @@ public insert(pedido: Pedido) {
       //this.total = this.total + parseFloat(el.valor_total);
       lista = lista +','+el;
     }
-    let lista2: number = 1;
+    //let lista2: number = 1;
     console.log('lista in AllItens: '+ lista);
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
@@ -412,7 +413,8 @@ export class Pedido{
   cliente_id: number;
   data: Date;
   status: string;
-  //itens: Produto[];
+  total_ajustado: number;
+  valor_pago: number;
 }
 
 export class Pedido2{
@@ -422,6 +424,8 @@ export class Pedido2{
   data: Date;
   total?: number;
   status: string;
+  total_ajustado: number;
+  valor_pago: number;
 }
 
 export class Item_pedido{
