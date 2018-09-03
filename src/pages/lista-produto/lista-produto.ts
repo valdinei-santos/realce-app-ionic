@@ -19,6 +19,7 @@ export class ListaProdutoPage {
                       nome_produto:null, preco:null, ativo:null, observacao:null};
   produtos: any[];
   //searchQuery: string = '';
+  isPedido: boolean;
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -38,6 +39,11 @@ export class ListaProdutoPage {
     this.getProdutos();
     //if (this.navParams.get('editBack')) {
     //}
+    if (this.navParams.data.isPedido) {
+      this.isPedido = true;
+    } else {
+      this.isPedido = false;
+    }
   }
 
 
@@ -102,7 +108,12 @@ export class ListaProdutoPage {
   }
 
   pedidoProduto(produto: Produto) {
-    this.navCtrl.push(CadastroPedidoPage, {produto: produto});
+    if (this.isPedido) {
+      this.navCtrl.getPrevious().data.produto = produto;
+      this.navCtrl.pop()
+    } else {
+      null;
+    }
   }
 
 

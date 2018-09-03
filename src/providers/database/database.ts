@@ -10,7 +10,7 @@ const DATABASES_TABLES = [
   `DROP TABLE produtos_unidade_venda`,
   `DROP TABLE pedidos`,
   `DROP TABLE pedidos_itens`, 
-  `DROP TABLE clientes`, */ 
+  `DROP TABLE clientes`,  */
   `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_tipo (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
@@ -59,7 +59,7 @@ const DATABASES_TABLES = [
                                        cliente_id INTEGER,
                                        data TEXT,
                                        status VARCHAR(30),
-                                       total_ajustado NUMERIC(10,2),
+                                       valor_adicional NUMERIC(10,2),
                                        valor_pago NUMERIC(10,2)
                                       )`,
   `CREATE TABLE IF NOT EXISTS pedidos_itens (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,7 +67,9 @@ const DATABASES_TABLES = [
                                               produto_id INTEGER,
                                               quantidade INTEGER,
                                               valor_unitario NUMERIC(10,2),
+                                              valor_padrao NUMERIC(10,2),
                                               valor_total NUMERIC(10,2),
+                                              valor_total_padrao NUMERIC(10,2),
                                               FOREIGN KEY(pedido_id) REFERENCES pedidos(id),
                                               FOREIGN KEY(produto_id) REFERENCES produtos(id)
                                               )`,
@@ -235,14 +237,14 @@ const PRODUTOS = [
                   values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [2, 'Bar do Zeca', 2, '32324543', '999442121', 'Caminho Novo', null, null, null, null, 1]],
   
   // Pedidos
-  [`insert into pedidos (id, cliente_id, data, status, total_ajustado, valor_pago) 
+  [`insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago) 
                   values (?, ?, ?, ?, ?, ?)`, [1, 1, '2018-06-07', 'Pendente', 0, 0]],
-  [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_total) 
-                  values (?, ?, ?, ?, ?, ?)`, [1, 1, 1, 2, 33.43, 66.86]],
-  [`insert into pedidos (id, cliente_id, data, status, total_ajustado, valor_pago) 
+  [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_padrao, valor_total, valor_total_padrao) 
+                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, 1, 1, 2, 33.43, 33.43, 66.86, 66.86]],
+  [`insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago) 
                   values (?, ?, ?, ?, ?, ?)`, [2, 2, '2018-06-07', 'Pendente', 0, 0]],
-  [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_total) 
-                  values (?, ?, ?, ?, ?, ?)`, [2, 2, 1, 2, 33.43, 66.86]],
+  [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_padrao, valor_total, valor_total_padrao) 
+                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [2, 2, 1, 2, 33.43, 33.43, 66.86, 66.86]],
 
  
 ];

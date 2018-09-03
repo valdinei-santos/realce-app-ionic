@@ -52,6 +52,7 @@ import { ListaTipoPageModule } from '../pages/lista-tipo/lista-tipo.module';
 import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/cadastro-unidade-venda.module';
 import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-unidade-venda.module';
 import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastro-vasilhame.module';
+import { CadastroPedidoItemPageModule } from '../pages/cadastro-pedido-item/cadastro-pedido-item.module';
 
 registerLocaleData(localePtBr);
 
@@ -66,27 +67,28 @@ registerLocaleData(localePtBr);
 	  IonicStorageModule.forRoot(),
     HttpClientModule,
     SelectSearchableModule,
-	  CadastroClientePageModule,
 	  ListaClientePageModule,
     //EditClientePageModule,
-    CadastroProdutoPageModule,
     ListaProdutoPageModule,
-    CadastroPedidoPageModule,
     ListaPedidoPageModule,
-    ShowPedidoPageModule,
-    CadastroFolhacargaPageModule,
     ListaFolhacargaPageModule,
-    ShowFolhacargaPageModule,
-    PreviewFolhacargaPageModule,
-    CadastroCategoriaPageModule,
     ListaCategoriaPageModule,
-    CadastroMarcaPageModule,
     ListaMarcaPageModule,
-    CadastroTipoPageModule,
     ListaTipoPageModule,
+    ListaUnidadeVendaPageModule,
+    PreviewFolhacargaPageModule,
+    ShowFolhacargaPageModule,
+    ShowPedidoPageModule,
+    CadastroProdutoPageModule,
+    CadastroPedidoPageModule,
+    CadastroFolhacargaPageModule,
+    CadastroCategoriaPageModule,
+    CadastroMarcaPageModule,
+    CadastroTipoPageModule,
     CadastroVasilhamePageModule,
     CadastroUnidadeVendaPageModule,
-    ListaUnidadeVendaPageModule,
+    CadastroClientePageModule,
+    CadastroPedidoItemPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

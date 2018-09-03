@@ -8,8 +8,12 @@ import { PedidoProvider, Pedido, Item_pedido } from '../../providers/pedido/pedi
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { ToastController } from 'ionic-angular';
+import { DecimalPipe } from '@angular/common';
 
 import { SelectSearchableComponent } from 'ionic-select-searchable';
+import { ListaClientePage } from '../lista-cliente/lista-cliente';
+import { ListaProdutoPage } from '../lista-produto/lista-produto';
+import { CadastroPedidoItemPage } from '../cadastro-pedido-item/cadastro-pedido-item';
 
 
 @IonicPage()
@@ -28,23 +32,28 @@ export class CadastroPedidoPage {
   model_item_pedido: Item_pedido;
   model_produto: Produto;
   model_cliente: Cliente;
-  itens: any[] = [];
+  itens: Item_pedido[] = [];
   clientes: any[];
   produtos: any[];
   total: number = 0;
+  total_geral: number = 0;
+  //valor_adicional: number = 0;
   //unidades: any[]
   //data_atual: string = new Date().toISOString();
   data_atual: any = new Date();
   data_atual_aux: any = new Date();
+  isHide: boolean = false;
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
               public pedidoProvider:PedidoProvider,
               public clienteProvider:ClienteProvider,
               public produtoProvider:ProdutoProvider,
-              public toast: ToastController) {
+              public toast: ToastController,
+              public decimalPipe: DecimalPipe) {
 
     this.model = new Pedido();
+    this.model.valor_adicional = 0;
     this.model_produto = new Produto();
     this.model_cliente = new Cliente();
     this.model_item_pedido = new Item_pedido(); 
@@ -52,30 +61,40 @@ export class CadastroPedidoPage {
 
   ionViewDidLoad() {
   	console.log('ID Peeee:' + this.navParams.data.id);
-    if (this.navParams.data.id) {
+    if (this.navParams.data.id) { // Edit
       this.editando = true;
       console.log('ID Pe:' + this.navParams.data.id);
       this.pedidoProvider.get(this.navParams.data.id)
-        .then((result: any) => {
+        .then((result: Pedido) => {
           this.model = result;
           console.log('Pedido que veio dentro promise: ' + this.model);
-          this.model_cliente.id = this.model.cliente_id;
+          //this.model_cliente.id = this.model.cliente_id;
+          this.clienteProvider.get(this.model.cliente_id)
+            .then((result: Cliente) => {
+            this.model_cliente = result;
+          })
+          .catch(() => {
+            this.toast.create({ message: 'Erro ao carregar um cliente.', duration: 3000, position: 'botton' }).present();
+          });
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
       });
       this.pedidoProvider.getItens(this.navParams.data.id)
-        .then((result: any) => {
+        .then((result: Item_pedido[]) => {
           this.itens = result;
           for (let el of this.itens){
-            this.total += el.valor_total;
+            this.total += Number(el.valor_total);
+            console.log(this.total);
           }
+          console.log(this.total);
+          this.setTotalGeral();
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
       });
       //this.model.data = this.model.data.toISOString();
-    } else {
+    } else { // Cadastro
       this.editando = false;
       this.model.data = this.data_atual.toISOString();
       console.log('Data Val1: ' + this.data_atual.toLocaleDateString('pt-BR'));
@@ -91,22 +110,71 @@ export class CadastroPedidoPage {
         });
     }
 
-    this.clienteProvider.getAll()
+    /* this.clienteProvider.getAll()
       .then((result: any[]) => {
         this.clientes = result;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar clientes!!!', duration: 3000, position: 'botton' }).present();
-      });
+      }); */
 
-    this.produtoProvider.getAll()
+    /* this.produtoProvider.getAll()
       .then((result: any[]) => {
         this.produtos = result;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
-      });	 
+      });	 */ 
 
+  }
+
+
+  ionViewWillEnter() {
+    console.log('cadastro-pedido - ionViewWillEnter');
+    if (this.navParams.get('cliente')) {
+      // console.log('cadastro-pedido - navParams cliente');
+      this.model_cliente = this.navParams.get('cliente');
+    }
+    if (this.navParams.get('produto')) {
+      // console.log('cadastro-pedido - navParams produto');
+      this.model_produto = this.navParams.get('produto');
+      this.model_item_pedido.valor_unitario = this.model_produto.preco;
+      //this.model_item_pedido.valor_unitario.toFixed(2);
+      this.model_item_pedido.quantidade = 1;
+    }
+    if (this.navParams.get('lista_itens')) {
+      // console.log('cadastro-pedido - navParams lista_itens');
+      this.itens = this.navParams.get('lista_itens');
+      this.total = Number(this.navParams.get('total'));
+    }
+    this.setTotalGeral();
+  }
+
+  setTotalGeral(){
+    // console.log('Total: ' + this.total);
+    this.total_geral = Number(this.total) + Number(this.model.valor_adicional);
+  }
+
+  getListCliente(){
+    this.navCtrl.push(ListaClientePage, {isPedido: true});
+  }
+
+  /* getListProdutos(){
+    this.navCtrl.push(ListaProdutoPage, {isPedido: true});
+  } */
+
+  hideList() {
+    console.log('hideList()');
+    this.isHide = this.isHide ? false : true;
+  }
+
+  addItens(){
+    this.navCtrl.push(CadastroPedidoItemPage, { isPedido: true, 
+                                                pedido_id: this.model.id,
+                                                pedido_itens: this.itens,
+                                                pedido_total: this.total
+                                              }
+                     );
   }
 
   addItem() {
@@ -138,7 +206,7 @@ export class CadastroPedidoPage {
         this.model_produto.nome_produto = null;
         this.model_item_pedido.quantidade = null;
         this.model_item_pedido.valor_unitario = null;
-        this.total = this.total + item.valor_total;
+        this.total = this.total + (item.valor_total as number);
       });
   }
 
@@ -169,6 +237,11 @@ export class CadastroPedidoPage {
   } */
 
   save() {
+    console.log('AAAA ' + this.model_cliente.nome);
+    if (this.model_cliente.nome === undefined) {
+      this.toast.create({ message: 'Cliente é obrigatório!', duration: 3000, position: 'center' }).present();
+      return null;
+    }
     if (this.savePedido()) {
       this.toast.create({ message: 'Pedido salvo!', duration: 3000, position: 'center' }).present();
       this.navCtrl.pop();
@@ -180,17 +253,21 @@ export class CadastroPedidoPage {
   private savePedido() {
     this.data_atual_aux = this.model.data;
     this.model.data = this.data_atual_aux.substring(0,10);
+    this.model.cliente_id = this.model_cliente.id; 
 
     //if (this.model.status != 'Inexistente') {
     if (this.editando) {
       console.log('Entrou UPDATE - ' + this.model.status);
       //this.editando = false;
+      console.log(this.model);
       this.pedidoProvider.update(this.model);
       return this.pedidoProvider.update_itens(this.itens);
     } else {
       console.log('Entrou INSERT');
       //this.editando = true;
       this.model.status = 'Pendente';
+      console.log(this.model);
+      console.log(this.itens);
       this.pedidoProvider.insert(this.model);
       return this.pedidoProvider.insert_itens(this.itens);
     }

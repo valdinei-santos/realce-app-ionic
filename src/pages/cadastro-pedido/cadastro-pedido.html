@@ -9,16 +9,27 @@
 <ion-content>
 	<ion-list>
 	    <!-- <ion-item>
-		  <ion-label floating>Cliente</ion-label>
+			  <ion-label floating>Cliente</ion-label>
+			  <ion-input type="text" [(ngModel)]="model_cliente.nome" required></ion-input>
+        <button clear item-right>Forgot</button>
+			</ion-item> -->
+
+			<ion-item>
+					<ion-label>Cliente: </ion-label>
+					<ion-input [disabled]="true" type="text" [(ngModel)]="model_cliente.nome" required></ion-input>
+					<button ion-button large clear (click)="getListCliente()" item-end>
+						<ion-icon name="search"></ion-icon>
+					</button>
+				</ion-item>
+			<!--
 		  <ion-select interface="popover" name="cliente_id" [(ngModel)]="model.cliente_id">
 	        <ion-option *ngFor="let cliente of clientes" value="{{ cliente.id }}">{{ cliente.nome}}</ion-option>
 	      </ion-select>
 			</ion-item> -->
-			<ion-grid>
+<!-- 			<ion-grid>
 					<ion-row>
 						<ion-col col-12>
 							<ion-item-group margin-top>
-									<!-- <ion-item> -->
 										<select-searchable
 											[(ngModel)]="model_cliente"
 											itemValueField="id"
@@ -30,24 +41,31 @@
 												Cliente
 											</ng-template>
 										</select-searchable>
-									<!-- </ion-item> -->
 								</ion-item-group>
 						</ion-col>
 					</ion-row>
-			</ion-grid>
+			</ion-grid> -->
 	    <ion-item>
-		    <ion-label >Data</ion-label>
+		    <ion-label>Data</ion-label>
 		    <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input> --> 
 			  <ion-datetime displayFormat="DD/MM/YYYY" doneText="OK" cancelText="Cancelar" [(ngModel)]="model.data"></ion-datetime>
 			</ion-item>
 	</ion-list>
     <!-- <hr> -->
 	<ion-list>
-			<ion-item-divider color="primary"><h1>Produtos</h1></ion-item-divider>	
-    <!-- <ion-item>
-		  <h1>Produtos</h1>
-	  </ion-item> -->
-		<ion-item-sliding *ngFor="let item of itens">
+			<ion-item-divider color="primary"><h1>Produtos</h1>
+				<button ion-button large clear (click)="addItens()" item-end>
+						<ion-icon color="light" name="md-add"></ion-icon>
+				</button>
+				<button ion-button large clear (click)="hideList()" item-end>
+					<ion-icon *ngIf="!isHide" color="light" name="ios-arrow-down-outline"></ion-icon>
+					<ion-icon *ngIf="isHide" color="light" name="ios-arrow-up-outline"></ion-icon>
+			  </button>
+			</ion-item-divider>	
+      <!-- <ion-item>
+		    <h1>Produtos</h1>
+	    </ion-item> -->
+		  <ion-item-sliding [hidden]="isHide" *ngFor="let item of itens">
 	      <button ion-item>
 					<h2>{{ item.nome_produto }}</h2>
 					<h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
@@ -64,16 +82,17 @@
 			</ion-item-sliding>
 			<ion-item>
 				<h2>Total: {{total | number:'1.2-2'}} </h2>
-			</ion-item>
+				<h2>A/D: {{model.valor_adicional | number:'1.2-2'}} </h2>
+				<h2>Total geral: {{ total_geral | number:'1.2-2'}} </h2>
 
+			</ion-item>
 	</ion-list>
 
 	<ion-list>
 		<ion-grid>
-			<ion-row>
+			<!-- <ion-row>
 				<ion-col>
 					<ion-item-group margin-bottom>
-							<!-- <ion-item> -->
 								<select-searchable
 									[(ngModel)]="model_produto"
 									itemValueField="id"
@@ -85,10 +104,15 @@
 										Produto
 									</ng-template>
 								</select-searchable>
-							<!-- </ion-item> -->
 						</ion-item-group>
 				</ion-col>
-			</ion-row>
+			</ion-row> -->
+			<!-- 
+			<ion-item>
+				<ion-label floating>Produto: </ion-label>
+				<ion-input [disabled]="true" type="text" [(ngModel)]="model_produto.nome_produto"></ion-input>
+			</ion-item>
+     -->
 		  <!-- <ion-row>
 		    <ion-col col-12>
 			    <ion-item>
@@ -99,6 +123,8 @@
 			    </ion-item>
 				</ion-col>
 			</ion-row> -->
+
+			<!-- 
 			<ion-row>
 		    <ion-col col-6>	    
 			    <ion-item>
@@ -116,11 +142,13 @@
       <ion-row>
         <ion-col col-8 offset-2>
           <button ion-button block (click)="addItem()" >Adicionar Produto</button>
-        </ion-col>
-      </ion-row>
+				</ion-col>
+			</ion-row>
+			-->
     </ion-grid>
-	</ion-list>
-    <hr>
+	</ion-list> 
+
+  <!-- <hr> -->
 	<div padding>
     <button *ngIf="!editando" ion-button block (click)="save()">Criar Pedido</button>
 		<button *ngIf="editando" ion-button block (click)="save()">Atualizar Pedido</button>
@@ -128,8 +156,8 @@
   </div>
 
 	<ion-item>
-		<ion-label floating>Total com Desc.</ion-label>
-		<ion-input type="number" [(ngModel)]="model.total_ajustado"></ion-input>
+		<ion-label floating>A/D:</ion-label>
+		<ion-input (keyup)="setTotalGeral($event)" type="number" [(ngModel)]="model.valor_adicional"></ion-input>
 	</ion-item>
 	<ion-item>
 		<ion-label floating>Valor Pago</ion-label>

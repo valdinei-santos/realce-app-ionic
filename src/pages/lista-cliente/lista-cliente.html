@@ -9,7 +9,7 @@
   <!-- <ion-searchbar (ionInput)="filterProducts($event)" [(ngModel)]="searchText"></ion-searchbar> -->
   <ion-list>
     <ion-item-sliding *ngFor="let cliente of clientes">
-      <button ion-item (click)="editCliente(cliente.id)">
+      <button ion-item (click)="pedidoCliente(cliente)">
         <h1>{{ cliente.nome }}</h1>
         <h2>{{ cliente.celular }}</h2>
         <h2>{{ cliente.endereco }}</h2>
@@ -21,9 +21,9 @@
         </button>
       </ion-item-options>
       <ion-item-options side="right">
-		<button ion-button color="primary" (click)="pedidoCliente(cliente)">
+		<button ion-button color="primary" (click)="editCliente(cliente.id)">
 		  <ion-icon name="document"></ion-icon>
-			Pedido
+			Editar
 		</button>
       </ion-item-options>
     </ion-item-sliding>

@@ -89,7 +89,7 @@ SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unit
                          case when t.nome is null then '' else t.nome||' ' end ||
                          case when v.nome is null then '' else v.nome||' ' end ||
                          case when u.nome is null then '' else u.nome end  as nome_produto,
-                         i.produto_id, sum(i.quantidade) as quantidade
+                         i.produto_id, sum(i.quantidade) as quantidade, sum(i.valor_total) as valor
                     FROM pedidos_itens i 
                     JOIN produtos p
                       ON i.produto_id = p.id
@@ -103,13 +103,14 @@ SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unit
                       on p.vasilhame_id = v.id
                     LEFT JOIN produtos_unidade_venda u
                       on p.unidade_venda_id = u.id
-                   WHERE i.pedido_id in (${lista})
+                   WHERE i.pedido_id in (3,4)
                    GROUP BY case when c.nome is null then '' else c.nome||' ' end ||
                             case when m.nome is null then '' else m.nome||' ' end ||
                             case when t.nome is null then '' else t.nome||' ' end ||
                             case when v.nome is null then '' else v.nome||' ' end ||
                             case when u.nome is null then '' else u.nome end,
                             i.produto_id
+                   ORDER BY 1
                             
 SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total

@@ -446,6 +446,7 @@ export class Folhacarga2{
   data: Date;
   status: string;
   total: number;
+  desconto: number;
 }
 
 export class Folhacarga3{
@@ -454,6 +455,7 @@ export class Folhacarga3{
   status: string;
   pedidos: string;
   total: string;
+  desconto: string;
 }
 
 export class Item_folhacarga{

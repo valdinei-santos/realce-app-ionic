@@ -19,8 +19,8 @@ export class PedidoProvider {
 public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'insert into pedidos (id, cliente_id, data, status, total_ajustado, valor_pago) values (?, ?, ?, ?, ?, ?)';
-        let data = [pedido.id, pedido.cliente_id, pedido.data, pedido.status, pedido.total_ajustado, pedido.valor_pago];
+        let sql = 'insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago) values (?, ?, ?, ?, ?, ?)';
+        let data = [pedido.id, pedido.cliente_id, pedido.data, pedido.status, pedido.valor_adicional, pedido.valor_pago];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
  
@@ -47,8 +47,11 @@ public insert(pedido: Pedido) {
       .then((db: SQLiteObject) => {
         //let id_ultimo_insert = db.executeSql('SELECT last_insert_rowid()', []) ;
         for (let item of itens){
-          let sql = 'insert into pedidos_itens (pedido_id, produto_id, quantidade, valor_unitario, valor_total) values (?, ?, ?, ?, ?)';
-          let data = [item.pedido_id, item.produto_id, item.quantidade, item.valor_unitario, item.valor_total];
+          let sql = `insert into pedidos_itens (pedido_id, produto_id, quantidade, valor_unitario, valor_padrao, 
+                                                valor_total, valor_total_padrao) 
+                          values (?, ?, ?, ?, ?, ?, ?)`;
+          let data = [item.pedido_id, item.produto_id, item.quantidade, item.valor_unitario, item.valor_padrao, 
+                      item.valor_total, item.valor_total_padrao];
           db.executeSql(sql, data)
             .catch((e) => console.error(e));
         }
@@ -62,8 +65,8 @@ public insert(pedido: Pedido) {
   public update(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'update pedidos set cliente_id = ?, data = ?, status = ?, total_ajustado = ?, valor_pago = ? where id = ?';
-        let data = [pedido.cliente_id, pedido.data, pedido.status, pedido.id, pedido.total_ajustado, pedido.valor_pago];
+        let sql = 'update pedidos set cliente_id = ?, data = ?, status = ?, valor_adicional = ?, valor_pago = ? where id = ?';
+        let data = [pedido.cliente_id, pedido.data, pedido.status, pedido.valor_adicional, pedido.valor_pago, pedido.id];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -146,7 +149,7 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
-        let sql = "select id, cliente_id, data, status, total_ajustado, valor_pago from pedidos where id = ?";
+        let sql = "select id, cliente_id, data, status, valor_adicional, valor_pago from pedidos where id = ?";
         let data = [id];
         return db.executeSql(sql, data)
           .then((data: any) => {
@@ -171,8 +174,9 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.total_ajustado, p.valor_pago,
-                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.valor_adicional, p.valor_pago,
+                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
+                          (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
                      JOIN clientes c 
                        ON p.cliente_id = c.id
@@ -189,6 +193,7 @@ public insert(pedido: Pedido) {
               pedido.data = item.data;
               pedido.status = item.status;
               pedido.total = item.total;
+              pedido.total_padrao = item.total_padrao;
               return pedido;
             }
             return null;
@@ -202,7 +207,7 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "SELECT id, cliente_id, strftime('%d/%m/%Y', data) as data, status FROM pedidos order by data desc";
-        let sql = "SELECT id, cliente_id, data, status, total_ajustado, valor_pago FROM pedidos order by data desc";
+        let sql = "SELECT id, cliente_id, data, status, valor_adicional, valor_pago FROM pedidos order by data desc";
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -225,12 +230,13 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = `SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome,
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.total_ajustado, p.valor_pago,
-                         (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.valor_adicional, p.valor_pago,
+                         (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
+                         (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
                      JOIN clientes c 
                        ON p.cliente_id = c.id
-                    ORDER BY p.data desc`;              
+                    ORDER BY p.id desc`;              
         //"SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome FROM pedidos p join clientes c on p.cliente_id = c.id";
         return db.executeSql(sql, [])
           .then((data: any) => {
@@ -254,8 +260,9 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = `SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome,
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.total_ajustado, p.valor_pago,
-                         (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.valor_adicional, p.valor_pago,
+                         (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
+                         (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
                      JOIN clientes c 
                        ON p.cliente_id = c.id
@@ -283,7 +290,9 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "SELECT * FROM pedidos_itens WHERE pedido_id = ?";
-        let sql =`SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unitario) as valor_unitario, printf("%.2f",i.valor_total) as valor_total, 
+        let sql =`SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unitario) as valor_unitario, 
+                         printf("%.2f",i.valor_total) as valor_total, 
+                         printf("%.2f",i.valor_total_padrao) as valor_total_padrao, 
                          case when c.nome is null then '' else c.nome||' ' end ||
                          case when m.nome is null then '' else m.nome||' ' end ||
                          case when t.nome is null then '' else t.nome||' ' end ||
@@ -339,7 +348,9 @@ public insert(pedido: Pedido) {
                          case when t.nome is null then '' else t.nome||' ' end ||
                          case when v.nome is null then '' else v.nome||' ' end ||
                          case when u.nome is null then '' else u.nome end  as nome_produto,
-                         i.produto_id, sum(i.quantidade) as quantidade, sum(i.valor_total) as valor
+                         i.produto_id, sum(i.quantidade) as quantidade, 
+                         sum(i.valor_total) as valor, 
+                         sum(i.valor_total_padrao) as valor_padrao 
                     FROM pedidos_itens i 
                     JOIN produtos p
                       ON i.produto_id = p.id
@@ -402,6 +413,26 @@ public insert(pedido: Pedido) {
       .catch((e) => console.error(e));
   }
 
+  public getTotalPadraoPedido(id: number) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = `SELECT printf("%.2f",sum(valor_total_padrao) as total 
+                     FROM pedidos_itens 
+                    WHERE pedido_id = ?`;
+        let data = [id];
+        return db.executeSql(sql, data)
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let item = data.rows.item(0);
+              return item.total;
+            }
+            return null;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
   
 
 
@@ -413,7 +444,7 @@ export class Pedido{
   cliente_id: number;
   data: Date;
   status: string;
-  total_ajustado: number;
+  valor_adicional: number;
   valor_pago: number;
 }
 
@@ -423,8 +454,9 @@ export class Pedido2{
   cliente_nome: string;
   data: Date;
   total?: number;
+  total_padrao?: number;
   status: string;
-  total_ajustado: number;
+  valor_adicional: number;
   valor_pago: number;
 }
 
@@ -435,7 +467,9 @@ export class Item_pedido{
   nome_produto: string;
   quantidade: number;
   valor_unitario: number;
+  valor_padrao: number;
   valor_total: number;
+  valor_total_padrao: number;
 }
 
 export class PedidoAllItens {
@@ -443,6 +477,7 @@ export class PedidoAllItens {
   nome_produto: string;
   quantidade: number;
   valor: number;
+  valor_padrao: number;
 }
 
 export class PedidoAllItens2 {
@@ -450,5 +485,6 @@ export class PedidoAllItens2 {
   nome_produto: string;
   quantidade: number;
   valor: string;
+  valor_padrao: string;
 }
 

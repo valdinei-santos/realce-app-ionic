@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Cadastro Itens</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <!-- <ion-item-divider color="light">
+          <button ion-button large clear (click)="getListProdutos()" item-end>
+              <ion-icon color="primary" name="add"></ion-icon>
+          </button>
+        </ion-item-divider>	 -->
+      <!-- <ion-item>
+        <h1>Produtos</h1>
+      </ion-item> -->
+      <ion-item-sliding *ngFor="let item of itens">
+          <button ion-item>
+            <h2>{{ item.nome_produto }}</h2>
+            <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
+                Valor: <b ion-text color="danger">{{ item.valor_unitario| number:'1.2-2' }}</b>
+                Total: <b ion-text color="danger">{{ item.quantidade * item.valor_unitario | number:'1.2-2' }}</b>
+            </h2>
+          </button>
+          <ion-item-options side="left">
+            <button ion-button color="danger" (click)="removeProduto(item)">
+              <ion-icon name="trash"></ion-icon>
+              Excluir
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+        <ion-item>
+          <h2>Total: {{total | number:'1.2-2'}} </h2>
+        </ion-item>
+    </ion-list>
+
+	<ion-list>
+		<ion-grid>
+			<ion-item>
+				<ion-label floating>Produto: </ion-label>
+				<ion-input [disabled]="true" type="text" [(ngModel)]="model_produto.nome_produto"></ion-input>
+			</ion-item>
+			<ion-row>
+		    <ion-col col-6>	    
+			    <ion-item>
+				    <ion-label floating>Quantidade</ion-label>
+				    <ion-input type="number" [(ngModel)]="model_item_pedido.quantidade" required></ion-input>
+			    </ion-item>
+        </ion-col>
+        <ion-col col-6>	    
+			    <ion-item>
+				    <ion-label floating>Preço</ion-label>
+				    <ion-input type="number" [(ngModel)]="model_item_pedido.valor_unitario" required></ion-input>
+			    </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-8 offset-2>
+          <button ion-button block (click)="addItem()" >Adicionar Produto</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-row>
+        <ion-col col-8 offset-2>
+          <button ion-button block (click)="backPedido()" >Voltar Pedido</button>
+        </ion-col>
+      </ion-row>
+  </ion-list>
+  
+  <ion-fab right top>
+      <button ion-fab color="primary" (click)="getListProdutos()"><ion-icon name="search"></ion-icon></button>
+  </ion-fab>
+
+</ion-content>

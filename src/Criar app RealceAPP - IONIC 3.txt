@@ -1,16 +1,16 @@
-1 - Instalar o IONIC e CORDOVA. Só instala na primeira vez, depois não precisa mais.
+1 - Instalar o IONIC e CORDOVA. Sï¿½ instala na primeira vez, depois nï¿½o precisa mais.
 npm install -g ionic cordova@~7.0 
 
-2 - Para ver as informações do IONIC instalado
+2 - Para ver as informaï¿½ï¿½es do IONIC instalado
 ionic info
 
-3 - Para criar a aplicação IONIC chamada MyApp com o template em branco
+3 - Para criar a aplicaï¿½ï¿½o IONIC chamada MyApp com o template em branco
 ionic start RealceApp sidemenu
 
-4 - Entrar no diretório criado com a aplicação
+4 - Entrar no diretï¿½rio criado com a aplicaï¿½ï¿½o
 cd c:/code/ionic3/RealceApp 
 
-5 - Iniciar o servidor da aplicação para ver a pagina default
+5 - Iniciar o servidor da aplicaï¿½ï¿½o para ver a pagina default
 ionic serve
 ionic serve --lab
 
@@ -32,7 +32,7 @@ ionic serve --lab
         IonicStorageModule.forRoot()
      ],
 
-  3 - Criar um PROVIDER (É compartilhado por todas as paginas do app)
+  3 - Criar um PROVIDER (ï¿½ compartilhado por todas as paginas do app)
     ionic g provider database
     ionic g provider Cliente
     ionic g provider Produto
@@ -42,14 +42,14 @@ ionic serve --lab
     ionic g provider Folhacarga
     
     
-    3.1 - Será criado o diretório ../src/provider/cliente e o arquivo cliente.ts
+    3.1 - Serï¿½ criado o diretï¿½rio ../src/provider/cliente e o arquivo cliente.ts
       Fazer os seguintes ajustes no arquivo criado:
-NÃO FIZ  - Retirar a linha "import { HttpClient } from '@angular/common/http';"
+Nï¿½O FIZ  - Retirar a linha "import { HttpClient } from '@angular/common/http';"
       - Incluir a linha de import do Storage: "import { Storage } from '@ionic/storage';"
-      - Alterar a referência no construtor. Retirando o Http e incluindo o Storage:
-SÓ INCLUI    Ficando assim: "constructor(private storage: Storage) {"
+      - Alterar a referï¿½ncia no construtor. Retirando o Http e incluindo o Storage:
+Sï¿½ INCLUI    Ficando assim: "constructor(private storage: Storage) {"
       Fazer o seguinte ajuste no arquivo "app.modules.ts"
-      - Incluir o módulo do HTTP no "app.modules.ts":
+      - Incluir o mï¿½dulo do HTTP no "app.modules.ts":
         ... 
           import { HttpClientModule } from '@angular/common/http';
         ...
@@ -64,7 +64,7 @@ SÓ INCLUI    Ficando assim: "constructor(private storage: Storage) {"
     - Incluir o import: " import { CrudProvider } from '../../providers/crud/crud' "
     - Injetar o PROVIDER no Construtor: " public crudProvider:CrudProvider "
     
-7 -- CRIAR AS TELAS DA APLICAÇÃO
+7 -- CRIAR AS TELAS DA APLICAï¿½ï¿½O
   1 - Gerar uma nova pagina com o nome CadastroCliente
     ionic g page CadastroCliente
     ionic g page ListaCliente
@@ -79,7 +79,7 @@ SÓ INCLUI    Ficando assim: "constructor(private storage: Storage) {"
     ionic g page ListaFolhacarga
     #ionic g page EditFolhacarga
 
-  2 - Incluir o módulo dessa pagina no module da APP "app.module.ts"
+  2 - Incluir o mï¿½dulo dessa pagina no module da APP "app.module.ts"
     ...
     import { CadastroClientePageModule } from '../pages/cadastro-cliente/cadastro-cliente.module';
     ...
@@ -90,29 +90,67 @@ SÓ INCLUI    Ficando assim: "constructor(private storage: Storage) {"
       CadastroClientePageModule,
     ...
 
-8 - Para criar o icone e a imagem de splash basta colocar a sua imagem no diretório \resources da aplicação com o respectivos nomes icon.png e splash.png 
+8 - Para criar o icone e a imagem de splash basta colocar a sua imagem no diretï¿½rio \resources da aplicaï¿½ï¿½o com o respectivos nomes icon.png e splash.png 
 ionic cordova resources --splash
 ionic cordova resources --icon
 
 9 - Instalar a plataforma para Android
 ionic cordova platform add android --save
 
--- Para remover a plataforma. As vezes é preciso reinstalar para reconhecer algum plugin.
+-- Para remover a plataforma. As vezes ï¿½ preciso reinstalar para reconhecer algum plugin.
 ionic cordova platform rm android
 
 
-9.1 - Para usar o emulador do AndroidStudio. Esse plugin HTTP é nativo e só funciona no emulador.
+9.1 - Para usar o emulador do AndroidStudio. Esse plugin HTTP ï¿½ nativo e sï¿½ funciona no emulador.
 ionic cordova emulate android
 ionic cordova emulate android --livereload
 
-9.2 - Para rodar a aplicação no Android conectado no notebook via usb
+9.2 - Para rodar a aplicaï¿½ï¿½o no Android conectado no notebook via usb
 ionic cordova run android --device
 
-9.3 - Para rodar a aplicação no Android conectado no notebook via usb como PRODUÇÃO. Tela inicial da APP fica mais rápida
+9.3 - Para rodar a aplicaï¿½ï¿½o no Android conectado no notebook via usb como PRODUï¿½ï¿½O. Tela inicial da APP fica mais rï¿½pida
 ionic cordova run android --prod
 
-10 - Para gerar a plataforma e a aplicação para Browser
+10 - Para gerar a plataforma e a aplicaï¿½ï¿½o para Browser
 ionic cordova platform add browser
 ionic cordova run browser
+
+
+DICAS:
+
+1 - Para incluir um LOADING em requisiÃ§Ãµes demoradas
+...
+import { LoadingController } from 'ionic-angular';
+...
+constructor(..., private loadingController LoadingController) {
+
+  let loading = this.loadingController.create({
+    content: 'Aguarde o carregamento...'
+  });
+  
+  loading.present();
+
+  REQUISIÃ‡ÃƒO DEMORADA AQUI.
+
+  loading.dismiss();
+
+}
+
+2 - Para incluir um Alert na aplicaÃ§Ã£o
+...
+import { AlertController } from 'ionic-angular';
+...
+constructor(..., private alertController AlertController) {}
+
+NO CALLBACK DE ERRO DO SUBSCRIB/Observable
+this.alertController.create({
+  title: 'Falha na conexÃ£o',
+  subTitle: 'NÃ£o foi possÃ­vel carregar lista...',
+  buttuns: [
+    { text: 'Ok' }
+  ]
+}).present()
+
+3 -  
 
 

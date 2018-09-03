@@ -17,6 +17,7 @@ export class ListaClientePage {
 
   cliente: Cliente = new Cliente(); //{nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
   clientes: any[];
+  isPedido: boolean;
   
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -35,6 +36,11 @@ export class ListaClientePage {
     this.getClientes();
     //if (this.navParams.get('editBack')) {
     //}
+    if (this.navParams.data.isPedido) {
+      this.isPedido = true;
+    } else {
+      this.isPedido = false;
+    }
   }
   
 
@@ -96,7 +102,12 @@ export class ListaClientePage {
   }
 
   pedidoCliente(cliente: Cliente) {
-    this.navCtrl.push(CadastroPedidoPage, {cliente: cliente});
+    if (this.isPedido) {
+      this.navCtrl.getPrevious().data.cliente = cliente;
+      this.navCtrl.pop()
+    } else {
+      null;
+    }
   }
 
 }

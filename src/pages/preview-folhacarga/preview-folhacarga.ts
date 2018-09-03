@@ -31,6 +31,7 @@ export class PreviewFolhacargaPage {
   data_atual: any = new Date();
   data_atual_aux: any = new Date();
   total_geral: number = 0;
+  total_geral_padrao: number = 0;
   editando: boolean = false;
   isShow: boolean = false;
   horaAtual: string;
@@ -93,8 +94,10 @@ export class PreviewFolhacargaPage {
         console.log('B:' + this.itens);
         for (let i=0; i < this.itens.length; i++){
           this.total_geral = this.total_geral + this.itens[i].valor;
+          this.total_geral_padrao = this.total_geral_padrao + this.itens[i].valor_padrao;
         }
-        console.log(this.total_geral);
+        console.log('Total geral: ' + this.total_geral);
+        console.log('Total geral_padrao: ' + this.total_geral_padrao);
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
@@ -259,6 +262,7 @@ export class PreviewFolhacargaPage {
       'status': this.model.status,
       'pedidos': this.lista_pedidos_str,
       'total': this.decimalPipe.transform(this.total_geral, '1.2-2'), //this.total_geral
+      'desconto': this.decimalPipe.transform(Number(this.total_geral) - Number(this.total_geral_padrao), '1.2-2'),
     }
     console.log('Antes getTime' );
     this.horaAtual = this.getTimestamp();
@@ -297,6 +301,7 @@ export class PreviewFolhacargaPage {
         ' ',
         table(this.itens2, ['produto_id', 'nome_produto', 'quantidade', 'valor']),
         { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' },
+        { text: 'DESC: ' + this.pagePdf.desconto, style: 'subheader' },
       ],
       styles: {
         header: {
