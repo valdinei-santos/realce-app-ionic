@@ -53,6 +53,9 @@ import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/
 import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-unidade-venda.module';
 import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastro-vasilhame.module';
 import { CadastroPedidoItemPageModule } from '../pages/cadastro-pedido-item/cadastro-pedido-item.module';
+// import { DirectivesModule } from '../directives/directives.module';
+import { BrMaskerModule } from 'brmasker-ionic-3';
+import { ReactiveFormsModule } from '@angular/forms';
 
 registerLocaleData(localePtBr);
 
@@ -63,6 +66,8 @@ registerLocaleData(localePtBr);
   ],
   imports: [
     BrowserModule,
+    BrMaskerModule,
+    ReactiveFormsModule,
     IonicModule.forRoot(MyApp),
 	  IonicStorageModule.forRoot(),
     HttpClientModule,
@@ -88,7 +93,10 @@ registerLocaleData(localePtBr);
     CadastroVasilhamePageModule,
     CadastroUnidadeVendaPageModule,
     CadastroClientePageModule,
-    CadastroPedidoItemPageModule
+    CadastroPedidoItemPageModule,
+    // DirectivesModule,
+    
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [

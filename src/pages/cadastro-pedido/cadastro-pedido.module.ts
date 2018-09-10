@@ -3,6 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { CadastroPedidoPage } from './cadastro-pedido';
 import { SelectSearchableModule } from 'ionic-select-searchable';
 import { PipesModule } from '../../pipes/pipes.module';
+import { BrMaskerModule } from 'brmasker-ionic-3';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { PipesModule } from '../../pipes/pipes.module';
   imports: [
     IonicPageModule.forChild(CadastroPedidoPage),
     SelectSearchableModule,
-    PipesModule
+    PipesModule,
+    BrMaskerModule
   ],
 })
 export class CadastroPedidoPageModule {}

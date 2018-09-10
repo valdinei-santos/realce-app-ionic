@@ -149,7 +149,10 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
-        let sql = "select id, cliente_id, data, status, valor_adicional, valor_pago from pedidos where id = ?";
+        let sql = `select id, cliente_id, data, status, 
+                          printf("%.2f",valor_adicional) as valor_adicional, 
+                          printf("%.2f",valor_pago) as valor_pago 
+                     from pedidos where id = ?`;
         let data = [id];
         return db.executeSql(sql, data)
           .then((data: any) => {
@@ -174,7 +177,10 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.valor_adicional, p.valor_pago,
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, c.endereco as cliente_endereco,
+                          c.celular as cliente_celular, 
+                          printf("%.2f",p.valor_adicional) as valor_adicional, 
+                          printf("%.2f",p.valor_pago) as valor_pago,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
                           (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
@@ -190,6 +196,8 @@ public insert(pedido: Pedido) {
               pedido.id = item.id;
               pedido.cliente_id = item.cliente_id;
               pedido.cliente_nome = item.cliente_nome;
+              pedido.cliente_endereco = item.cliente_endereco;
+              pedido.cliente_celular = item.cliente_celular;
               pedido.data = item.data;
               pedido.status = item.status;
               pedido.total = item.total;
@@ -207,7 +215,10 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = "SELECT id, cliente_id, strftime('%d/%m/%Y', data) as data, status FROM pedidos order by data desc";
-        let sql = "SELECT id, cliente_id, data, status, valor_adicional, valor_pago FROM pedidos order by data desc";
+        let sql = `SELECT id, cliente_id, data, status, 
+                          printf("%.2f",valor_adicional) as valor_adicional, 
+                          printf("%.2f",valor_pago) as valor_pago 
+                     FROM pedidos order by data desc`;
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -230,9 +241,11 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = `SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome,
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.valor_adicional, p.valor_pago,
-                         (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
-                         (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, 
+                          printf("%.2f",p.valor_adicional) as valor_adicional, 
+                          printf("%.2f",p.valor_pago) as valor_pago,
+                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
+                          (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
                      JOIN clientes c 
                        ON p.cliente_id = c.id
@@ -260,7 +273,9 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         //let sql = `SELECT p.id, strftime('%d/%m/%Y', p.data) as data, p.status, p.cliente_id, c.nome as cliente_nome,
-        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, p.valor_adicional, p.valor_pago,
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, 
+                          printf("%.2f",p.valor_adicional) as valor_adicional, 
+                          printf("%.2f",p.valor_pago) as valor_pago,
                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
                          (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
@@ -452,6 +467,8 @@ export class Pedido2{
   id?: number;
   cliente_id: number;
   cliente_nome: string;
+  cliente_endereco: string;
+  cliente_celular: string;
   data: Date;
   total?: number;
   total_padrao?: number;

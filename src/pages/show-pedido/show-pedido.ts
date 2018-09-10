@@ -28,7 +28,15 @@ export class ShowPedidoPage {
   total: number = 0;
   dataAtual: Date;
   horaAtual: string;
-  pagePdf = { 'pedido_id': null, 'cliente_nome': null, 'data': null, 'status': null, 'total': null };
+  pagePdf = { 
+    'pedido_id': null, 
+    'cliente_nome': null,
+    'cliente_endereco': null,
+    'cliente_celular': null, 
+    'data': null, 
+    'status': null, 
+    'total': null 
+  };
   pdfObj = null;
 
   constructor(public navCtrl: NavController, 
@@ -95,6 +103,8 @@ export class ShowPedidoPage {
     this.pagePdf = {
       'pedido_id': this.model.id,
       'cliente_nome': this.model.cliente_nome,
+      'cliente_endereco': this.model.cliente_endereco,
+      'cliente_celular': this.model.cliente_celular,
       'data': this.formatDate.transform(this.model.data),
       'status': this.model.status,
       'total': this.decimalPipe.transform(this.model.total, '1.2-2'),
@@ -135,6 +145,10 @@ export class ShowPedidoPage {
         { text: 'PEDIDO: ' + this.pagePdf.pedido_id, style: 'subheader' },
 
         { text: 'CLIENTE: ' + this.pagePdf.cliente_nome, style: 'subheader' },
+
+        { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' },
+        
+        { text: 'CELULAR: ' + this.pagePdf.cliente_celular, style: 'subheader' },
 
         { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
 

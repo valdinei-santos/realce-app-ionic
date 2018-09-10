@@ -27,6 +27,7 @@ export class CadastroClientePage {
     this.model = new Cliente();
 
     if (this.navParams.data.id) {
+      this.editando = true;
       this.clienteProvider.get(this.navParams.data.id)
         .then((result: any) => {
           this.model = result;
@@ -34,6 +35,8 @@ export class CadastroClientePage {
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um cliente.', duration: 3000, position: 'botton' }).present();
       });
+    } else {
+      this.editando = false;
     }  
   }
 

@@ -115,6 +115,10 @@ ionic cordova run android --prod
 ionic cordova platform add browser
 ionic cordova run browser
 
+11 - Instalar pacote para mascara decimal https://www.npmjs.com/package/brmasker-ionic-3
+npm install brmasker-ionic-3 --save
+
+
 
 DICAS:
 

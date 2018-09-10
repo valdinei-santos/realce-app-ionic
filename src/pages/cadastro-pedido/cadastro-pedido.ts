@@ -14,14 +14,19 @@ import { SelectSearchableComponent } from 'ionic-select-searchable';
 import { ListaClientePage } from '../lista-cliente/lista-cliente';
 import { ListaProdutoPage } from '../lista-produto/lista-produto';
 import { CadastroPedidoItemPage } from '../cadastro-pedido-item/cadastro-pedido-item';
-
+import { MaskDirective } from '../../directives/mask/mask';
+import { BrMaskerIonic3, BrMaskModel } from 'brmasker-ionic-3';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @IonicPage()
 @Component({
   selector: 'page-cadastro-pedido',
   templateUrl: 'cadastro-pedido.html',
+  providers: [BrMaskerIonic3]
 })
 export class CadastroPedidoPage {
+
+  form: FormGroup;
 
   pedido: Pedido = new Pedido(); //{id:null, cliente_id:null, data:null, status:'Inexistente'};
   //Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, nome_produto:null, quantidade:null, valor_unitario:null, valor_total:null};
@@ -44,20 +49,56 @@ export class CadastroPedidoPage {
   data_atual_aux: any = new Date();
   isHide: boolean = false;
 
+  ad: string = '';
+  valor_pago: string = '';
+
+  // myModelVariable = '';
+
+  
+
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
               public pedidoProvider:PedidoProvider,
               public clienteProvider:ClienteProvider,
               public produtoProvider:ProdutoProvider,
               public toast: ToastController,
-              public decimalPipe: DecimalPipe) {
+              public decimalPipe: DecimalPipe,
+              public brMaskerIonic3: BrMaskerIonic3) {
 
+    this.form = this.createForm();
     this.model = new Pedido();
     this.model.valor_adicional = 0;
+    this.model.valor_pago = 0;
     this.model_produto = new Produto();
     this.model_cliente = new Cliente();
     this.model_item_pedido = new Item_pedido(); 
   }
+
+  protected createForm(): FormGroup {
+    return new FormGroup({
+      ad: new FormControl(this.createMaskAd()),
+      valor_pago : new FormControl(this.createMaskValorPago())
+    });
+  }
+   
+  private createMaskAd(): string {
+    const config: BrMaskModel = new BrMaskModel();
+    config.money = true;
+    config.thousand = '.';
+    config.decimal = 2;
+    config.type = 'num';
+    return this.brMaskerIonic3.writeCreateValue('', config);
+  }
+
+  private createMaskValorPago(): string {
+    const config: BrMaskModel = new BrMaskModel();
+    config.money = true;
+    config.thousand = '.';
+    config.decimal = 2;
+    config.type = 'num';
+    return this.brMaskerIonic3.writeCreateValue('', config);
+  }
+
 
   ionViewDidLoad() {
   	console.log('ID Peeee:' + this.navParams.data.id);
@@ -67,6 +108,10 @@ export class CadastroPedidoPage {
       this.pedidoProvider.get(this.navParams.data.id)
         .then((result: Pedido) => {
           this.model = result;
+          //this.ad = this.model.valor_adicional.toString().replace('.', ',');
+          //this.valor_pago = this.model.valor_pago.toString().replace('.', ',');
+          this.form.get('ad').setValue(this.model.valor_adicional.toString().replace('.', ',') );
+          this.form.get('valor_pago').setValue(this.model.valor_pago.toString().replace('.', ','));
           console.log('Pedido que veio dentro promise: ' + this.model);
           //this.model_cliente.id = this.model.cliente_id;
           this.clienteProvider.get(this.model.cliente_id)
@@ -134,6 +179,7 @@ export class CadastroPedidoPage {
     if (this.navParams.get('cliente')) {
       // console.log('cadastro-pedido - navParams cliente');
       this.model_cliente = this.navParams.get('cliente');
+      //this.form.get('valor_pago');
     }
     if (this.navParams.get('produto')) {
       // console.log('cadastro-pedido - navParams produto');
@@ -150,9 +196,36 @@ export class CadastroPedidoPage {
     this.setTotalGeral();
   }
 
+/*   convert(event: any) {
+    console.log('old:', this.model.valor_adicional);
+    this.model.valor_adicional = event.target.value.replace(/[^\d\.]/g ,'');
+    console.log('new:', this.model.valor_adicional);
+  } */
+
+/*   convert(event: any) {
+    console.log('old:', this.myModelVariable);
+    this.myModelVariable = event.target.value.replace(/[^\d\.]/g ,'');
+    console.log('new:', this.myModelVariable);
+  } */
+
+  
+
+
   setTotalGeral(){
     // console.log('Total: ' + this.total);
-    this.total_geral = Number(this.total) + Number(this.model.valor_adicional);
+    // this.total_geral = Number(this.total) + Number(this.ad.replace(',', '.'));
+    this.total_geral = Number(this.total) + Number(this.form.get('ad').value.replace(',', '.'));
+  }
+
+  changeAd(){
+    //console.log('changeAd() ' + this.ad );
+    //console.log('changeAd() ' + this.form.get('ad').value );
+    //this.ad = this.form.get('ad').value;
+    this.setTotalGeral();
+  }
+
+  changeValorPago(){
+    this.valor_pago = this.form.get('valor_pago').value;
   }
 
   getListCliente(){
@@ -253,7 +326,9 @@ export class CadastroPedidoPage {
   private savePedido() {
     this.data_atual_aux = this.model.data;
     this.model.data = this.data_atual_aux.substring(0,10);
-    this.model.cliente_id = this.model_cliente.id; 
+    this.model.cliente_id = this.model_cliente.id;
+    this.model.valor_pago = Number(this.form.get('valor_pago').value.replace(',','.'));
+    this.model.valor_adicional = Number(this.form.get('ad').value.replace(',','.'));
 
     //if (this.model.status != 'Inexistente') {
     if (this.editando) {
