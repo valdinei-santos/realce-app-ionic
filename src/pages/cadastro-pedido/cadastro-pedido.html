@@ -46,7 +46,7 @@
 					</ion-row>
 			</ion-grid> -->
 	    <ion-item>
-		    <ion-label>Data</ion-label>
+		    <ion-label>Data:</ion-label>
 		    <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input> --> 
 			  <ion-datetime displayFormat="DD/MM/YYYY" doneText="OK" cancelText="Cancelar" [(ngModel)]="model.data"></ion-datetime>
 			</ion-item>
@@ -83,7 +83,7 @@
 			<ion-item>
 				<h2>Total: {{ total | number:'1.2-2'}} </h2>
 				<!-- <h2>A/D: {{model.valor_adicional | number:'1.2-2'}} </h2> -->
-				<h2>A/D: {{ form.get('ad').value }} </h2>
+				<h2>A/D: {{ ad }} </h2>
 				<h2>Total geral: {{ total_geral | number:'1.2-2'}} </h2>
 			</ion-item>
 	</ion-list>
@@ -149,11 +149,6 @@
 	</ion-list> 
 
   <!-- <hr> -->
-	<div padding>
-    <button *ngIf="!editando" ion-button block (click)="save()">Criar Pedido</button>
-		<button *ngIf="editando" ion-button block (click)="save()">Atualizar Pedido</button>
-	  <!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
-  </div>
 
 	<!-- <form [formGroup]="form" (submit)="submit($event)"> -->
 	<form [formGroup]="form">
@@ -179,7 +174,11 @@
 		</ion-item>
 	</form>
 
-
+	<div padding>
+    <button *ngIf="!editando" ion-button block (click)="save()">Criar Pedido</button>
+		<button *ngIf="editando" ion-button block (click)="save()">Atualizar Pedido</button>
+	  <!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
+  </div>
 <!-- 	<ion-item>
 		<ion-label floating>A/D:</ion-label>
 		<ion-input (keyup)="setTotalGeral($event)" type="number" [(ngModel)]="model.valor_adicional"></ion-input>

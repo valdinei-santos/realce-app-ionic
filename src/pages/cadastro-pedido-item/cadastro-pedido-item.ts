@@ -6,15 +6,19 @@ import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { Item_pedido } from '../../providers/pedido/pedido';
 import { ListaProdutoPage } from '../lista-produto/lista-produto';
 import { DecimalPipe } from '@angular/common';
+import { FormGroup, FormControl } from '@angular/forms';
+import { BrMaskerIonic3, BrMaskModel } from 'brmasker-ionic-3';
 
 
 @IonicPage()
 @Component({
   selector: 'page-cadastro-pedido-item',
   templateUrl: 'cadastro-pedido-item.html',
+  providers: [BrMaskerIonic3]
 })
 export class CadastroPedidoItemPage {
 
+  form: FormGroup;
   itens: any[] = [];
   model_item_pedido: Item_pedido;
   model_produto: Produto;
@@ -25,7 +29,9 @@ export class CadastroPedidoItemPage {
               public navParams: NavParams,
               public produtoProvider: ProdutoProvider,
               public toast: ToastController,
-              private decimalPipe: DecimalPipe) {
+              private decimalPipe: DecimalPipe,
+              public brMaskerIonic3: BrMaskerIonic3) {
+    this.form = this.createForm();
     this.model_item_pedido = new Item_pedido();
     this.model_produto = new Produto();
   }
@@ -44,7 +50,7 @@ export class CadastroPedidoItemPage {
     if (this.navParams.get('produto')) {
       this.model_produto = this.navParams.get('produto');
       this.model_item_pedido.valor_unitario = Number(this.model_produto.preco); //this.decimalPipe.transform(this.model_produto.preco, '1.2-2'); 
-      //this.model_item_pedido.valor_unitario.toFixed(2);
+      this.form.get('preco').setValue(this.model_produto.preco.toString().replace('.', ','));
       this.model_item_pedido.valor_padrao = Number(this.model_produto.preco);
       this.model_item_pedido.quantidade = 1;
     }
@@ -53,6 +59,27 @@ export class CadastroPedidoItemPage {
   /* ionViewWillUnload() {
     this.setBackPedido();
   } */
+
+  protected createForm(): FormGroup {
+    return new FormGroup({
+      preco : new FormControl(this.createMaskPreco()),
+    });
+  }
+   
+  private createMaskPreco(): string {
+    const config: BrMaskModel = new BrMaskModel();
+    config.money = true;
+    config.thousand = '.';
+    config.decimal = 2;
+    config.type = 'num';
+    return this.brMaskerIonic3.writeCreateValue('', config);
+  }
+
+  changePreco(){
+    //console.log('changeAd() ' + this.ad );
+    //console.log('changeAd() ' + this.form.get('ad').value );
+    this.model_item_pedido.valor_unitario = Number(this.form.get('preco').value.replace(',', '.'));
+  }
 
   getListProdutos(){
     this.navCtrl.push(ListaProdutoPage, {isPedido: true});
@@ -96,6 +123,7 @@ export class CadastroPedidoItemPage {
       this.model_produto.nome_produto = null;
       this.model_item_pedido.quantidade = null;
       this.model_item_pedido.valor_unitario = null;
+      this.form.get('preco').setValue(null);
       this.model_item_pedido.valor_padrao = null;
       this.total = this.total + item.valor_total;
       this.setBackPedido();

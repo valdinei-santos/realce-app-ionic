@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { CadastroPedidoItemPage } from './cadastro-pedido-item';
+import { BrMaskerModule } from 'brmasker-ionic-3';
 
 @NgModule({
   declarations: [
@@ -8,6 +9,7 @@ import { CadastroPedidoItemPage } from './cadastro-pedido-item';
   ],
   imports: [
     IonicPageModule.forChild(CadastroPedidoItemPage),
+    BrMaskerModule
   ],
 })
 export class CadastroPedidoItemPageModule {}

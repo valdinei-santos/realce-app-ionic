@@ -133,5 +133,24 @@ export class ListaPedidoPage {
     this.emailProvider.sendEmail(to, cc, bcc, null, subject, message); */
   }
 
+  getPedidos(ev: any) {
+    // Reset items back to all of the items
+    //this.getProdutos();
+    this.pedidoProvider.getAll2()
+      .then((result: any[]) => {
+        this.pedidos2 = result;
+        // Lógica para povoar o array só com os produtos que atendem o filtro.
+        const val = ev.target.value;
+        if (val && val.trim() != '') {
+          this.pedidos2 = this.pedidos2.filter((item) => {
+            return (item.cliente_nome.toLowerCase().indexOf(val.toLowerCase()) > -1);
+          })
+        }
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar pedidos.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
 
 }

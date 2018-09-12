@@ -49,8 +49,8 @@ export class CadastroPedidoPage {
   data_atual_aux: any = new Date();
   isHide: boolean = false;
 
-  ad: string = '';
-  valor_pago: string = '';
+  ad: string = '0,00';
+  valor_pago: string = '0,00';
 
   // myModelVariable = '';
 
@@ -74,32 +74,6 @@ export class CadastroPedidoPage {
     this.model_item_pedido = new Item_pedido(); 
   }
 
-  protected createForm(): FormGroup {
-    return new FormGroup({
-      ad: new FormControl(this.createMaskAd()),
-      valor_pago : new FormControl(this.createMaskValorPago())
-    });
-  }
-   
-  private createMaskAd(): string {
-    const config: BrMaskModel = new BrMaskModel();
-    config.money = true;
-    config.thousand = '.';
-    config.decimal = 2;
-    config.type = 'num';
-    return this.brMaskerIonic3.writeCreateValue('', config);
-  }
-
-  private createMaskValorPago(): string {
-    const config: BrMaskModel = new BrMaskModel();
-    config.money = true;
-    config.thousand = '.';
-    config.decimal = 2;
-    config.type = 'num';
-    return this.brMaskerIonic3.writeCreateValue('', config);
-  }
-
-
   ionViewDidLoad() {
   	console.log('ID Peeee:' + this.navParams.data.id);
     if (this.navParams.data.id) { // Edit
@@ -111,6 +85,7 @@ export class CadastroPedidoPage {
           //this.ad = this.model.valor_adicional.toString().replace('.', ',');
           //this.valor_pago = this.model.valor_pago.toString().replace('.', ',');
           this.form.get('ad').setValue(this.model.valor_adicional.toString().replace('.', ',') );
+          this.ad = this.form.get('ad').value;
           this.form.get('valor_pago').setValue(this.model.valor_pago.toString().replace('.', ','));
           console.log('Pedido que veio dentro promise: ' + this.model);
           //this.model_cliente.id = this.model.cliente_id;
@@ -208,7 +183,30 @@ export class CadastroPedidoPage {
     console.log('new:', this.myModelVariable);
   } */
 
-  
+  protected createForm(): FormGroup {
+    return new FormGroup({
+      ad: new FormControl(this.createMaskAd()),
+      valor_pago : new FormControl(this.createMaskValorPago())
+    });
+  }
+   
+  private createMaskAd(): string {
+    const config: BrMaskModel = new BrMaskModel();
+    config.money = true;
+    config.thousand = '.';
+    config.decimal = 2;
+    config.type = 'num';
+    return this.brMaskerIonic3.writeCreateValue('', config);
+  }
+
+  private createMaskValorPago(): string {
+    const config: BrMaskModel = new BrMaskModel();
+    config.money = true;
+    config.thousand = '.';
+    config.decimal = 2;
+    config.type = 'num';
+    return this.brMaskerIonic3.writeCreateValue('', config);
+  }
 
 
   setTotalGeral(){
@@ -220,7 +218,7 @@ export class CadastroPedidoPage {
   changeAd(){
     //console.log('changeAd() ' + this.ad );
     //console.log('changeAd() ' + this.form.get('ad').value );
-    //this.ad = this.form.get('ad').value;
+    this.ad = this.form.get('ad').value;
     this.setTotalGeral();
   }
 
