@@ -201,6 +201,7 @@ public insert(pedido: Pedido) {
               pedido.data = item.data;
               pedido.status = item.status;
               pedido.total = item.total;
+              pedido.valor_adicional = item.valor_adicional;
               pedido.total_padrao = item.total_padrao;
               return pedido;
             }
@@ -308,20 +309,21 @@ public insert(pedido: Pedido) {
         let sql =`SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unitario) as valor_unitario, 
                          printf("%.2f",i.valor_total) as valor_total, 
                          printf("%.2f",i.valor_total_padrao) as valor_total_padrao, 
-                         case when c.nome is null then '' else c.nome||' ' end ||
+                         p.nome_produto || ' ' || v.nome || ' ' || u.nome as nome_produto
+                         /* case when c.nome is null then '' else c.nome||' ' end ||
                          case when m.nome is null then '' else m.nome||' ' end ||
                          case when t.nome is null then '' else t.nome||' ' end ||
                          case when v.nome is null then '' else v.nome||' ' end ||
-                         case when u.nome is null then '' else u.nome end  as nome_produto
+                         case when u.nome is null then '' else u.nome end  as nome_produto */
                     FROM pedidos_itens i 
                     JOIN produtos p
                       ON i.produto_id = p.id
-                    JOIN produtos_categoria c 
+                    /* JOIN produtos_categoria c 
                       on p.categoria_id = c.id 
                     LEFT JOIN produtos_marca m 
                       on p.marca_id = m.id 
                     LEFT JOIN produtos_tipo t 
-                      on p.tipo_id = t.id 
+                      on p.tipo_id = t.id */
                     LEFT JOIN produtos_vasilhame v
                       on p.vasilhame_id = v.id
                     LEFT JOIN produtos_unidade_venda u

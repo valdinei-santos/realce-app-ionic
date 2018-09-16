@@ -13,14 +13,11 @@ import { CadastroMarcaPage } from '../cadastro-marca/cadastro-marca';
 import { CadastroTipoPage } from '../cadastro-tipo/cadastro-tipo';
 import { CadastroVasilhamePage } from '../cadastro-vasilhame/cadastro-vasilhame';
 import { CadastroUnidadeVendaPage } from '../cadastro-unidade-venda/cadastro-unidade-venda';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { BrMaskerIonic3, BrMaskModel } from 'brmasker-ionic-3';
 
 @IonicPage()
 @Component({
   selector: 'page-cadastro-produto',
   templateUrl: 'cadastro-produto.html',
-  providers: [BrMaskerIonic3]
 })
 export class CadastroProdutoPage {
 
@@ -28,12 +25,11 @@ export class CadastroProdutoPage {
 //  produto: Produto = {id: null, categoria_id:null, marca_id:null, tipo_id:null, vasilhame_id:null, unidade_venda_id:null, 
 //                      nome_produto:null, preco:null, ativo:null, observacao:null };
   //produtoEditando: Produto;
-  myForm: FormGroup;
   editando:boolean = false;	
   model: Produto;
-  // categorias: any[];
-  // marcas: any[];
-  // tipos: any[];
+  categorias: any[];
+  marcas: any[];
+  tipos: any[];
   vasilhames: any[];
   unidades_venda: any[];
 
@@ -45,21 +41,15 @@ export class CadastroProdutoPage {
               public tipoProvider:TipoProvider,
               public vasilhameProvider:VasilhameProvider,
   	          public unidadeVendaProvider:UnidadeVendaProvider,
-              public toast: ToastController,
-              public brMaskerIonic3: BrMaskerIonic3) { 
+			        public toast: ToastController) {
 
-      this.model = new Produto();
-      this.myForm = this.createForm();    
-  }
+    this.model = new Produto();
 
-  ionViewDidLoad() {
-    if (this.navParams.data.id) { // Edit
+    if (this.navParams.data.id) {
       this.editando = true;
       this.produtoProvider.get(this.navParams.data.id)
-        .then((result: Produto) => {
+        .then((result: any) => {
           this.model = result;
-          this.myForm.patchValue(result);
-          //console.log(this.model);
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um produto.', duration: 3000, position: 'botton' }).present();
@@ -69,16 +59,17 @@ export class CadastroProdutoPage {
     }
   }
 
+  //ionViewDidLoad() {
   ionViewDidEnter() {  
-    // this.loadCategoria();
-    // this.loadMarca();
-    // this.loadTipo();
+    this.loadCategoria();
+    this.loadMarca();
+    this.loadTipo();
     this.loadVasilhame();
     this.loadUnidadeVenda();
     this.model.ativo = 1;
   }
 
-  /* public loadCategoria(){
+  public loadCategoria(){
     this.categoriaProvider.getAll()
       .then((result: any[]) => {
         this.categorias = result;
@@ -86,9 +77,9 @@ export class CadastroProdutoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar as categorias.', duration: 3000, position: 'botton' }).present();
     });
-  } */
+  }
 
-  /* private loadMarca(){
+  private loadMarca(){
     this.marcaProvider.getAll()
       .then((result: any[]) => {
         this.marcas = result;
@@ -96,9 +87,9 @@ export class CadastroProdutoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar as marcas.', duration: 3000, position: 'botton' }).present();
     });
-  } */
+  }
 
-  /* private loadTipo(){
+  private loadTipo(){
     this.tipoProvider.getAll()
       .then((result: any[]) => {
         this.tipos = result;
@@ -106,7 +97,7 @@ export class CadastroProdutoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar os tipos.', duration: 3000, position: 'botton' }).present();
     });
-  } */
+  }
 
   private loadVasilhame(){
     this.vasilhameProvider.getAll()
@@ -128,30 +119,6 @@ export class CadastroProdutoPage {
     });
   }
 
-  protected createForm(): FormGroup {
-    return new FormGroup({
-      id: new FormControl(""),
-      // categoria_id: new FormControl(""),
-      // marca_id: new FormControl(""),
-      // tipo_id: new FormControl(""),
-      nome_produto: new FormControl(""),
-      vasilhame_id: new FormControl(""),
-      unidade_venda_id: new FormControl(""),
-      preco: new FormControl(this.createMaskPreco(), Validators.required),
-      ativo: new FormControl(""),
-      observacao: new FormControl(""),
-    });
-  }
-
-  private createMaskPreco(): string {
-    const config: BrMaskModel = new BrMaskModel();
-    config.money = true;
-    config.thousand = '.';
-    config.decimal = 2;
-    config.type = 'num';
-    return this.brMaskerIonic3.writeCreateValue('', config);
-  }
-
   save() {
     if (this.saveProduto()) {
       this.toast.create({ message: 'Produto salvo!', duration: 3000, position: 'center' }).present();
@@ -165,14 +132,10 @@ export class CadastroProdutoPage {
   }
 
   private saveProduto() {
-    // this.model.categoria_id = this.myForm.get('categoria_id').value;
-    // this.model.marca_id = this.myForm.get('marca_id').value;
-
-    const newProduto: Produto = this.myForm.getRawValue();
-    if (newProduto.id) {
-      return this.produtoProvider.update(newProduto);
+    if (this.model.id) {
+      return this.produtoProvider.update(this.model);
     } else {
-      return this.produtoProvider.insert(newProduto);
+      return this.produtoProvider.insert(this.model);
     }
   }
 

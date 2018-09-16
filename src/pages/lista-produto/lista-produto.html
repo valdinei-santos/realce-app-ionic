@@ -10,7 +10,7 @@
   <ion-list>
     <ion-item-sliding *ngFor="let produto of produtos">
       <button ion-item (click)="pedidoProduto(produto)">
-        <h1>{{ produto.categoria_nome }} {{ produto.marca_nome }} {{ produto.tipo_nome }} {{ produto.vasilhame_nome }} </h1>
+        <h1>{{ produto.nome_produto }} {{ produto.vasilhame_nome }} </h1>
         <h2><b ion-text color="danger">R$ {{ produto.preco | number:'1.2-2' }} - {{ produto.unidade_venda_nome }}</b></h2>
         <!-- Para string com valor decimal o replace funcionava, mas troquei pelo PIPE     .replace('.',',') -->
       </button>

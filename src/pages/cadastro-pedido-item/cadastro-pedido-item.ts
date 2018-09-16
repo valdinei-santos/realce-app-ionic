@@ -6,7 +6,7 @@ import { ProdutoProvider, Produto } from '../../providers/produto/produto';
 import { Item_pedido } from '../../providers/pedido/pedido';
 import { ListaProdutoPage } from '../lista-produto/lista-produto';
 import { DecimalPipe } from '@angular/common';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BrMaskerIonic3, BrMaskModel } from 'brmasker-ionic-3';
 
 
@@ -18,7 +18,7 @@ import { BrMaskerIonic3, BrMaskModel } from 'brmasker-ionic-3';
 })
 export class CadastroPedidoItemPage {
 
-  form: FormGroup;
+  myForm: FormGroup;
   itens: any[] = [];
   model_item_pedido: Item_pedido;
   model_produto: Produto;
@@ -31,7 +31,7 @@ export class CadastroPedidoItemPage {
               public toast: ToastController,
               private decimalPipe: DecimalPipe,
               public brMaskerIonic3: BrMaskerIonic3) {
-    this.form = this.createForm();
+    this.myForm = this.createForm();
     this.model_item_pedido = new Item_pedido();
     this.model_produto = new Produto();
   }
@@ -49,10 +49,13 @@ export class CadastroPedidoItemPage {
     console.log('cadastro-pedido-item - ionViewWillEnter');
     if (this.navParams.get('produto')) {
       this.model_produto = this.navParams.get('produto');
-      this.model_item_pedido.valor_unitario = Number(this.model_produto.preco); //this.decimalPipe.transform(this.model_produto.preco, '1.2-2'); 
-      this.form.get('preco').setValue(this.model_produto.preco.toString().replace('.', ','));
+      this.model_item_pedido.valor_unitario = Number(this.model_produto.preco); //this.decimalPipe.transmyForm(this.model_produto.preco, '1.2-2'); 
       this.model_item_pedido.valor_padrao = Number(this.model_produto.preco);
       this.model_item_pedido.quantidade = 1;
+      console.log(this.model_produto);
+      this.myForm.get('nome_produto').setValue(this.model_produto.nome_completo);
+      this.myForm.get('quantidade').setValue(1);
+      this.myForm.get('preco').setValue(this.model_produto.preco.toString().replace('.', ','));
     }
   }
 
@@ -62,7 +65,9 @@ export class CadastroPedidoItemPage {
 
   protected createForm(): FormGroup {
     return new FormGroup({
-      preco : new FormControl(this.createMaskPreco()),
+      nome_produto: new FormControl( {value: '', disabled: true}, Validators.required ), 
+      quantidade: new FormControl( {value: 1}, Validators.required ),
+      preco: new FormControl(this.createMaskPreco(), Validators.required),
     });
   }
    
@@ -75,10 +80,16 @@ export class CadastroPedidoItemPage {
     return this.brMaskerIonic3.writeCreateValue('', config);
   }
 
+  changeNomeProduto(){
+    this.model_produto.nome_completo = this.myForm.get('nome_produto').value;
+  }
+  
+  changeQuantidade(){
+    this.model_item_pedido.quantidade = Number(this.myForm.get('quantidade').value);
+  }
+  
   changePreco(){
-    //console.log('changeAd() ' + this.ad );
-    //console.log('changeAd() ' + this.form.get('ad').value );
-    this.model_item_pedido.valor_unitario = Number(this.form.get('preco').value.replace(',', '.'));
+    this.model_item_pedido.valor_unitario = Number(this.myForm.get('preco').value.replace(',', '.'));
   }
 
   getListProdutos(){
@@ -111,7 +122,7 @@ export class CadastroPedidoItemPage {
       let item = new Item_pedido();
       item.pedido_id = this.pedido_id;
       item.produto_id = this.model_produto.id;
-      item.nome_produto = this.model_produto.nome_produto;
+      item.nome_produto = this.model_produto.nome_completo;
       item.quantidade = this.model_item_pedido.quantidade;
       item.valor_unitario = this.model_item_pedido.valor_unitario; 
       item.valor_padrao = this.model_item_pedido.valor_padrao;
@@ -123,7 +134,9 @@ export class CadastroPedidoItemPage {
       this.model_produto.nome_produto = null;
       this.model_item_pedido.quantidade = null;
       this.model_item_pedido.valor_unitario = null;
-      this.form.get('preco').setValue(null);
+      this.myForm.get('nome_produto').setValue(null);
+      this.myForm.get('quantidade').setValue(null);
+      this.myForm.get('preco').setValue(null);
       this.model_item_pedido.valor_padrao = null;
       this.total = this.total + item.valor_total;
       this.setBackPedido();

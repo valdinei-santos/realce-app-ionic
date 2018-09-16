@@ -25,7 +25,9 @@
             Total: <b ion-text color="danger">{{ item.valor_total | number:'1.2-2' }}</b></h2>
       </ion-item>  
       <ion-item>
-        <h1>Total: <b ion-text color="danger">R$ {{ total.toFixed(2) | number:'1.2-2' }}</b> </h1>
+        <h1>Total: <b ion-text color="danger"> {{ total.toFixed(2) | number:'1.2-2' }}</b> </h1>
+        <h1>A/D: <b ion-text color="danger"> {{ model.valor_adicional | number:'1.2-2' }}</b> </h1>
+        <h1>Total Geral: <b ion-text color="danger"> {{ total_geral | number:'1.2-2' }}</b> </h1>
       </ion-item>
     </ion-list>
   </div>

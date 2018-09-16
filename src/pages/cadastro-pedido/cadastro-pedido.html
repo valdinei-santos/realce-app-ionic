@@ -2,7 +2,7 @@
   <ion-navbar color="primary">
 		<ion-title *ngIf="!editando"><h1>Cadastro de Pedido</h1></ion-title>
 		<!-- <ion-title *ngIf="!editando"><h1>Cadastro de Pedido - {{ model.id }}</h1></ion-title> -->
-    <ion-title *ngIf="editando"><h1>Alteração de Pedido - {{ model.id }}</h1></ion-title>
+    <ion-title *ngIf="editando"><h1>Pedido - {{ model.id }}</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -156,7 +156,7 @@
 			<ion-label>A/D:</ion-label>
 			<ion-input type="tel" 
 								 formControlName="ad" 
-								 (blur)="changeAd()"
+								 (ionBlur)="changeAd()"
 								 [value]="form.get('ad').value" 
 								 name="ad" 
 								 placeholder="0,00"  
@@ -166,7 +166,7 @@
 			<ion-label>Valor Pago:</ion-label>
 			<ion-input type="tel"
 								 formControlName="valor_pago" 
-								 (blur)="changeValorPago()"
+								 (ionBlur)="changeValorPago()"
 								 [value]="form.get('valor_pago').value" 
 								 name="valor_pago" 
 								 placeholder="0,00"  

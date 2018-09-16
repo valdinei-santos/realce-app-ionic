@@ -10,24 +10,25 @@ const DATABASES_TABLES = [
   `DROP TABLE produtos_unidade_venda`,
   `DROP TABLE pedidos`,
   `DROP TABLE pedidos_itens`, 
-  `DROP TABLE clientes`,  */
+  `DROP TABLE clientes`, */
   `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_tipo (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_vasilhame (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_unidade_venda (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(10) )`,
   `CREATE TABLE IF NOT EXISTS produtos (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        categoria_id INTEGER,
+                                        /* categoria_id INTEGER,
                                         marca_id INTEGER,
-                                        tipo_id INTEGER,
+                                        tipo_id INTEGER, */
+                                        nome_produto VARCHAR(60),
                                         vasilhame_id INTEGER,
                                         unidade_venda_id INTEGER,
                                         preco NUMERIC(10,2),
                                         ativo INTEGER,
                                         observacao VARCHAR(50),
-                                        FOREIGN KEY(categoria_id) REFERENCES produtos_categoria(id),
-                                        FOREIGN KEY(marca_id) REFERENCES produtos_marca(id),
-                                        FOREIGN KEY(tipo_id) REFERENCES produtos_tipo(id),
+                                        -- FOREIGN KEY(categoria_id) REFERENCES produtos_categoria(id),
+                                        -- FOREIGN KEY(marca_id) REFERENCES produtos_marca(id),
+                                        -- FOREIGN KEY(tipo_id) REFERENCES produtos_tipo(id),
                                         FOREIGN KEY(vasilhame_id) REFERENCES produtos_vasilhame(id),
                                         FOREIGN KEY(unidade_venda_id) REFERENCES produtos_unidade_venda(id)
                                        )`,
@@ -177,8 +178,16 @@ const UNIDADES = [
     ['insert into produtos_categoria (nome) values (?)', ['Cerveja Longneck 350ml']]
 ]; */
 const PRODUTOS = [
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma', 11, 2, 128.00, true, null]],  
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Skol', 11, 2, 128.00, true, null]],  
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Antartica', 11, 2, 122.00, true, null]],  
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Original', 11, 2, 144.00, true, null]],  
   // Cerveja Garrafa 600ml
-  [`insert into produtos (categoria_id, marca_id, tipo_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+  /* [`insert into produtos (categoria_id, marca_id, tipo_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
                   values (?, ?, ?, ?, ?, ?, ?, ?)`, [9, 1, null, 11, 2, 28.00, true, null]],
   [`insert into produtos (categoria_id, marca_id, tipo_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
                   values (?, ?, ?, ?, ?, ?, ?, ?)`, [9, 2, null, 11, 2, 27.00, true, null]],
@@ -228,7 +237,7 @@ const PRODUTOS = [
                   values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, null, 5, 3, 1, 17.00, true, null]],
   // Refri garrafa 600ml                 
   [`insert into produtos (categoria_id, marca_id, tipo_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, 13, null, 11, 5, 17.00, true, null]],
+                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, 13, null, 11, 5, 17.00, true, null]], */
 
   // Clientes
   [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est, ativo) 
@@ -294,7 +303,7 @@ export class DatabaseProvider {
    * @param db
    */
   private insertDefaultItems(db: SQLiteObject) {
-    db.executeSql('select COUNT(id) as qtd from produtos_categoria', {})
+    db.executeSql('select COUNT(id) as qtd from produtos', {})
     .then((data: any) => {
       //Se não existe nenhum registro
       if (data.rows.item(0).qtd == 0) {
@@ -308,7 +317,7 @@ export class DatabaseProvider {
 
       }
     })
-    .catch(e => console.error('Erro ao consultar a qtd de categorias', e));
+    .catch(e => console.error('Erro ao consultar a qtd de produtos', e));
   }
 
 

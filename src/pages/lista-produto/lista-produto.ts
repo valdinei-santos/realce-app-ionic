@@ -15,8 +15,9 @@ import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 })
 export class ListaProdutoPage {
 
-  produto: Produto = {id:null, categoria_id:null, marca_id:null, tipo_id:null, vasilhame_id:null, unidade_venda_id:null, 
-                      nome_produto:null, preco:null, ativo:null, observacao:null};
+  /* produto: Produto = {id:null, nome_produto:null, vasilhame_id:null, unidade_venda_id:null, nome_completo:null,
+                       preco:null, ativo:null, observacao:null}; */
+  produto: Produto;
   produtos: any[];
   //searchQuery: string = '';
   isPedido: boolean;
@@ -25,12 +26,13 @@ export class ListaProdutoPage {
   	          public navParams: NavParams,
   	          public produtoProvider: ProdutoProvider,
   	          public toast: ToastController) {
-	  console.log('lista-produto - constructor');
+    console.log('lista-produto - constructor');
   }
 
 
   ionViewDidLoad() {
     console.log('lista-produto - ionViewDidLoad');
+    this.produto = new Produto();
     this.getProdutos();
   }
 

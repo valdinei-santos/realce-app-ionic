@@ -9,84 +9,97 @@
     <!-- <ion-list-header>
         Titulo
     </ion-list-header> -->
-	<ion-list>
+    <form [formGroup]="myForm">
+      <ion-list>
+        <ion-item>
+            <ion-label floating>Produto</ion-label>
+            <ion-input type="text" formControlName="nome_produto"></ion-input>
+        </ion-item> 
+        <!-- <ion-item>     
+            <ion-input type="hidden" formControlName="id" hidden> </ion-input>
+        </ion-item> -->
+        <!-- <ion-item>     
+            <ion-label floating>Categoria</ion-label>
+            <ion-select interface="popover" formControlName="categoria_id"> 
+              <ion-option *ngFor="let categoria of categorias" value="{{ categoria.id }}">{{ categoria.nome}}</ion-option>
+            </ion-select>
+            <button ion-button color="dark" item-end >
+              <ion-icon name="add" (click)="addCategoria()"></ion-icon>
+            </button>
+        </ion-item>
 
-    <ion-item>     
-		  <ion-label floating>Categoria</ion-label>
-		  <ion-select interface="popover" name="categoria_id" [(ngModel)]="model.categoria_id"> 
-          <ion-option *ngFor="let categoria of categorias" value="{{ categoria.id }}">{{ categoria.nome}}</ion-option>
-      </ion-select>
-      <button ion-button color="dark" item-end >
-          <ion-icon name="add" (click)="addCategoria()"></ion-icon>
-      </button>
-    </ion-item>
+        <ion-item>
+            <ion-label floating>Marca</ion-label>
+            <ion-select interface="popover" formControlName="marca_id">
+                <ion-option *ngFor="let marca of marcas" value="{{ marca.id }}">{{ marca.nome}}</ion-option>
+            </ion-select>
+            <button ion-button color="dark" item-end >
+                <ion-icon name="add" (click)="addMarca()"></ion-icon>
+            </button>
+        </ion-item>
 
-    <ion-item>
-      <ion-label floating>Marca</ion-label>
-      <ion-select interface="popover" name="marca_id" [(ngModel)]="model.marca_id">
-          <ion-option *ngFor="let marca of marcas" value="{{ marca.id }}">{{ marca.nome}}</ion-option>
-      </ion-select>
-      <button ion-button color="dark" item-end >
-          <ion-icon name="add" (click)="addMarca()"></ion-icon>
-      </button>
-    </ion-item>
+        <ion-item>
+            <ion-label floating>Tipo</ion-label>
+            <ion-select interface="popover" formControlName="tipo_id">
+                <ion-option *ngFor="let tipo of tipos" value="{{ tipo.id }}">{{ tipo.nome}}</ion-option>
+            </ion-select>
+            <button ion-button color="dark" item-end >
+                <ion-icon name="add" (click)="addTipo()"></ion-icon>
+            </button>
+        </ion-item>   -->
 
-    <ion-item>
-      <ion-label floating>Tipo</ion-label>
-      <ion-select interface="popover" name="tipo_id" [(ngModel)]="model.tipo_id">
-          <ion-option *ngFor="let tipo of tipos" value="{{ tipo.id }}">{{ tipo.nome}}</ion-option>
-      </ion-select>
-      <button ion-button color="dark" item-end >
-          <ion-icon name="add" (click)="addTipo()"></ion-icon>
-      </button>
-    </ion-item>  
+        <ion-item>
+            <ion-label floating>Vasilhame</ion-label>
+            <ion-select interface="popover" formControlName="vasilhame_id">
+                <ion-option *ngFor="let vasilhame of vasilhames" value="{{ vasilhame.id }}">{{ vasilhame.nome}}</ion-option>
+            </ion-select>
+            <button ion-button color="dark" item-end >
+                <ion-icon name="add" (click)="addVasilhame()"></ion-icon>
+            </button>
+        </ion-item>
 
-    <ion-item>
-        <ion-label floating>Vasilhame</ion-label>
-        <ion-select interface="popover" name="vasilhame_id" [(ngModel)]="model.vasilhame_id">
-            <ion-option *ngFor="let vasilhame of vasilhames" value="{{ vasilhame.id }}">{{ vasilhame.nome}}</ion-option>
-        </ion-select>
-        <button ion-button color="dark" item-end >
-            <ion-icon name="add" (click)="addVasilhame()"></ion-icon>
-        </button>
-      </ion-item>
+        <ion-item>
+            <ion-label floating>Unidade</ion-label>
+            <ion-select interface="popover" formControlName="unidade_venda_id">
+                <ion-option *ngFor="let unidade_venda of unidades_venda" value="{{ unidade_venda.id }}">{{ unidade_venda.nome}}</ion-option>
+            </ion-select>
+            <button ion-button color="dark" item-end >
+                <ion-icon name="add" (click)="addUnidade()"></ion-icon>
+            </button>
+        </ion-item>
 
-    <ion-item>
-      <ion-label floating>Unidade</ion-label>
-      <ion-select interface="popover" name="unidade_venda_id" [(ngModel)]="model.unidade_venda_id">
-          <ion-option *ngFor="let unidade_venda of unidades_venda" value="{{ unidade_venda.id }}">{{ unidade_venda.nome}}</ion-option>
-      </ion-select>
-      <button ion-button color="dark" item-end >
-          <ion-icon name="add" (click)="addUnidade()"></ion-icon>
-      </button>
-    </ion-item>
+            <!-- <ion-label floating>Descrição</ion-label>
+            <ion-input type="text" [(ngModel)]="model.descricao"></ion-input>
+        </ion-item> -->
+        
+        
+        <ion-item>
+            <ion-label floating>Preço</ion-label>
+            <ion-input type="tel"
+                       formControlName="preco" 
+                       name="preco"  
+                       [brmasker]="{money: true, type: 'num', thousand: '.', decimalCaracter: ',', decimal: '2'}"></ion-input>
+            <!-- <ion-label floating>Preço</ion-label>
+            <ion-input type="text" formControlName="preco"></ion-input> -->
+        </ion-item>
+            
+        <ion-item>
+            <ion-label>Ativo</ion-label>
+            <ion-checkbox color="dark" formControlName="ativo"></ion-checkbox>
+        </ion-item>
 
-		<!-- <ion-label floating>Descrição</ion-label>
-		<ion-input type="text" [(ngModel)]="model.descricao"></ion-input>
-	  </ion-item> -->
-	  
-    <ion-item>
-		  <ion-label floating>Preço</ion-label>
-		  <ion-input type="text" [(ngModel)]="model.preco"></ion-input>
-	  </ion-item>
-    	
-	  <ion-item>
-      <ion-label>Ativo</ion-label>
-      <ion-checkbox color="dark" name="ativo" [(ngModel)]="model.ativo"></ion-checkbox>
-    </ion-item>
+        <ion-item>
+            <ion-label floating>Observação</ion-label>
+            <ion-input type="text" formControlName="observacao"></ion-input>
+        </ion-item>  
 
-    <ion-item>
-      <ion-label floating>Observação</ion-label>
-      <ion-input type="text" [(ngModel)]="model.observacao"></ion-input>
-    </ion-item>  
+    </ion-list>
 
-  </ion-list>
-
-  <div padding>
-    <button *ngIf="!editando" ion-button color="dark" block (click)="save()">Adicionar</button>
-    <br>
-    <button *ngIf="editando" ion-button color="dark" block (click)="save()">Atualizar</button>
-	<!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
-  </div>
-	
+    <div padding>
+        <button *ngIf="!editando" ion-button color="dark" block (click)="save()">Adicionar</button>
+        <br>
+        <button *ngIf="editando" ion-button color="dark" block (click)="save()">Atualizar</button>
+        <!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
+    </div>
+  </form>	
 </ion-content>

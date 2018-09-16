@@ -153,4 +153,9 @@ export class ListaPedidoPage {
   }
 
 
+  soma(value1: any, value2: any){
+    return Number(value1) + Number(value2);
+  }
+
+
 }

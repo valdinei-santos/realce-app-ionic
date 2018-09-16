@@ -26,6 +26,7 @@ export class ShowPedidoPage {
   itens: any[] = [];
   itens2: any[] = [];
   total: number = 0;
+  total_geral: number = 0;
   dataAtual: Date;
   horaAtual: string;
   pagePdf = { 
@@ -74,6 +75,7 @@ export class ShowPedidoPage {
     for (let el of this.itens) {
       this.total = this.total + parseFloat(el.valor_total);
     }
+    this.total_geral = Number(this.total) + Number(this.model.valor_adicional);
     console.log(this.itens[0].valor_unitario);
   }
 
