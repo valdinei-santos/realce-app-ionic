@@ -1,3 +1,4 @@
+<!-- ACHO QUE NAO ESTA SENDO USADO -->
 <ion-header>
   <ion-navbar color="secondary">
     <ion-title><h1>Folha de Carga {{model.id}}</h1></ion-title>
@@ -8,9 +9,6 @@
   <div ion-row>
     <div ion-col-12>
       <h2>Pedidos: <b ion-text color="primary">{{pedidos}}</b></h2>
-      <!-- <h2 *ngFor="let pedido of itens">
-        Pedido: <b ion-text color="primary">{{pedido.pedido_id}}</b>
-      </h2> -->
       <h2>Data: <b ion-text color="primary">{{model.data| formatDate}}</b></h2>
       <h2>Status: <b ion-text color="primary">{{model.status}}</b></h2>
     </div>

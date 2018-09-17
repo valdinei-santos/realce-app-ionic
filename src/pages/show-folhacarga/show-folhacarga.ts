@@ -1,3 +1,8 @@
+
+
+
+/* ACHO QUE NAO ESTA SENDO USADO */
+
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 
@@ -35,15 +40,9 @@ export class ShowFolhacargaPage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams, 
               public folhacargaProvider: FolhacargaProvider,
-              public toast: ToastController,
-              private formatDate: FormatDatePipe,
-              private decimalPipe: DecimalPipe,
-              private plt: Platform,
-              private file: File,
-              private fileOpener: FileOpener
-             ) {
-    console.log('constructor ShowFolhacargaPage');
-    console.log('ID: ' + this.navParams.data.id);
+              public toast: ToastController) { }
+
+  ionViewDidLoad() {
     this.model = new Folhacarga2();
     this.folhacargaProvider.get2(this.navParams.data.id)
       .then((result: any) => {
@@ -66,10 +65,6 @@ export class ShowFolhacargaPage {
     this.loadPedidosDaFolhacarga(this.navParams.data.id);
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ShowFolhacargaPage');
-  }
-
   loadPedidosDaFolhacarga(folha_id: number){
     this.folhacargaProvider.getPedidos(folha_id)
       .then((result: any[]) => {
@@ -88,22 +83,5 @@ export class ShowFolhacargaPage {
       });
   }
 
-/*   loadPedidosDaFolhacarga2(folha_id: number){
-    this.folhacargaProvider.getPedidosDaFolhacarga(folha_id)
-      .then( (data) => {
-        this.pedidos2 = data;
-        for (let i = 0; i < this.pedidos2.length; i++) {
-          if (i == 0){
-            this.pedidos = this.pedidos2[i].pedido_id;  
-          } else {
-            this.pedidos = this.pedidos + ' - ' + this.pedidos2[i].pedido_id;
-          }
-        }
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar pedidos da Folhacarga!!!', duration: 3000, position: 'botton' }).present();
-      });
-    console.log('loadPedidosDaFolhacarga em show-fohacarga');
-  } */
 
 }

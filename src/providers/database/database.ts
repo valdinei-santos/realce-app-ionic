@@ -8,8 +8,10 @@ const DATABASES_TABLES = [
   `DROP TABLE produtos_tipo`,
   `DROP TABLE produtos_vasilhame`,
   `DROP TABLE produtos_unidade_venda`,
-  `DROP TABLE pedidos`,
+  `DROP TABLE folhas_carga_itens`,
+  `DROP TABLE folhas_carga`,
   `DROP TABLE pedidos_itens`, 
+  `DROP TABLE pedidos`,
   `DROP TABLE clientes`, */
   `CREATE TABLE IF NOT EXISTS produtos_categoria (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,
   `CREATE TABLE IF NOT EXISTS produtos_marca (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50) )`,

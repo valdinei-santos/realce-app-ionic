@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
-//import { ICliente } from '../../interfaces/ICliente';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { CadastroClientePage } from '../cadastro-cliente/cadastro-cliente';
 import { ToastController } from 'ionic-angular';
-import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 
 
 @IonicPage()
@@ -22,10 +20,7 @@ export class ListaClientePage {
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
 			        public clienteProvider: ClienteProvider,
-              public toast: ToastController) {
-	  console.log('lista-cliente - constructor');
-  }
-
+              public toast: ToastController) { }
 
   ionViewDidLoad() {
     this.getClientes();
@@ -34,8 +29,6 @@ export class ListaClientePage {
   ionViewWillEnter() {
     console.log('lista-cliente - ionViewWillEnter');
     this.getClientes();
-    //if (this.navParams.get('editBack')) {
-    //}
     if (this.navParams.data.isPedido) {
       this.isPedido = true;
     } else {
@@ -45,19 +38,16 @@ export class ListaClientePage {
   
 
   addCliente(){
-    console.log('lista-cliente - addCliente');
     this.navCtrl.push(CadastroClientePage);
   }
 
 
   editCliente(id: number){
-    console.log('lista-cliente - editCliente');
     this.navCtrl.push(CadastroClientePage, { id: id, isEdit: true });
   }
 
 
   removeCliente(cliente: Cliente) {
-    console.log('lista-cliente - removeCliente');
     this.clienteProvider.remove(cliente.id) 
       .then(() => {
         var index = this.clientes.indexOf(cliente);
@@ -67,11 +57,6 @@ export class ListaClientePage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao remover cliente.', duration: 3000, position: 'botton' }).present();
     });
-  }
-  
-  cancelar(){
-    this.navCtrl.setRoot(HomePage);
-    //this.navCtrl.pop();
   }
 
   getClientes() {

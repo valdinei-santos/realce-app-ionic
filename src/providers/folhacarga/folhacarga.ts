@@ -3,7 +3,6 @@ import { SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
 import { ToastController } from 'ionic-angular';
 import { Pedido2, PedidoProvider } from '../pedido/pedido';
-import { resolveDefinition } from '../../../node_modules/@angular/core/src/view/util';
 
 @Injectable()
 export class FolhacargaProvider {
@@ -12,9 +11,7 @@ export class FolhacargaProvider {
 
   constructor(private dbProvider: DatabaseProvider, 
               public toast: ToastController,
-              public pedidoProvider: PedidoProvider) {
-    console.log('Hello FolhacargaProvider Provider');
-  }
+              public pedidoProvider: PedidoProvider) { }
 
   public getNewId() {
     return this.dbProvider.getDB()
@@ -49,12 +46,6 @@ export class FolhacargaProvider {
           db.executeSql(sql, data)
             .catch((e) => console.error(e));
         }
-        /* for (let item of itens){
-          let sql = 'insert into folhas_carga_itens (pedido_id, folha_carga_id) values (?, ?)';
-          let data = [item.pedido_id, folhacarga_id];
-          db.executeSql(sql, data)
-            .catch((e) => console.error(e));
-        } */
         return true;
       })
       .catch((e) => console.error(e));
@@ -82,7 +73,6 @@ export class FolhacargaProvider {
       .then((db: SQLiteObject) => {
         let sql = 'update folhas_carga set status = ? where id = ?';
         let data = [status, folha_carga_id];
-        //let data = [];
         return db.executeSql(sql, data)
       .catch((e) => console.error(e));
     })
@@ -98,7 +88,6 @@ export class FolhacargaProvider {
         for (let p of pedidos){
           listaPedidosExistentes.push(p.pedido_id);
         } 
-        console.log('LISTA PEDIDOS EXISTENTES: ' + listaPedidosExistentes);
         this.pedidoProvider.update_status(listaPedidosExistentes, 'Pendente');
       })
       .catch(() => {
@@ -128,10 +117,8 @@ export class FolhacargaProvider {
   }
 
   public get(id: number) {
-    console.log('fohacarga - get - ' + id);
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
         let sql = `SELECT id, data, status 
                      FROM folhas_carga
                     WHERE id = ?`;
@@ -153,7 +140,6 @@ export class FolhacargaProvider {
   public get2(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        //let sql = "select id, cliente_id, strftime('%d/%m/%Y', data) as data, status from pedidos where id = ?";
         let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total
                      FROM pedidos p 
@@ -289,41 +275,6 @@ export class FolhacargaProvider {
       .catch((e) => console.error(e));
   }
 
-/*   getPedidosDaFolhacarga(folha_id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.getPedidos(folha_id)
-      .then((result: any[]) => {
-        this.pedidos2 = result;    
-        console.log('Pedidos2 loadPedidosDaFolhacarga da folhacarga.ts ' + this.pedidos2); 
-        //return this.pedidos2;
-        return resolve(this.pedidos2);
-      })
-      .catch(() => {
-        console.log('Erro metodo getPedidosDaFolhacarga - folhacarga.ts');
-      });
-    })
-  }   */
-    /* this.getPedidos(folha_id)
-      .then((result: any[]) => {
-        this.pedidos2 = result;    
-        console.log('Pedidos2 loadPedidosDaFolhacarga da folhacarga.ts ' + this.pedidos2); 
-        //return this.pedidos2;
-        return Promise.resolve(this.pedidos2);
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar pedidos da Folhacarga!!!', duration: 3000, position: 'botton' }).present();
-      }); */
-
- /*  login(): Promise<{ firstname: string}> {
-    return new Promise((resolve, reject) => {
-      this.getUsers().then(data => {
-        this.films = data;
-        resolve(this.films.customer_info);
-      });
-    });
-  } */
-  
-
   public getPedidos(folha_carga_id: number) {
     console.log(folha_carga_id);
     return this.dbProvider.getDB()
@@ -337,16 +288,7 @@ export class FolhacargaProvider {
                      JOIN clientes c
                        ON p.cliente_id = c.id
                     WHERE i.folha_carga_id = ?
-                    ORDER BY i.pedido_id`;
-
-        /* let sql = `SELECT f.id, f.data, f.status, i.pedido_id
-                     FROM folhas_carga f
-                     JOIN folhas_carga_itens i
-                       ON f.id = i.folha_carga_id
-                    WHERE i.folha_carga_id = ?`; */
-/*                     `SELECT pedido_id, folha_carga_id 
-                     FROM folhas_carga_itens
-                    WHERE folha_carga_id = ?`; */  
+                    ORDER BY i.pedido_id`; 
         let data = [folha_carga_id];
         return db.executeSql(sql, data)
           .then((data: any) => {
@@ -365,72 +307,6 @@ export class FolhacargaProvider {
       })
       .catch((e) => console.error(e));
   }
-
-
-  /* public getAllItens(lista_folhas: any[]) {
-    let lista: string = '0';
-    for (let el of lista_folhas) {
-      //this.total = this.total + parseFloat(el.valor_total);
-      lista = lista +','+el;
-    }
-    let lista2: number = 1;
-    console.log('lista Folhas in AllItens: '+ lista);
-    return this.dbProvider.getDB()
-      .then((db: SQLiteObject) => {
-        //let sql = "SELECT * FROM pedidos_itens WHERE pedido_id = ?";
-        let sql =`SELECT id, pedido_id, folha_carga_id 
-                    FROM folhas_carga f
-                    JOIN folhas_carga_itens i
-                      ON f.id = i.folhas_carga_id
-                   WHERE i.folha_carga_id = in (${lista})
-                   GROUP BY i.folha_carga_id 
-       
-       SELECT case when c.nome is null then '' else c.nome||' ' end ||
-                         case when m.nome is null then '' else m.nome||' ' end ||
-                         case when t.nome is null then '' else t.nome||' ' end ||
-                         case when v.nome is null then '' else v.nome||' ' end ||
-                         case when u.nome is null then '' else u.nome end  as nome_produto,
-                         i.produto_id, sum(i.quantidade) as quantidade, sum(i.valor_total) as valor
-                    FROM pedidos_itens i 
-                    JOIN produtos p
-                      ON i.produto_id = p.id
-                      JOIN produtos_categoria c 
-                      on p.categoria_id = c.id 
-                    LEFT JOIN produtos_marca m 
-                      on p.marca_id = m.id 
-                    LEFT JOIN produtos_tipo t 
-                      on p.tipo_id = t.id 
-                    LEFT JOIN produtos_vasilhame v
-                      on p.vasilhame_id = v.id
-                    LEFT JOIN produtos_unidade_venda u
-                      on p.unidade_venda_id = u.id
-                   WHERE i.pedido_id in (${lista})
-                   GROUP BY case when c.nome is null then '' else c.nome||' ' end ||
-                            case when m.nome is null then '' else m.nome||' ' end ||
-                            case when t.nome is null then '' else t.nome||' ' end ||
-                            case when v.nome is null then '' else v.nome||' ' end ||
-                            case when u.nome is null then '' else u.nome end,
-                            i.produto_id`;
-        //let data = [lista];
-        //console.log(sql);
-        return db.executeSql(sql, [])
-          .then((data: any) => {
-            if (data.rows.length > 0) {
-              let itens: any[] = [];
-              for (var i = 0; i < data.rows.length; i++) {
-                var item = data.rows.item(i);
-                itens.push(item);
-              }
-              return itens;
-            } else {
-              return [];
-            }
-          })
-          .catch((e) => console.error(e));
-      })
-      .catch((e) => console.error(e));
-  } */
-
 
 }
 
@@ -464,15 +340,4 @@ export class Item_folhacarga{
   folhacarga_id: number;
 }
 
-/* export class Folhacarga{
-  id?: number;
-  date: string;
-  pedidos: Pedido[];
-} 
-
-export class FolhacargaList {
-  key: string;
-  folhacarga: Folhacarga;
-}
-*/
 

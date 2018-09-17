@@ -6,8 +6,7 @@ import { DatabaseProvider } from '../database/database';
 @Injectable()
 export class VasilhameProvider {
 
-  constructor(private dbProvider: DatabaseProvider) {
-  }
+  constructor(private dbProvider: DatabaseProvider) { }
 
 
   public insert(vasilhame: Vasilhame) {

@@ -16,20 +16,18 @@ import { EmailComposer } from '@ionic-native/email-composer';
 })
 export class ListaPedidoPage {
 
-  pedido: Pedido = new Pedido(); //{id:null, cliente_id:null, data:null, status:''};
-  pedido2: Pedido2 = new Pedido2(); //{id:null, cliente_id:null, cliente_nome:'', total:null, data:null, status:''};
+  pedido: Pedido = new Pedido(); 
+  pedido2: Pedido2 = new Pedido2(); 
   pedidos: any[];
   pedidos2: any[];
-  cliente: Cliente = {nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
+  cliente: Cliente = new Cliente(); //{nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
   	          public pedidoProvider: PedidoProvider,
               public clienteProvider: ClienteProvider,
               public toast: ToastController,
-              public emailComposer: EmailComposer) {
-  }
-
+              public emailComposer: EmailComposer) { }
 
   ionViewDidEnter() {
   	this.pedidoProvider.getAll2()
@@ -41,15 +39,11 @@ export class ListaPedidoPage {
       });
   }
 
-
   addPedido(){
-    console.log('addPedido');
 	  this.navCtrl.push(CadastroPedidoPage);
   }
 
-
   removePedido(pedido: Pedido2){
-    console.log('removePedido');
     let status_pedido: string = '';
     for (let el of this.pedidos2) {
       if (el.id === pedido.id) {
@@ -72,7 +66,6 @@ export class ListaPedidoPage {
   }
 
   editPedido(id: number){
-    console.log('editPedido: ' + id );
     let status_pedido: string = '';
     for (let el of this.pedidos2) {
       if (el.id === id) {
@@ -87,12 +80,10 @@ export class ListaPedidoPage {
   }
 
   showPedido(id: number){
-    console.log('showPedido: ' + id );
     this.navCtrl.push(ShowPedidoPage, { id: id });
   }
 
   enviaPedido(id: number){
-    console.log('enviaPedido: ' + id );
     this.pedidoProvider.get2(id)
       .then((result: any) => {
         this.pedido2 = result;   
@@ -134,8 +125,6 @@ export class ListaPedidoPage {
   }
 
   getPedidos(ev: any) {
-    // Reset items back to all of the items
-    //this.getProdutos();
     this.pedidoProvider.getAll2()
       .then((result: any[]) => {
         this.pedidos2 = result;
@@ -151,7 +140,6 @@ export class ListaPedidoPage {
         this.toast.create({ message: 'Erro ao carregar pedidos.', duration: 3000, position: 'botton' }).present();
     });
   }
-
 
   soma(value1: any, value2: any){
     return Number(value1) + Number(value2);

@@ -3,12 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 
 import { UnidadeVendaProvider, UnidadeVenda } from '../../providers/unidade-venda/unidade-venda';
-/**
- * Generated class for the CadastroUnidadeVendaPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 
 @IonicPage()
 @Component({
@@ -26,20 +21,18 @@ export class CadastroUnidadeVendaPage {
               public toast: ToastController) {
 
       this.model = new UnidadeVenda();
-
-      if (this.navParams.data.id) {
-        this.unidadeVendaProvider.get(this.navParams.data.id)
-          .then((result: any) => {
-            this.model = result;
-          })
-          .catch(() => {
-            this.toast.create({ message: 'Erro ao carregar uma Unidade.', duration: 3000, position: 'botton' }).present();
-        });
-      }
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CadastroUnidadeVendaPage');
+    if (this.navParams.data.id) {
+      this.unidadeVendaProvider.get(this.navParams.data.id)
+        .then((result: any) => {
+          this.model = result;
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar uma Unidade.', duration: 3000, position: 'botton' }).present();
+      });
+    }
   }
 
   save() {
@@ -53,11 +46,8 @@ export class CadastroUnidadeVendaPage {
 
   private saveUnidadeVenda() {
     if (this.model.id) {
-      //this.editando = false;
       return this.unidadeVendaProvider.update(this.model);
     } else {
-      //this.editando = true;
-      console.log(this.model);
       return this.unidadeVendaProvider.insert(this.model);
     }
   }

@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar autocomplete="on" (ionInput)="getPedidos($event)"></ion-searchbar>
+  <ion-searchbar showCancelButton="true" placeholder="Busca" autocomplete="on" (ionInput)="getPedidos($event)"></ion-searchbar>
   <ion-list>
     <ion-item-sliding *ngFor="let pedido of pedidos2">
       <button ion-item (click)="showPedido(pedido.id)">
@@ -15,14 +15,7 @@
 
         <h1>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} </h1>
         <h2>{{ pedido.cliente_nome }}</h2>
-        <h2><b ion-text color="danger">
-               Total: {{ soma(pedido.total, pedido.valor_adicional) | number:'1.2-2' }} 
-               <!-- <ion-icon name="md-arrow-forward"></ion-icon> 
-               <span *ngIf="pedido.status == 'Pendente' " style="background-color:red;color:white;">{{ pedido.status }}</span>
-               <span *ngIf="pedido.status == 'Alocado' " style="background-color:blue;color:white;">{{ pedido.status }}</span>
-               <span *ngIf="pedido.status == 'Entregue' " style="background-color:green;color:white;">{{ pedido.status }}</span> -->
-            </b>
-        </h2>
+        <h2><b ion-text color="danger">Total: {{ soma(pedido.total, pedido.valor_adicional) | number:'1.2-2' }}</b></h2>
       </button>
       <ion-item-options side="left">
         <button ion-button color="danger" (click)="removePedido(pedido)">
@@ -35,16 +28,10 @@
           <ion-icon name="document"></ion-icon>
           Editar
         </button>
-        <!-- <button ion-button color="secondary" (click)="enviaPedido(pedido.id)">
-          <ion-icon name="document"></ion-icon>
-          Enviar
-        </button> -->
       </ion-item-options>
 
     </ion-item-sliding>
   </ion-list>
-  
-  <!-- <button ion-button color="light" block (click)="cancelar()" >Voltar</button> -->
  
   <ion-fab right bottom>
     <button ion-fab color="blue" (click)="addPedido()"><ion-icon name="add"></ion-icon></button>

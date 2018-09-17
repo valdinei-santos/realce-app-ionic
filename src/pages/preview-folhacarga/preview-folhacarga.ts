@@ -21,12 +21,10 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class PreviewFolhacargaPage {
 
   model: Folhacarga;
-  //pedido: Pedido2;
   itens: PedidoAllItens[] = [];
   itens2: PedidoAllItens2[] = [];
   lista_pedidos: any[] = [];
   lista_pedidos_str: string;
-  //lista_pedidos: string = '';
   pedidos: string = '';
   data_atual: any = new Date();
   data_atual_aux: any = new Date();
@@ -35,7 +33,6 @@ export class PreviewFolhacargaPage {
   editando: boolean = false;
   isShow: boolean = false;
   horaAtual: string;
-  //pagePdf = { 'produto_id': null, 'cliente_nome': null, 'data': null, 'status': null, 'total': null };
   pagePdf: Folhacarga3;
   pdfObj = null;
 
@@ -51,20 +48,15 @@ export class PreviewFolhacargaPage {
               private file: File,
               private fileOpener: FileOpener
              ) {
-    console.log('preview-folhacarga - constructor');
-    this.model = new Folhacarga;
-    
+    this.model = new Folhacarga;  
   }
 
   ionViewDidLoad() {
-    console.log('preview-folhacarga - ionViewDidLoad');
     if (!this.navParams.data.isEdit && !this.navParams.data.isShow) { // Eh CADASTRO
-      console.log('preview-folhacarga - isEdit: ' + this.navParams.data.isEdit);
       this.model.status = 'Pendente';
       this.model.data = this.data_atual.toISOString();
       this.loadNewId();
     } else {
-      console.log('preview-folhacarga - Não é cadastro: ' + this.navParams.data.isEdit);
       this.folhacargaProvider.get(this.navParams.data.id)
          .then((result: Folhacarga) => {
           this.model = result;
@@ -78,7 +70,6 @@ export class PreviewFolhacargaPage {
     }
     this.lista_pedidos = this.navParams.data.lista_pedidos;
     this.lista_pedidos_str = this.navParams.data.lista_pedidos_str;
-    console.log(this.lista_pedidos);
     for (let i = 0; i < this.lista_pedidos.length; i++) {
       if (i == 0){
         this.pedidos = this.lista_pedidos[i];  
@@ -89,15 +80,10 @@ export class PreviewFolhacargaPage {
     this.pedidoProvider.getAllItens(this.navParams.data.lista_pedidos)
       .then((result: PedidoAllItens[]) => {
         this.itens = result;
-        //console.log('Itenss: ' + this.itens);
-        console.log('A:' + this.itens.length);
-        console.log('B:' + this.itens);
         for (let i=0; i < this.itens.length; i++){
           this.total_geral = this.total_geral + this.itens[i].valor;
           this.total_geral_padrao = this.total_geral_padrao + this.itens[i].valor_padrao;
         }
-        console.log('Total geral: ' + this.total_geral);
-        console.log('Total geral_padrao: ' + this.total_geral_padrao);
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
@@ -105,14 +91,12 @@ export class PreviewFolhacargaPage {
   }
 
   ionViewWillEnter(){
-    console.log('preview-folhacarga - ionViewWillEnter');
     if (this.navParams.data.isShow) {
       this.isShow = this.navParams.data.isShow;
     }
   }
 
   ionViewDidEnter(){
-    console.log('preview-folhacarga - ionViewWDidEnter');
     this.editando = this.navParams.data.isEdit;
   }
   ionViewWillLeave(){
@@ -161,38 +145,17 @@ export class PreviewFolhacargaPage {
   }
 
   private saveFolhacarga() {
-    //if (this.model.status != 'Inexistente') {
     if (this.editando) {
-      console.log('Entrou UPDATE Folha - ' + this.model.status);
-      //this.folhacargaProvider.remove(this.model.id);
       this.folhacargaProvider.remove(this.model.id)
         .then(() => {
-          console.log('Folha carga removida para UPDATE1');
           this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
-          console.log('Folha carga removida para UPDATE2');
           let insert_folha = this.folhacargaProvider.insert(this.model);
-          console.log('Folha carga removida para UPDATE3');  
           return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
-          //   .then((res) => {
-          //    console.log('RES: ' + res);
-          //  })
-          //  .catch(() => {
-          //    console.log('RES - ERRO: ');
-          //  });
-          //return true; 
         })
         .catch(() => {
           console.log('Erro ao remover a Folha de Carga para UPDATE!');
         });
-/*         console.log('Folha carga removida para UPDATE1');
-        this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
-        console.log('Folha carga removida para UPDATE2');
-        let insert_folha = this.folhacargaProvider.insert(this.model);
-        console.log('Folha carga removida para UPDATE3');  
-        return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id); */
-        //return true;
     } else {
-      console.log('Entrou INSERT Folha - ' + this.model.status);
       this.data_atual_aux = this.model.data;
       this.model.data = this.data_atual_aux.substring(0,10);
       this.model.status = 'Pendente';
@@ -200,34 +163,6 @@ export class PreviewFolhacargaPage {
       let insert_folha = this.folhacargaProvider.insert(this.model);  
       return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
     } 
-/*     this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
-    let insert_folha = this.folhacargaProvider.insert(this.model);  
-    return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id); */
-  }
-
-/*   private updateFolhacarga() {
-    this.data_atual_aux = this.model.data;
-    this.model.data = this.data_atual_aux.substring(0,10);
-    if (this.model.status != 'Inexistente') {
-      console.log('Entrou UPDATE Folha - ' + this.model.status);
-      //this.editando = false;
-      this.folhacargaProvider.update(this.model);
-      return this.folhacargaProvider.update_itens(this.lista_pedidos, this.model.id);
-    } else {
-      console.log('Entrou INSERT Folha - ' + this.model.status);
-      //this.editando = true;
-      this.model.status = 'Pendente';
-      console.log(this.model);
-      let insert_folha = this.folhacargaProvider.insert(this.model);
-      console.log(insert_folha);
-      this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
-      return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
-    } 
-  } */
-
-  cancelar(){
-    //this.navCtrl.setRoot(HomePage);
-    this.navCtrl.pop();
   }
 
   private getTimestamp() {
@@ -243,11 +178,7 @@ export class PreviewFolhacargaPage {
 
 
   createPdf() {
-    console.log('preview-folhacarga - Entrou createPdf');
     for (let el of this.itens) {
-      console.log('Entrou lopp this.itens ' + el.produto_id );
-      //this.total = this.total + parseFloat(el.valor_total);
-      //let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null};
       let item: PedidoAllItens2 = new PedidoAllItens2;
       item.produto_id = el.produto_id;
       item.nome_produto = el.nome_produto;
@@ -258,18 +189,14 @@ export class PreviewFolhacargaPage {
     this.pagePdf = {
       'id': this.model.id,
       'data': this.formatDate.transform(this.model.data),
-      //'data': this.model.data,
       'status': this.model.status,
       'pedidos': this.lista_pedidos_str,
       'total': this.decimalPipe.transform(this.total_geral, '1.2-2'), //this.total_geral
       'desconto': this.decimalPipe.transform(Number(this.total_geral) - Number(this.total_geral_padrao), '1.2-2'),
     }
-    console.log('Antes getTime' );
     this.horaAtual = this.getTimestamp();
-    console.log('Depois getTime' );
     function buildTableBody(data, columns) {
       var body = [];
-      //body.push(columns);
       body.push(['ID', 'Produto', 'Quantidade', 'Total']);
       data.forEach(function(row) {
           var dataRow = [];
@@ -329,7 +256,6 @@ export class PreviewFolhacargaPage {
 
       }
     }
-    console.log(docDefinition);
     this.pdfObj = pdfMake.createPdf(docDefinition);
   } // Fim createPdf()
 

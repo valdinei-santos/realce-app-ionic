@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { CadastroFolhacargaPage } from '../cadastro-folhacarga/cadastro-folhacarga';
-import { ShowFolhacargaPage } from '../show-folhacarga/show-folhacarga';
 import { FolhacargaProvider, Folhacarga  } from '../../providers/folhacarga/folhacarga';
 import { PedidoProvider } from '../../providers/pedido/pedido';
 import { PreviewFolhacargaPage } from '../preview-folhacarga/preview-folhacarga';
@@ -23,19 +22,12 @@ export class ListaFolhacargaPage {
               public navParams: NavParams,
               public folhacargaProvider: FolhacargaProvider,
               public pedidoProvider: PedidoProvider,
-              public toast: ToastController
-             ){
-    console.log("Constructor ListaFolhacargaPage");
-    
-    //console.log(this.folhas);
-  }
+              public toast: ToastController) { }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ListaFolhacargaPage');
   }
 
   ionViewDidEnter() {
-    console.log("ionViewDidEnter ListaFolhacargaPage");
     this.folhacargaProvider.getAll2()
       .then((result: any[]) => {
         this.folhas = result; 
@@ -53,8 +45,6 @@ export class ListaFolhacargaPage {
       this.folhacargaProvider.getPedidos(el.id)
         .then((result: any[]) => {
           itens.push(result);
-          //this.pedidos.push(result);
-          console.log('Retorno getPedidos: ' + result);
           return;
       })
       .catch(() => {
@@ -62,16 +52,13 @@ export class ListaFolhacargaPage {
       });
     }
     this.pedidos = itens;
-    console.log('Pedidos: ' + this.pedidos);
   }
 
   addFolha(){
-    console.log('addFolha');
 	  this.navCtrl.push(CadastroFolhacargaPage, { isCadastro: true });
   }
 
   removeFolha(folha: Folhacarga){
-    console.log('lista-folhacarga - removeFolha');
     this.folhacargaProvider.remove(folha.id)
       .then(() => {
         var index = this.folhas.indexOf(folha);
@@ -84,28 +71,20 @@ export class ListaFolhacargaPage {
   }
 
   editFolha(id: number){
-    console.log('editFolha: ' + id );
     this.navCtrl.push(CadastroFolhacargaPage, { id: id, isEdit: true });
   }
 
   showFolha(id: number){
-    console.log('showFolha: ' + id );
-    console.log('showFolha - Pedidos: ' + this.pedidos);
-    //this.navCtrl.push(ShowFolhacargaPage, { id: id, isShow: true });
     let lista_p: number[] = [];
     for (let el1 of this.pedidos){
       for (let el2 of el1){
         if (el2.id === id) {
-          console.log('pedido_id: ' + el2.pedido_id);
           lista_p.push(el2.pedido_id);
         }
       }
     }
     lista_p.sort;
-    //let str_lista_p: string;
     let str_lista_p: string = lista_p.toString();
-
-    console.log('lista_p: ' + lista_p);
     this.navCtrl.push(PreviewFolhacargaPage, 
       { id: id, 
         lista_pedidos: lista_p,

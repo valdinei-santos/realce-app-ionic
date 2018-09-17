@@ -6,14 +6,6 @@
 
 <ion-content>
     <ion-list>
-        <!-- <ion-item-divider color="light">
-          <button ion-button large clear (click)="getListProdutos()" item-end>
-              <ion-icon color="primary" name="add"></ion-icon>
-          </button>
-        </ion-item-divider>	 -->
-      <!-- <ion-item>
-        <h1>Produtos</h1>
-      </ion-item> -->
       <ion-item-sliding *ngFor="let item of itens">
           <button ion-item>
             <h2>{{ item.nome_produto }}</h2>
@@ -37,10 +29,6 @@
 	<ion-list>
 		<ion-grid>
       <form [formGroup]="myForm">
-        <!-- <ion-item>
-          <ion-label floating>Produto: </ion-label>
-          <ion-input [disabled]="true" type="text" [(ngModel)]="model_produto.nome_produto"></ion-input>
-        </ion-item> -->
         <ion-item>
             <ion-label floating>Produto: </ion-label>
             <ion-input type="text" 
@@ -50,10 +38,6 @@
           </ion-item>
         <ion-row>
           <ion-col col-6>	    
-            <!-- <ion-item>
-              <ion-label floating>Quantidade</ion-label>
-              <ion-input type="number" [(ngModel)]="model_item_pedido.quantidade" required></ion-input>
-            </ion-item> -->
             <ion-item>
               <ion-label floating>Quantidade</ion-label>
               <ion-input type="number" 
@@ -72,10 +56,6 @@
                           [brmasker]="{money: true, type: 'num', thousand: '.', decimalCaracter: ',', decimal: '2'}"></ion-input>
               </ion-item>
             
-            <!-- <ion-item>
-                <ion-label floating>Preço</ion-label>
-                <ion-input type="number" [(ngModel)]="model_item_pedido.valor_unitario" required></ion-input>
-            </ion-item> -->
           </ion-col>
         </ion-row>
 

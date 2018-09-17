@@ -2,16 +2,10 @@ import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
 
-
 @Injectable()
 export class ClienteProvider {
 
-
-  constructor(private dbProvider: DatabaseProvider) {
-    console.log('Hello ClienteProvider Provider');
-
-  }
-
+  constructor(private dbProvider: DatabaseProvider) { }
 
   public insert(cliente: Cliente) {
     return this.dbProvider.getDB()
@@ -60,19 +54,8 @@ export class ClienteProvider {
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
-              //let item = data.rows.item(0);
               let cliente = new Cliente();
               cliente = data.rows.item(0);
-              /* cliente.id = item.id;
-              cliente.codigo = item.codigo;
-              cliente.nome = item.nome;
-              cliente.fone = item.fone;
-              cliente.celular = item.celular;
-              cliente.endereco = item.endereco;
-              cliente.bairro = item.bairro;
-              cliente.cidade = item.cidade;
-              cliente.cnpj = item.cnpj;
-              cliente.inscricao_est = item.inscricao_est; */
               return cliente;
             }
             return null;

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="secondary">
-    <ion-title *ngIf="!editando"><h1>Cadastro de Folha de Carga</h1></ion-title>
-    <ion-title *ngIf="editando"><h1>Edição de Folha de Carga</h1></ion-title>
+    <ion-title *ngIf="!editando"><h1>Cadastro Folha de Carga</h1></ion-title>
+    <ion-title *ngIf="editando"><h1>Edição Folha de Carga</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -11,7 +11,6 @@
         <ion-item *ngFor="let pedido2 of pedidos2">
           <ion-label>
             <h2>Pedido: {{ pedido2.id }} - {{ pedido2.data | formatDate }} - {{ pedido2.cliente_nome }} </h2>
-            <!-- <h2><b ion-text color="danger">Total: {{ pedido2.total | number:'1.2-2' }}  {{ pedido2.status }}</b></h2> -->
             <h2><b ion-text color="danger">Total: {{ pedido2.total | number:'1.2-2' }}</b></h2>
           </ion-label>
           <ion-checkbox [checked]="pedido2.checked"  color="secondary" (ionChange)="onChange(pedido2.id, $event.checked)" value="pedido.id"></ion-checkbox>
@@ -19,27 +18,10 @@
         <ion-item *ngFor="let pedido3 of pedidos3">
           <ion-label>
             <h2>Pedido: {{ pedido3.pedido_id }} - {{ pedido3.data | formatDate }} - {{ pedido3.cliente_nome }} </h2>
-            <!-- <h2><b ion-text color="danger">Total: {{ pedido3.total | number:'1.2-2' }} {{ pedido3.status }}</b></h2> -->
             <h2><b ion-text color="danger">Total: {{ pedido3.total | number:'1.2-2' }}</b></h2>
           </ion-label>
           <ion-checkbox [checked]="pedido3.checked"  color="secondary" (ionChange)="onChange(pedido3.pedido_id, $event.checked)" value="pedido.id"></ion-checkbox>
         </ion-item>
-        <!-- <ion-item *ngFor="let c of check; let i = index">
-            {{ c.id }}
-        </ion-item> -->
-        
-
-<!--         <div *ngFor="let option of question.questionOptions"> -->
-        <!-- <div *ngFor="let pedido of pedidos2">
-          <ion-item-group [formControl]="checkboxes">
-            <ion-item>
-              <ion-label>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} - {{ pedido.cliente_nome }}</ion-label>
-              <ion-checkbox (click)="changeRadioStatus(pedido, pedidos2)"></ion-checkbox>
-              <ion-checkbox (ionChange)="onChange(choice.id, $event._checked)" value="choice.id"></ion-checkbox>
-            </ion-item>
-          </ion-item-group>
-        </div> -->
-
   </ion-list>
 
   <ion-item *ngIf="editando">
@@ -54,10 +36,6 @@
   <div padding>
       <button *ngIf="!editando" ion-button color="secondary" block (click)="previewFolhacarga()">Preview Folha de Carga</button>
       <button *ngIf="editando" ion-button color="secondary" block (click)="previewFolhacarga()">Preview Atualização Folha de Carga</button>
-      <br>
-      <!-- <button ion-button color="light" block (click)="loadPedidos()">Atualizar Lista Pedidos</button> -->
-      <!-- <button *ngIf="editando" ion-button block (click)="save()">Atualizar Folha de Carga</button> -->
-      <!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
     </div>
 
 </ion-content>

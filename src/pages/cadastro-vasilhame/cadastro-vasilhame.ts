@@ -4,13 +4,6 @@ import { ToastController } from 'ionic-angular';
 
 import { VasilhameProvider, Vasilhame } from '../../providers/vasilhame/vasilhame';
 
-/**
- * Generated class for the CadastroVasilhamePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-cadastro-vasilhame',
@@ -27,20 +20,18 @@ export class CadastroVasilhamePage {
               public toast: ToastController) {
 
       this.model = new Vasilhame();
-
-      if (this.navParams.data.id) {
-        this.vasilhameProvider.get(this.navParams.data.id)
-          .then((result: any) => {
-            this.model = result;
-          })
-          .catch(() => {
-            this.toast.create({ message: 'Erro ao carregar um vasilhame.', duration: 3000, position: 'botton' }).present();
-        });
-      }
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CadastroVasilhamePage');
+    if (this.navParams.data.id) {
+      this.vasilhameProvider.get(this.navParams.data.id)
+        .then((result: any) => {
+          this.model = result;
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar um vasilhame.', duration: 3000, position: 'botton' }).present();
+      });
+    }
   }
 
   save() {
@@ -54,11 +45,8 @@ export class CadastroVasilhamePage {
 
   private saveVasilhame() {
     if (this.model.id) {
-      //this.editando = false;
       return this.vasilhameProvider.update(this.model);
     } else {
-      //this.editando = true;
-      console.log(this.model);
       return this.vasilhameProvider.insert(this.model);
     }
   }

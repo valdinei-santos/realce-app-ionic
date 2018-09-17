@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 
 import { PedidoProvider, Pedido, Pedido2, Item_pedido } from '../../providers/pedido/pedido';
-import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { ToastController } from 'ionic-angular';
-//import { FormatCurrencyPipe } from '../../pipes/format-currency/format-currency';
 import { FormatDatePipe } from '../../pipes/format-date/format-date';
 import { DecimalPipe } from '@angular/common';
 
@@ -48,8 +46,10 @@ export class ShowPedidoPage {
               private decimalPipe: DecimalPipe,
               private plt: Platform,
               private file: File,
-              private fileOpener: FileOpener) {
+              private fileOpener: FileOpener) { }
 
+
+  ionViewDidLoad() {
     this.model = new Pedido2();
     this.pedidoProvider.get2(this.navParams.data.id)
       .then((result: any) => {
@@ -58,7 +58,6 @@ export class ShowPedidoPage {
       .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
     });
-
     this.pedidoProvider.getItens(this.navParams.data.id)
       .then((result: any) => {
         this.itens = result;
@@ -66,17 +65,13 @@ export class ShowPedidoPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
     });
-     
-
   }
 
   ionViewDidEnter() {
-    console.log('ionViewDidEnter ShowPedidoPage');
     for (let el of this.itens) {
       this.total = this.total + parseFloat(el.valor_total);
     }
     this.total_geral = Number(this.total) + Number(this.model.valor_adicional);
-    console.log(this.itens[0].valor_unitario);
   }
 
   getTimestamp() {
@@ -91,9 +86,7 @@ export class ShowPedidoPage {
   }
 
   createPdf() {
-    console.log('Entrou createPdf');
     for (let el of this.itens) {
-      //this.total = this.total + parseFloat(el.valor_total);
       let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null};
       item.id = el.id;
       item.nome_produto = el.nome_produto;
@@ -115,7 +108,6 @@ export class ShowPedidoPage {
 
     function buildTableBody(data, columns) {
       var body = [];
-      //body.push(columns);
       body.push(['Produto', 'Quantidade', 'Valor', 'Total']);
       data.forEach(function(row) {
           var dataRow = [];
@@ -136,58 +128,19 @@ export class ShowPedidoPage {
       };
     }
 
-    //function (row) {
-    //      return (row + 1) * 25;
-
     var docDefinition = {
       content: [
         { text: 'DISTRIBUIDORA REALCE - PEDIDO', style: 'header' },
         { text: this.horaAtual, alignment: 'right' },
-
         { text: 'PEDIDO: ' + this.pagePdf.pedido_id, style: 'subheader' },
-
         { text: 'CLIENTE: ' + this.pagePdf.cliente_nome, style: 'subheader' },
-
         { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' },
-        
         { text: 'CELULAR: ' + this.pagePdf.cliente_celular, style: 'subheader' },
-
         { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
-
         { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' },
         ' ',
         table(this.itens2, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']),
-
         { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' },
-//        {
-//          style: 'tableExample',
-//          table: {
-            //widths: [200, '*', '*', 'auto'],
-            //heights: 40,  // Valor para altura de todas as linhas
-            //heights: [20, 30, 40, 20],  --> Com altura distinta para cada linha
-            //layout: 'noBorders',   ou   layout: 'lightHorizontalLines'   ou    layout: 'headerLineOnly',  ou  
-            //layout: {
-            //  fillColor: function (i, node) {
-            //      return (i % 2 === 0) ? '#CCCCCC' : null;
-            //  }
-            //}
-//            body: this.itens 
-              //[
-              //['Produto', 'Quantidade', 'Valor', 'Total'],
-              //['One value goes here', 'Another one here', 'OK?', 'dadada']
-              //]
-//          }
-//        },
-
-        //{ text: this.letterObj.text, style: 'story', margin: [0, 20, 0, 20] },
-        //{ text: corpo, style: 'story', margin: [0, 20, 0, 20] },
-
-        //{
-        //  ul: [
-        //    'Bacon',
-        //    'Rips',
-        //  ]
-        //}
       ],
       styles: {
         header: {
@@ -215,7 +168,6 @@ export class ShowPedidoPage {
 
       }
     }
-    console.log(docDefinition);
     this.pdfObj = pdfMake.createPdf(docDefinition);
   } // Fim createPdf()
 

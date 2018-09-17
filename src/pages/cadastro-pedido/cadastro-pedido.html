@@ -1,50 +1,19 @@
 <ion-header>
   <ion-navbar color="primary">
 		<ion-title *ngIf="!editando"><h1>Cadastro de Pedido</h1></ion-title>
-		<!-- <ion-title *ngIf="!editando"><h1>Cadastro de Pedido - {{ model.id }}</h1></ion-title> -->
     <ion-title *ngIf="editando"><h1>Pedido - {{ model.id }}</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
 	<ion-list>
-	    <!-- <ion-item>
-			  <ion-label floating>Cliente</ion-label>
-			  <ion-input type="text" [(ngModel)]="model_cliente.nome" required></ion-input>
-        <button clear item-right>Forgot</button>
-			</ion-item> -->
-
 			<ion-item>
 					<ion-label>Cliente: </ion-label>
 					<ion-input [disabled]="true" type="text" [(ngModel)]="model_cliente.nome" required></ion-input>
 					<button ion-button large clear (click)="getListCliente()" item-end>
 						<ion-icon name="search"></ion-icon>
 					</button>
-				</ion-item>
-			<!--
-		  <ion-select interface="popover" name="cliente_id" [(ngModel)]="model.cliente_id">
-	        <ion-option *ngFor="let cliente of clientes" value="{{ cliente.id }}">{{ cliente.nome}}</ion-option>
-	      </ion-select>
-			</ion-item> -->
-<!-- 			<ion-grid>
-					<ion-row>
-						<ion-col col-12>
-							<ion-item-group margin-top>
-										<select-searchable
-											[(ngModel)]="model_cliente"
-											itemValueField="id"
-											itemTextField="nome"
-											[items]="clientes"
-											[canSearch]="true"
-											(onChange)="clienteChange($event)">
-											<ng-template selectSearchableLabelTemplate >
-												Cliente
-											</ng-template>
-										</select-searchable>
-								</ion-item-group>
-						</ion-col>
-					</ion-row>
-			</ion-grid> -->
+			</ion-item>
 	    <ion-item>
 		    <ion-label>Data:</ion-label>
 		    <!-- <ion-input type="datetime-local" [(ngModel)]="model.data"></ion-input> --> 
@@ -62,9 +31,6 @@
 					<ion-icon *ngIf="isHide" color="light" name="ios-arrow-up-outline"></ion-icon>
 			  </button>
 			</ion-item-divider>	
-      <!-- <ion-item>
-		    <h1>Produtos</h1>
-	    </ion-item> -->
 		  <ion-item-sliding [hidden]="isHide" *ngFor="let item of itens">
 	      <button ion-item>
 					<h2>{{ item.nome_produto }}</h2>
@@ -87,66 +53,6 @@
 				<h2>Total geral: {{ total_geral | number:'1.2-2'}} </h2>
 			</ion-item>
 	</ion-list>
-
-	<ion-list>
-		<ion-grid>
-			<!-- <ion-row>
-				<ion-col>
-					<ion-item-group margin-bottom>
-								<select-searchable
-									[(ngModel)]="model_produto"
-									itemValueField="id"
-									itemTextField="nome_produto"
-									[items]="produtos"
-									[canSearch]="true"
-									(onChange)="produtoChange($event)">
-									<ng-template floating selectSearchableLabelTemplate >
-										Produto
-									</ng-template>
-								</select-searchable>
-						</ion-item-group>
-				</ion-col>
-			</ion-row> -->
-			<!-- 
-			<ion-item>
-				<ion-label floating>Produto: </ion-label>
-				<ion-input [disabled]="true" type="text" [(ngModel)]="model_produto.nome_produto"></ion-input>
-			</ion-item>
-     -->
-		  <!-- <ion-row>
-		    <ion-col col-12>
-			    <ion-item>
-					<ion-label floating>Item</ion-label>
-					<ion-select interface="popover" name="id" [(ngModel)]="model_item_pedido.produto_id" (ionChange)="onSelectChange($event);">
-				      <ion-option *ngFor="let produto of produtos" value="{{ produto.id }}">{{ produto.nome_produto }}</ion-option>
-				    </ion-select>
-			    </ion-item>
-				</ion-col>
-			</ion-row> -->
-
-			<!-- 
-			<ion-row>
-		    <ion-col col-6>	    
-			    <ion-item>
-				    <ion-label floating>Quantidade</ion-label>
-				    <ion-input type="number" [(ngModel)]="model_item_pedido.quantidade" required></ion-input>
-			    </ion-item>
-        </ion-col>
-        <ion-col col-6>	    
-			    <ion-item>
-				    <ion-label floating>Preço</ion-label>
-				    <ion-input type="number" [(ngModel)]="model_item_pedido.valor_unitario" required></ion-input>
-			    </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col col-8 offset-2>
-          <button ion-button block (click)="addItem()" >Adicionar Produto</button>
-				</ion-col>
-			</ion-row>
-			-->
-    </ion-grid>
-	</ion-list> 
 
   <!-- <hr> -->
 
@@ -172,22 +78,12 @@
 								 placeholder="0,00"  
 								 [brmasker]="{money: true, type: 'num', thousand: '.', decimalCaracter: ',', decimal: '2'}"></ion-input>
 		</ion-item>
+
+		<div padding>
+				<button *ngIf="!editando" ion-button block (click)="save()">Criar Pedido</button>
+				<button *ngIf="editando" ion-button block (click)="save()">Atualizar Pedido</button>
+			</div>
+
 	</form>
-
-	<div padding>
-    <button *ngIf="!editando" ion-button block (click)="save()">Criar Pedido</button>
-		<button *ngIf="editando" ion-button block (click)="save()">Atualizar Pedido</button>
-	  <!-- <button ion-button color="light" block (click)="cancelar()" >Cancelar</button> -->
-  </div>
-<!-- 	<ion-item>
-		<ion-label floating>A/D:</ion-label>
-		<ion-input (keyup)="setTotalGeral($event)" type="number" [(ngModel)]="model.valor_adicional"></ion-input>
-	</ion-item> -->
-
-
-	<!-- <ion-item>
-		<ion-label>Valor Pago:</ion-label>
-		<ion-input type="number" [(ngModel)]="model.valor_pago"></ion-input>
-	</ion-item> -->
 
 </ion-content>

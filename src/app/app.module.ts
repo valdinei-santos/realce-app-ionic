@@ -18,6 +18,8 @@ import { HomePage } from '../pages/home/home';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClientModule } from '@angular/common/http';
+import { BrMaskerModule } from 'brmasker-ionic-3';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { ClienteProvider } from '../providers/cliente/cliente';
@@ -33,7 +35,6 @@ import { VasilhameProvider } from '../providers/vasilhame/vasilhame';
 
 import { CadastroClientePageModule } from '../pages/cadastro-cliente/cadastro-cliente.module';
 import { ListaClientePageModule } from '../pages/lista-cliente/lista-cliente.module';
-//import { EditClientePageModule } from '../pages/edit-cliente/edit-cliente.module';
 import { CadastroProdutoPageModule } from '../pages/cadastro-produto/cadastro-produto.module';
 import { ListaProdutoPageModule } from '../pages/lista-produto/lista-produto.module';
 import { CadastroPedidoPageModule } from '../pages/cadastro-pedido/cadastro-pedido.module';
@@ -53,9 +54,6 @@ import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/
 import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-unidade-venda.module';
 import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastro-vasilhame.module';
 import { CadastroPedidoItemPageModule } from '../pages/cadastro-pedido-item/cadastro-pedido-item.module';
-// import { DirectivesModule } from '../directives/directives.module';
-import { BrMaskerModule } from 'brmasker-ionic-3';
-import { ReactiveFormsModule } from '@angular/forms';
 
 registerLocaleData(localePtBr);
 

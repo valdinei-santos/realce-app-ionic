@@ -14,7 +14,6 @@ import { SelectSearchableComponent } from 'ionic-select-searchable';
 import { ListaClientePage } from '../lista-cliente/lista-cliente';
 import { ListaProdutoPage } from '../lista-produto/lista-produto';
 import { CadastroPedidoItemPage } from '../cadastro-pedido-item/cadastro-pedido-item';
-import { MaskDirective } from '../../directives/mask/mask';
 import { BrMaskerIonic3, BrMaskModel } from 'brmasker-ionic-3';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -28,10 +27,7 @@ export class CadastroPedidoPage {
 
   form: FormGroup;
 
-  pedido: Pedido = new Pedido(); //{id:null, cliente_id:null, data:null, status:'Inexistente'};
-  //Item_pedido: Item_pedido = {id:null, pedido_id:null, produto_id:null, nome_produto:null, quantidade:null, valor_unitario:null, valor_total:null};
-  //produto: Produto = {id:null, }
-  //pedidoEditando: Pedido;
+  pedido: Pedido = new Pedido(); 
   editando:boolean = false;	
   model: Pedido;
   model_item_pedido: Item_pedido;
@@ -51,10 +47,6 @@ export class CadastroPedidoPage {
 
   ad: string = '0,00';
   valor_pago: string = '0,00';
-
-  // myModelVariable = '';
-
-  
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -82,13 +74,9 @@ export class CadastroPedidoPage {
       this.pedidoProvider.get(this.navParams.data.id)
         .then((result: Pedido) => {
           this.model = result;
-          //this.ad = this.model.valor_adicional.toString().replace('.', ',');
-          //this.valor_pago = this.model.valor_pago.toString().replace('.', ',');
           this.form.get('ad').setValue(this.model.valor_adicional.toString().replace('.', ',') );
           this.ad = this.form.get('ad').value;
           this.form.get('valor_pago').setValue(this.model.valor_pago.toString().replace('.', ','));
-          console.log('Pedido que veio dentro promise: ' + this.model);
-          //this.model_cliente.id = this.model.cliente_id;
           this.clienteProvider.get(this.model.cliente_id)
             .then((result: Cliente) => {
             this.model_cliente = result;
@@ -105,15 +93,12 @@ export class CadastroPedidoPage {
           this.itens = result;
           for (let el of this.itens){
             this.total += Number(el.valor_total);
-            console.log(this.total);
           }
-          console.log(this.total);
           this.setTotalGeral();
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
       });
-      //this.model.data = this.model.data.toISOString();
     } else { // Cadastro
       this.editando = false;
       this.model.data = this.data_atual.toISOString();
@@ -129,59 +114,25 @@ export class CadastroPedidoPage {
           this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
         });
     }
-
-    /* this.clienteProvider.getAll()
-      .then((result: any[]) => {
-        this.clientes = result;
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar clientes!!!', duration: 3000, position: 'botton' }).present();
-      }); */
-
-    /* this.produtoProvider.getAll()
-      .then((result: any[]) => {
-        this.produtos = result;
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
-      });	 */ 
-
   }
 
 
   ionViewWillEnter() {
     console.log('cadastro-pedido - ionViewWillEnter');
     if (this.navParams.get('cliente')) {
-      // console.log('cadastro-pedido - navParams cliente');
       this.model_cliente = this.navParams.get('cliente');
-      //this.form.get('valor_pago');
     }
     if (this.navParams.get('produto')) {
-      // console.log('cadastro-pedido - navParams produto');
       this.model_produto = this.navParams.get('produto');
       this.model_item_pedido.valor_unitario = this.model_produto.preco;
-      //this.model_item_pedido.valor_unitario.toFixed(2);
       this.model_item_pedido.quantidade = 1;
     }
     if (this.navParams.get('lista_itens')) {
-      // console.log('cadastro-pedido - navParams lista_itens');
       this.itens = this.navParams.get('lista_itens');
       this.total = Number(this.navParams.get('total'));
     }
     this.setTotalGeral();
   }
-
-/*   convert(event: any) {
-    console.log('old:', this.model.valor_adicional);
-    this.model.valor_adicional = event.target.value.replace(/[^\d\.]/g ,'');
-    console.log('new:', this.model.valor_adicional);
-  } */
-
-/*   convert(event: any) {
-    console.log('old:', this.myModelVariable);
-    this.myModelVariable = event.target.value.replace(/[^\d\.]/g ,'');
-    console.log('new:', this.myModelVariable);
-  } */
 
   protected createForm(): FormGroup {
     return new FormGroup({
@@ -208,16 +159,11 @@ export class CadastroPedidoPage {
     return this.brMaskerIonic3.writeCreateValue('', config);
   }
 
-
   setTotalGeral(){
-    // console.log('Total: ' + this.total);
-    // this.total_geral = Number(this.total) + Number(this.ad.replace(',', '.'));
     this.total_geral = Number(this.total) + Number(this.form.get('ad').value.replace(',', '.'));
   }
 
   changeAd(){
-    //console.log('changeAd() ' + this.ad );
-    //console.log('changeAd() ' + this.form.get('ad').value );
     this.ad = this.form.get('ad').value;
     this.setTotalGeral();
   }
@@ -230,12 +176,7 @@ export class CadastroPedidoPage {
     this.navCtrl.push(ListaClientePage, {isPedido: true});
   }
 
-  /* getListProdutos(){
-    this.navCtrl.push(ListaProdutoPage, {isPedido: true});
-  } */
-
   hideList() {
-    console.log('hideList()');
     this.isHide = this.isHide ? false : true;
   }
 
@@ -249,13 +190,11 @@ export class CadastroPedidoPage {
   }
 
   addItem() {
-  	  console.log(this.model_produto.id);
       Observable.forkJoin([
         Observable.fromPromise(
                 this.produtoProvider.get(this.model_produto.id)
                   .then((result: any) => {
                     this.model_produto = result;
-                    console.log("Promessa: " + this.model_produto);
                   })
                   .catch(() => {
                     this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
@@ -266,12 +205,10 @@ export class CadastroPedidoPage {
         let item = new Item_pedido();
         item.pedido_id = this.model.id; //item.;
         item.produto_id = this.model_produto.id;
-        //item.nome_produto = this.model_produto.marca_id.toString();
         item.nome_produto = this.model_produto.nome_produto;
         item.quantidade = this.model_item_pedido.quantidade;
         item.valor_unitario = this.model_item_pedido.valor_unitario; //this.model_produto.preco;
         item.valor_total = item.quantidade * item.valor_unitario; //this.model_produto.preco;
-        console.log(item);
         this.itens.push(item);
         this.model_produto.id = null;
         this.model_produto.nome_produto = null;
@@ -281,34 +218,7 @@ export class CadastroPedidoPage {
       });
   }
 
-  /* onSelectChange(selectedValue: any) {
-    console.log(selectedValue);
-    console.log('passou onSelectChange');
-    if (this.model_produto.id !== null) {
-      Observable.forkJoin([
-          Observable.fromPromise(
-                  this.produtoProvider.get(this.model_produto.id)
-                    .then((result: any) => {
-                      this.model_produto = result;
-                      console.log("Promessa: " + result);
-                    })
-                    .catch(() => {
-                      this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
-                    })
-          )
-        ])
-        .subscribe(data => {
-          console.log(data);
-          //let valor_unitario = this.model_produto.preco;
-          console.log("item_pedido: " + this.model_produto);
-          this.model_item_pedido.valor_unitario = this.model_produto.preco;
-          this.model_item_pedido.quantidade = 1;
-        });
-    }
-  } */
-
   save() {
-    console.log('AAAA ' + this.model_cliente.nome);
     if (this.model_cliente.nome === undefined) {
       this.toast.create({ message: 'Cliente é obrigatório!', duration: 3000, position: 'center' }).present();
       return null;
@@ -328,16 +238,10 @@ export class CadastroPedidoPage {
     this.model.valor_pago = Number(this.form.get('valor_pago').value.replace(',','.'));
     this.model.valor_adicional = Number(this.form.get('ad').value.replace(',','.'));
 
-    //if (this.model.status != 'Inexistente') {
     if (this.editando) {
-      console.log('Entrou UPDATE - ' + this.model.status);
-      //this.editando = false;
-      console.log(this.model);
       this.pedidoProvider.update(this.model);
       return this.pedidoProvider.update_itens(this.itens);
     } else {
-      console.log('Entrou INSERT');
-      //this.editando = true;
       this.model.status = 'Pendente';
       console.log(this.model);
       console.log(this.itens);
@@ -349,23 +253,7 @@ export class CadastroPedidoPage {
   removeProduto(item: Item_pedido) {
     this.itens.splice(this.itens.indexOf(item), 1);
     this.total -= item.valor_total; 
-    /* for (let el of this.itens){
-      if (el.produto_id == item.produto_id) {
-
-      } */
   }
-/*
-  	  this.produtoProvider.get(this.model_produto.id)
-		  .then((result: any) => {
-        this.itens.push(result);
-        console.log(this.itens);
-		  })
-		  .catch(() => {
-		    this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
-		  });	
-*/
-      //this.itens.push(this.model_produto);
-
 
   cancelar(){
     //this.navCtrl.setRoot(HomePage);
@@ -373,14 +261,12 @@ export class CadastroPedidoPage {
   }
 
   produtoChange(event: { component: SelectSearchableComponent, value: any }) {
-    console.log('port:', event.value);
     if (this.model_produto.id !== null) {
       Observable.forkJoin([
           Observable.fromPromise(
               this.produtoProvider.get(this.model_produto.id)
                 .then((result: any) => {
                   this.model_produto = result;
-                  console.log("Promessa: " + result);
                 })
                 .catch(() => {
                   this.toast.create({ message: 'Erro ao carregar produtos!!!', duration: 3000, position: 'botton' }).present();
@@ -388,18 +274,13 @@ export class CadastroPedidoPage {
           )
         ])
         .subscribe(data => {
-          console.log(data);
-          //let valor_unitario = this.model_produto.preco;
-          console.log("item_pedido: " + this.model_produto);
           this.model_item_pedido.valor_unitario = this.model_produto.preco;
-          //his.model_item_pedido.valor_unitario.toFixed(2);
           this.model_item_pedido.quantidade = 1;
         });
     }
   }
 
   clienteChange(event: { component: SelectSearchableComponent, value: any }) {
-    console.log('clienteChange:', event.value);
     if (this.model_cliente.id !== null) {
       Observable.forkJoin([
           Observable.fromPromise(
@@ -413,12 +294,10 @@ export class CadastroPedidoPage {
           )
         ])
         .subscribe(data => {
-          console.log(data);
           this.model.cliente_id = this.model_cliente.id;
         });
     }
   }
-
-
+  
 
 }

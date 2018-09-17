@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
-//import { ProdutoProvider } from '../produto/produto';
-
 
 @Injectable()
 export class UnidadeVendaProvider {
 
-
-  constructor(private dbProvider: DatabaseProvider) {
-  }
+  constructor(private dbProvider: DatabaseProvider) { }
 
 
   public insert(unidade_venda: UnidadeVenda) {
