@@ -32,7 +32,8 @@ export class ListaPedidoPage {
   ionViewDidEnter() {
   	this.pedidoProvider.getAll2()
       .then((result: any[]) => {
-        this.pedidos2 = result;    
+        this.pedidos2 = result;  
+        console.log(this.pedidos2);  
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();

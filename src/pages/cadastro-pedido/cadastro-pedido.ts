@@ -243,8 +243,6 @@ export class CadastroPedidoPage {
       return this.pedidoProvider.update_itens(this.itens);
     } else {
       this.model.status = 'Pendente';
-      console.log(this.model);
-      console.log(this.itens);
       this.pedidoProvider.insert(this.model);
       return this.pedidoProvider.insert_itens(this.itens);
     }

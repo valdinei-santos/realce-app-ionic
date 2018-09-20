@@ -46,25 +46,27 @@ export class ShowPedidoPage {
               private decimalPipe: DecimalPipe,
               private plt: Platform,
               private file: File,
-              private fileOpener: FileOpener) { }
+              private fileOpener: FileOpener) { 
+
+      this.model = new Pedido2();
+  }
 
 
   ionViewDidLoad() {
-    this.model = new Pedido2();
     this.pedidoProvider.get2(this.navParams.data.id)
-      .then((result: any) => {
-          this.model = result;
-      })
-      .catch(() => {
-          this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
-    });
-    this.pedidoProvider.getItens(this.navParams.data.id)
-      .then((result: any) => {
-        this.itens = result;
-      })
-      .catch(() => {
-        this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
-    });
+        .then((result: any) => {
+            this.model = result;
+        })
+        .catch(() => {
+            this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
+      });
+      this.pedidoProvider.getItens(this.navParams.data.id)
+        .then((result: any) => {
+          this.itens = result;
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
+      });
   }
 
   ionViewDidEnter() {

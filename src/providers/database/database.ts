@@ -128,21 +128,28 @@ const UNIDADES = [
   ['insert into produtos_tipo (nome) values (?)', ['Guaraná Antártica' ]], // 5
   ['insert into produtos_tipo (nome) values (?)', ['Sub Zero' ]],          // 6 */
   
-  ['insert into produtos_vasilhame (nome) values (?)', ['lata 220ml']],     // 1
-  ['insert into produtos_vasilhame (nome) values (?)', ['lata 310ml']],     // 2 
-  ['insert into produtos_vasilhame (nome) values (?)', ['lata 350ml']],     // 3
-  ['insert into produtos_vasilhame (nome) values (?)', ['lata 473ml']],     // 4
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 255ml']],  // 5
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 275ml']],  // 6
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 300ml']],  // 7
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 330ml']],  // 8
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 355ml']],  // 9
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 550ml']],  // 10
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 600ml']],  // 11
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 1LT']],    // 12
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 1,5LT']],  // 13
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 2LT']],    // 14
-  ['insert into produtos_vasilhame (nome) values (?)', ['garrafa 290ml']],  // 15
+  ['insert into produtos_vasilhame (nome) values (?)', ['220ml']],  // 1
+  ['insert into produtos_vasilhame (nome) values (?)', ['310ml']],  // 2 
+  ['insert into produtos_vasilhame (nome) values (?)', ['350ml']],  // 3
+  ['insert into produtos_vasilhame (nome) values (?)', ['473ml']],  // 4
+  ['insert into produtos_vasilhame (nome) values (?)', ['255ml']],  // 5
+  ['insert into produtos_vasilhame (nome) values (?)', ['275ml']],  // 6
+  ['insert into produtos_vasilhame (nome) values (?)', ['300ml']],  // 7
+  ['insert into produtos_vasilhame (nome) values (?)', ['330ml']],  // 8
+  ['insert into produtos_vasilhame (nome) values (?)', ['355ml']],  // 9
+  ['insert into produtos_vasilhame (nome) values (?)', ['550ml']],  // 10
+  ['insert into produtos_vasilhame (nome) values (?)', ['600ml']],  // 11
+  ['insert into produtos_vasilhame (nome) values (?)', ['1LT']],    // 12
+  ['insert into produtos_vasilhame (nome) values (?)', ['1,5LT']],  // 13
+  ['insert into produtos_vasilhame (nome) values (?)', ['2LT']],    // 14
+  ['insert into produtos_vasilhame (nome) values (?)', ['290ml']],  // 15
+  ['insert into produtos_vasilhame (nome) values (?)', ['450ml']],  // 16
+  ['insert into produtos_vasilhame (nome) values (?)', ['250ml']],  // 17
+  ['insert into produtos_vasilhame (nome) values (?)', ['200ml']],  // 18
+  ['insert into produtos_vasilhame (nome) values (?)', ['500ml']],  // 19
+  ['insert into produtos_vasilhame (nome) values (?)', ['Caixinha']],  // 20
+  ['insert into produtos_vasilhame (nome) values (?)', ['5LT']],    // 21
+  ['insert into produtos_vasilhame (nome) values (?)', ['20LT']],   // 22
 
   ['insert into produtos_unidade_venda (nome) values (?)', ['CX 12 un.']],  // 1
   ['insert into produtos_unidade_venda (nome) values (?)', ['CX 24 un.']],  // 2
@@ -153,6 +160,9 @@ const UNIDADES = [
   ['insert into produtos_unidade_venda (nome) values (?)', ['CX 25 un.']],  // 7
   ['insert into produtos_unidade_venda (nome) values (?)', ['CX 23 un.']],  // 8
   ['insert into produtos_unidade_venda (nome) values (?)', ['CX 30 un.']],  // 9
+  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 48 un.']],  // 10
+  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 27 un.']],  // 11
+  ['insert into produtos_unidade_venda (nome) values (?)', ['PC 4 un.']],   // 12
 
 ];
 
@@ -164,37 +174,37 @@ const UNIDADES = [
 const PRODUTOS = [
   // Cerveja 600ml
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma', 11, 2, 135.80, true, null]],  
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Garrafa', 11, 2, 135.80, true, null]],  
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Skol', 11, 2, 142.80, true, null]],  
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Skol Garrafa', 11, 2, 142.80, true, null]],  
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Antártica', 11, 2, 135.80, true, null]],  
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Antártica Garrafa', 11, 2, 135.80, true, null]],  
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Antártica Sub Zero', 11, 2, 123.60, true, null]],  
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Antártica Sub Zero Garrafa', 11, 2, 123.60, true, null]],  
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Original', 11, 2, 171.80, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Original Garrafa', 11, 2, 171.80, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Extra', 11, 2, 171.80, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Extra Garrafa', 11, 2, 171.80, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Bohemia', 11, 2, 171.80, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Bohemia Garrafa', 11, 2, 171.80, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Heineken', 11, 2, 171.80, true, null]],
+  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Heineken Garrafa', 11, 2, 171.80, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Budweiser', 11, 2, 171.80, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Budweiser Garrafa', 11, 2, 171.80, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Nova Schin', 11, 2, 77.40, true, null]],
+  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Nova Schin Garrafa', 11, 2, 77.40, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Eisenbahn', 11, 2, 158.00, true, null]],
+  values (?, ?, ?, ?, ?, ?)`, ['Cerveja Eisenbahn Garrafa', 11, 2, 158.00, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Pilsen', 11, 2, 70.00, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Pilsen Garrafa', 11, 2, 70.00, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Burguesa', 11, 2, 90.00, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Burguesa Garrafa', 11, 2, 90.00, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Malzebier', 11, 2, 171.80, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Malzebier Garrafa', 11, 2, 171.80, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Nova Schin Malzebier', 11, 2, 96.00, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Nova Schin Malzebier Garrafa', 11, 2, 96.00, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Pilsen Malzebier', 11, 2, 144.00, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Cerveja Pilsen Malzebier Garrafa', 11, 2, 144.00, true, null]],
   
   // Cerveja Litrao 1LT
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
@@ -263,7 +273,7 @@ const PRODUTOS = [
 
   // Refri garrafa 600 cx 24un
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?)`, ['Refri Pureza', 11, 2, 44.30, true, null]],
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Pureza Garrafa', 11, 2, 44.30, true, null]],
   
   // Refri garrafa 290 KS cx 24un
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
@@ -307,6 +317,110 @@ const PRODUTOS = [
     values (?, ?, ?, ?, ?, ?)`, ['Refri Guaraná', 13, 4, 46.80, true, null]],
   [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
     values (?, ?, ?, ?, ?, ?)`, ['Refri Schweppes Citrus', 13, 4, 32.80, true, null]],
+
+  // Refri garrafa 1LT DZ
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Pureza', 12, 3, 39.30, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Água da Serra', 12, 3, 39.80, true, null]],
+
+  // Refri garrafa 600ml DZ
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Coca Cola', 11, 3, 39.60, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Guaraná', 11, 3, 39.60, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Pureza', 11, 3, 31.80, true, null]],
+
+  // Refri garrafa 350ml DZ
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Pureza', 11, 3, 26.80, true, null]],
+
+  // Refri lata 350ml DZ
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Coca Cola Lata', 3, 3, 25.80, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Guaraná Lata', 3, 3, 25.80, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Refri Schweppes Citrus Lata', 3, 3, 32.80, true, null]],
+
+  // Suco
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Suco Sufrech Lata', 8, 3, 36.80, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Suco Skinka Pet', 16, 3, 28.50, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Suco Tily Pet', 16, 3, 12.30, true, null]],
+  // 1LT UN
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Suco Sufrech Tetra Pak', 12, 6, 36.80, true, null]],
+
+  // Refri lata 250ml DZ
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Juninhu Água da Serra', 17, 3, 18.30, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Juninhu Coca Cola', 17, 3, 16.70, true, null]],
+  
+  // Mate Leão
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Mate Leão', null, 3, 26.80, true, null]],
+  
+  // Chocoleite
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Chocoleite', 18, 10, 76.00, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Chocoleite', 19, 2, 46.80, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Chocoleite', 20, 11, 29.80, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Chocoleite', 7, 2, 69.80, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Chocoleite Oni Way', null, 2, 62.80, true, null]],
+
+  // Agua 
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água Vidro', null, 2, 22.00, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água Sem Gás Sta Catarina', 19, 3, 12.90, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água Com Gás Sta Catarina', 19, 3, 13.90, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água Sem Gás', 19, 3, 10.90, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água Com Gás', 19, 3, 11.90, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água Sta Catarina', 13, 4, 12.90, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água', 13, 4, 10.90, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água', 21, 12, 14.90, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água Bombona', 22, 6, 8.20, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água H2O', 19, 3, 32.80, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água de Copo', null, 10, 20.50, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Água de Copo Tetra Pak', 18, 11, 49.80, true, null]],
+  [`insert into produtos (nome_produto, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
+    values (?, ?, ?, ?, ?, ?)`, ['Gatorade', null, 4, 21.60, true, null]],
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Cerveja Garrafa 600ml
   /* [`insert into produtos (categoria_id, marca_id, tipo_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
