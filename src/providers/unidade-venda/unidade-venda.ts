@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
+import { ProdutoProvider } from '../produto/produto';
 
 @Injectable()
 export class UnidadeVendaProvider {
 
-  constructor(private dbProvider: DatabaseProvider) { }
+  teste: any;
+
+  constructor(private dbProvider: DatabaseProvider,
+              private produtoProvider: ProdutoProvider) { }
 
 
   public insert(unidade_venda: UnidadeVenda) {
@@ -31,14 +35,21 @@ export class UnidadeVendaProvider {
   }
  
   public remove(id: number) {
-    return this.dbProvider.getDB()
-      .then((db: SQLiteObject) => {
-        let sql = 'delete from produtos_unidade_venda where id = ?';
-        let data = [id];
-        return db.executeSql(sql, data)
-          .catch((e) => console.error(e));
-      })
-      .catch((e) => console.error(e));
+    return this.produtoProvider.countForeignKey(id, 'unidade_venda')
+      .then((result: any) => {
+        if (result) {
+          return this.dbProvider.getDB()
+            .then((db: SQLiteObject) => {
+              let sql = 'delete from produtos_unidade_venda where id = ?';
+              let data = [id];
+              return db.executeSql(sql, data)
+                .catch((e) => console.error(e));
+            })
+            .catch((e) => console.error(e));
+         } else {
+           return Promise.reject(new Error('fail')).then();
+         }
+    });
   }
  
   public get(id: number) {

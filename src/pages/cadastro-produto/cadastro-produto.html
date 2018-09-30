@@ -8,48 +8,90 @@
 <ion-content padding>
     <form [formGroup]="myForm">
       <ion-list>
-        <ion-item>
-            <ion-label floating>Produto</ion-label>
-            <ion-input type="text" formControlName="nome_produto"></ion-input>
-        </ion-item> 
-        <ion-item>
-            <ion-label floating>Vasilhame</ion-label>
-            <ion-select interface="popover" formControlName="vasilhame_id">
-                <ion-option *ngFor="let vasilhame of vasilhames" value="{{ vasilhame.id }}">{{ vasilhame.nome}}</ion-option>
-            </ion-select>
-            <button ion-button color="dark" item-end >
-                <ion-icon name="add" (click)="addVasilhame()"></ion-icon>
-            </button>
-        </ion-item>
+        <ion-grid>
+            <ion-row>
+                <ion-col col-12> 
+                    <ion-item no-lines>
+                        <ion-label floating>Produto</ion-label>
+                        <ion-input type="text" formControlName="nome_produto"></ion-input>
+                    </ion-item> 
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-10>
+                    <ion-item>
+                        <ion-label floating>Categoria</ion-label>
+                        <ion-select interface="popover" formControlName="categoria_id">
+                            <ion-option *ngFor="let categoria of categorias" value="{{ categoria.id }}">{{ categoria.nome}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2>
 
-        <ion-item>
-            <ion-label floating>Unidade</ion-label>
-            <ion-select interface="popover" formControlName="unidade_venda_id">
-                <ion-option *ngFor="let unidade_venda of unidades_venda" value="{{ unidade_venda.id }}">{{ unidade_venda.nome}}</ion-option>
-            </ion-select>
-            <button ion-button color="dark" item-end >
-                <ion-icon name="add" (click)="addUnidade()"></ion-icon>
-            </button>
-        </ion-item>
-        
-        <ion-item>
-            <ion-label floating>Preço</ion-label>
-            <ion-input type="tel"
-                       formControlName="preco" 
-                       name="preco"  
-                       [brmasker]="{money: true, type: 'num', thousand: '.', decimalCaracter: ',', decimal: '2'}"></ion-input>
-        </ion-item>
-            
-        <ion-item>
-            <ion-label>Ativo</ion-label>
-            <ion-checkbox color="dark" formControlName="ativo"></ion-checkbox>
-        </ion-item>
+                        <button ion-button color="dark" item-end >
+                            <ion-icon name="add" (click)="addCategoria()"></ion-icon>
+                        </button>
 
-        <ion-item>
-            <ion-label floating>Observação</ion-label>
-            <ion-input type="text" formControlName="observacao"></ion-input>
-        </ion-item>  
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-10>
+                    <ion-item>
+                        <ion-label floating>Vasilhame</ion-label>
+                        <ion-select interface="popover" formControlName="vasilhame_id">
+                            <ion-option *ngFor="let vasilhame of vasilhames" value="{{ vasilhame.id }}">{{ vasilhame.nome}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2>
 
+                        <button ion-button color="dark" item-end >
+                            <ion-icon name="add" (click)="addVasilhame()"></ion-icon>
+                        </button>
+
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-10>
+                    <ion-item>
+                        <ion-label floating>Unidade</ion-label>
+                        <ion-select interface="popover" formControlName="unidade_venda_id">
+                            <ion-option *ngFor="let unidade_venda of unidades_venda" value="{{ unidade_venda.id }}">{{ unidade_venda.nome}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-2>
+
+                        <button ion-button color="dark" item-end >
+                            <ion-icon name="add" (click)="addUnidade()"></ion-icon>
+                        </button>
+
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                    <ion-item no-lines>
+                        <ion-label floating>Preço</ion-label>
+                        <ion-input type="tel"
+                                formControlName="preco" 
+                                name="preco"  
+                                [brmasker]="{money: true, type: 'num', thousand: '.', decimalCaracter: ',', decimal: '2'}"></ion-input>
+                    </ion-item>
+            </ion-row> 
+            <ion-row>
+                <ion-col col-10>
+                    <ion-item no-lines>
+                        <ion-label>Ativo</ion-label>
+                        <ion-checkbox color="dark" formControlName="ativo"></ion-checkbox>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                    <ion-item no-lines>
+                        <ion-label floating>Observação</ion-label>
+                        <ion-input type="text" formControlName="observacao"></ion-input>
+                    </ion-item> 
+            </ion-row>
+        </ion-grid>
     </ion-list>
 
     <div padding>

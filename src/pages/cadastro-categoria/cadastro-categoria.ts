@@ -3,14 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 
 import { CategoriaProvider, Categoria } from '../../providers/categoria/categoria';
-//import { CadastroProdutoPage } from '../cadastro-produto/cadastro-produto';
-
-/**
- * Generated class for the CadastroCategoriaPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -19,18 +11,17 @@ import { CategoriaProvider, Categoria } from '../../providers/categoria/categori
 })
 export class CadastroCategoriaPage {
 
-  categoria: Categoria = {id:null, nome:null };
+  //categoria: Categoria = {id:null, nome:null };
   model: Categoria;
+  categorias: Categoria[];
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               public categoriaProvider: CategoriaProvider,
-              //public cadastroProdutoPage: CadastroProdutoPage,
               public toast: ToastController) {
-
       this.model = new Categoria();
 
-      if (this.navParams.data.id) {
+      /* if (this.navParams.data.id) {
         this.categoriaProvider.get(this.navParams.data.id)
           .then((result: any) => {
             this.model = result;
@@ -38,37 +29,46 @@ export class CadastroCategoriaPage {
           .catch(() => {
             this.toast.create({ message: 'Erro ao carregar uma categoria.', duration: 3000, position: 'botton' }).present();
         });
-      }
+      } */
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CadastroCategoriaPage');
+  ionViewDidLoad() { }
+
+  ionViewWillEnter() {
+    this.getCategorias();
+  }
+
+  getCategorias() {
+    this.categoriaProvider.getAll()
+      .then((result: any[]) => {
+        this.categorias = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar as Categorias!', duration: 3000, position: 'center' }).present();
+      })
+  }
+
+  remove(unidade: Categoria) {
+    this.categoriaProvider.remove(unidade.id)
+      .then(() => { 
+        this.toast.create({ message: 'Categoria excluída!', duration: 3000, position: 'center' }).present();
+        this.getCategorias();
+        // this.navCtrl.pop();
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao excluir Categoria!', duration: 3000, position: 'center' }).present();
+      });
   }
 
   save() {
-    if (this.saveCategoria()) {
-      this.toast.create({ message: 'Categoria salvo!', duration: 3000, position: 'center' }).present();
-      //this.cadastroProdutoPage.loadCategoria();
-      this.navCtrl.pop();
-    } else {
-      this.toast.create({ message: 'Erro ao salvar o Categoria!', duration: 3000, position: 'center' }).present();
-    }
-  }
-
-  private saveCategoria() {
-    if (this.model.id) {
-      //this.editando = false;
-      return this.categoriaProvider.update(this.model);
-    } else {
-      //this.editando = true;
-      console.log(this.model);
-      return this.categoriaProvider.insert(this.model);
-    }
-  }
-
-  cancelar(){
-    //this.navCtrl.setRoot(HomePage);
-    this.navCtrl.pop();
+    this.categoriaProvider.insert(this.model)
+      .then(() => {
+        this.toast.create({ message: 'Categoria salva!', duration: 3000, position: 'center' }).present();
+        this.navCtrl.pop();
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao salvar Categoria!', duration: 3000, position: 'center' }).present();
+      });
   }
 
 }

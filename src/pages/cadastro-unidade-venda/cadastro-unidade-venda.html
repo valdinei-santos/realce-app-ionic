@@ -1,7 +1,6 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title *ngIf="!editando"><h1>Cadastro Unidade de Venda</h1></ion-title>
-    <ion-title *ngIf="editando"><h1>Alteração Unidade de Venda</h1></ion-title>
+    <ion-title>Cadastro Unidade de Venda</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -14,9 +13,23 @@
   </ion-list>
 
   <div padding>
-    <button *ngIf="!editando" ion-button color="dark" block (click)="save()">Adicionar</button>
-    <br>
-    <button *ngIf="editando" ion-button color="dark" block (click)="save()">Atualizar</button>
+    <button ion-button color="dark" block (click)="save()">Adicionar</button>
   </div>
+
+  <ion-list>
+      <br>
+      <h2 ion-text color="danger" text-center>Unidades Existentes</h2>
+      <ion-item-sliding *ngFor="let unidade of unidades">
+        <ion-item>
+         {{ unidade.nome }}
+        </ion-item>
+        <ion-item-options side="left">
+          <button ion-button color="danger" (click)="remove(unidade)">
+            <ion-icon name="trash"></ion-icon>
+            Excluir
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
 	
 </ion-content>

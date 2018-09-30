@@ -12,7 +12,6 @@ import { DecimalPipe } from '@angular/common';
 
 import { SelectSearchableComponent } from 'ionic-select-searchable';
 import { ListaClientePage } from '../lista-cliente/lista-cliente';
-import { ListaProdutoPage } from '../lista-produto/lista-produto';
 import { CadastroPedidoItemPage } from '../cadastro-pedido-item/cadastro-pedido-item';
 import { BrMaskerIonic3, BrMaskModel } from 'brmasker-ionic-3';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -67,7 +66,6 @@ export class CadastroPedidoPage {
   }
 
   ionViewDidLoad() {
-  	console.log('ID Peeee:' + this.navParams.data.id);
     if (this.navParams.data.id) { // Edit
       this.editando = true;
       console.log('ID Pe:' + this.navParams.data.id);
@@ -80,14 +78,14 @@ export class CadastroPedidoPage {
           this.clienteProvider.get(this.model.cliente_id)
             .then((result: Cliente) => {
             this.model_cliente = result;
-          })
-          .catch(() => {
-            this.toast.create({ message: 'Erro ao carregar um cliente.', duration: 3000, position: 'botton' }).present();
-          });
+            })
+            .catch(() => {
+              this.toast.create({ message: 'Erro ao carregar um cliente.', duration: 3000, position: 'botton' }).present();
+            });
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
-      });
+        });
       this.pedidoProvider.getItens(this.navParams.data.id)
         .then((result: Item_pedido[]) => {
           this.itens = result;
@@ -98,12 +96,10 @@ export class CadastroPedidoPage {
         })
         .catch(() => {
           this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
-      });
+        });
     } else { // Cadastro
       this.editando = false;
       this.model.data = this.data_atual.toISOString();
-      console.log('Data Val1: ' + this.data_atual.toLocaleDateString('pt-BR'));
-      console.log('Data Val2: ' + new Date().toJSON().slice(0,10).replace(/-/g,'/'));
       this.model.status = 'Inexistente';
       
       this.pedidoProvider.getNewId()
@@ -181,12 +177,17 @@ export class CadastroPedidoPage {
   }
 
   addItens(){
-    this.navCtrl.push(CadastroPedidoItemPage, { isPedido: true, 
-                                                pedido_id: this.model.id,
-                                                pedido_itens: this.itens,
-                                                pedido_total: this.total
-                                              }
-                     );
+    if (!this.model_cliente.id) {
+      this.toast.create({ message: 'Selecione o Cliente!!!', duration: 3000, position: 'botton' }).present();
+    } else {
+      this.navCtrl.push(CadastroPedidoItemPage, { isPedido: true, 
+                                                  pedido_id: this.model.id,
+                                                  pedido_itens: this.itens,
+                                                  pedido_total: this.total,
+                                                  cliente_id: this.model_cliente.id
+                                                }
+                       );
+    }
   }
 
   addItem() {

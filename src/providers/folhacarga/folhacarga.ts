@@ -276,7 +276,6 @@ export class FolhacargaProvider {
   }
 
   public getPedidos(folha_carga_id: number) {
-    console.log(folha_carga_id);
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         let sql = `SELECT f.id, f.data, f.status, i.pedido_id, c.nome as cliente_nome

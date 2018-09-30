@@ -111,6 +111,15 @@ SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unit
                             case when u.nome is null then '' else u.nome end,
                             i.produto_id
                    ORDER BY 1
+SELECT max(id) 
+  FROM pedidos
+ WHERE cliente_id = ?
+
+SELECT valor_unitario 
+  FROM pedidos_itens
+ WHERE pedido_id = (SELECT max(id) FROM pedidos WHERE cliente_id = ?)
+   AND produto_id = ?
+   
                             
 SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total

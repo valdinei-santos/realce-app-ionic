@@ -262,7 +262,10 @@ public insert(pedido: Pedido) {
         let sql =`SELECT i.id, i.pedido_id, i.produto_id, i.quantidade, printf("%.2f",i.valor_unitario) as valor_unitario, 
                          printf("%.2f",i.valor_total) as valor_total, 
                          printf("%.2f",i.valor_total_padrao) as valor_total_padrao, 
-                         p.nome_produto || ' ' || v.nome || ' ' || u.nome as nome_produto
+                         p.nome_produto || ' ' 
+                           || case when v.nome is null then '' else v.nome || ' ' end  
+                           || u.nome as nome_produto
+                         --p.nome_produto || ' ' || v.nome || ' ' || u.nome as nome_produto
                          /* case when c.nome is null then '' else c.nome||' ' end ||
                          case when m.nome is null then '' else m.nome||' ' end ||
                          case when t.nome is null then '' else t.nome||' ' end ||
@@ -309,7 +312,10 @@ public insert(pedido: Pedido) {
     }
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql =`SELECT p.nome_produto || ' ' || v.nome || ' ' || u.nome as nome_produto,
+        let sql =`SELECT p.nome_produto || ' ' 
+                          || case when v.nome is null then '' else v.nome || ' ' end  
+                          || u.nome as nome_produto,
+                          --p.nome_produto || ' ' || v.nome || ' ' || u.nome as nome_produto,
                          /*case when c.nome is null then '' else c.nome||' ' end ||
                          case when m.nome is null then '' else m.nome||' ' end ||
                          case when t.nome is null then '' else t.nome||' ' end ||
@@ -335,7 +341,10 @@ public insert(pedido: Pedido) {
                     LEFT JOIN produtos_unidade_venda u
                       on p.unidade_venda_id = u.id
                    WHERE i.pedido_id in (${lista})
-                   GROUP BY p.nome_produto || ' ' || v.nome || ' ' || u.nome,
+                   GROUP BY p.nome_produto || ' ' 
+                            || case when v.nome is null then '' else v.nome || ' ' end  
+                            || u.nome,
+                            --p.nome_produto || ' ' || v.nome || ' ' || u.nome,
                             /*case when c.nome is null then '' else c.nome||' ' end ||
                             case when m.nome is null then '' else m.nome||' ' end ||
                             case when t.nome is null then '' else t.nome||' ' end ||
@@ -393,6 +402,27 @@ public insert(pedido: Pedido) {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
               return item.total;
+            }
+            return null;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
+  public getUltimoValorProduto(cliente_id: number, produto_id: number) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = `SELECT printf("%.2f",valor_unitario) as valor_unitario 
+                     FROM pedidos_itens
+                    WHERE pedido_id = (SELECT max(id) FROM pedidos WHERE cliente_id = ?)
+                      AND produto_id = ?`;
+        let data = [cliente_id, produto_id];
+        return db.executeSql(sql, data)
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let valor = data.rows.item(0) as number;
+              return valor;
             }
             return null;
           })

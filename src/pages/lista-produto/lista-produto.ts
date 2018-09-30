@@ -15,7 +15,10 @@ export class ListaProdutoPage {
 
   produto: Produto;
   produtos: any[];
+  qtd_produtos: number = 0;
   isPedido: boolean;
+  tipo: string;
+  tipo_titulo: string;
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -24,15 +27,32 @@ export class ListaProdutoPage {
 
   ionViewDidLoad() {
     this.produto = new Produto();
-    this.getProdutos();
   }
 
   ionViewWillEnter() {
-    this.getProdutos();
     if (this.navParams.data.isPedido) {
       this.isPedido = true;
     } else {
       this.isPedido = false;
+    }
+    if (this.navParams.data.tipo) {
+      if (this.navParams.data.tipo == 'cerveja') {
+        this.tipo_titulo = 'Cervejas';
+        this.tipo = 'cerveja';
+        this.getProdutosCerveja();
+      } else if (this.navParams.data.tipo == 'refri') {
+        this.tipo_titulo = 'Refri e Similares';
+        this.tipo = 'refri';
+        this.getProdutosRefri();
+      } else {
+        this.tipo_titulo = 'Destilados';
+        this.tipo = 'outros'
+        this.getProdutosDestilados();
+      }
+    } else {
+      this.tipo_titulo = 'Produtos';
+      this.tipo = 'produto';
+      this.getProdutos();
     }
   }
 
@@ -61,6 +81,40 @@ export class ListaProdutoPage {
     this.produtoProvider.getAll()
       .then((result: any[]) => {
         this.produtos = result;
+        this.qtd_produtos = this.produtos.length;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
+  getProdutosCerveja(){
+    this.produtoProvider.getAllCerveja()
+      .then((result: any[]) => {
+        this.produtos = result;
+        this.qtd_produtos = this.produtos.length;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
+  getProdutosRefri(){
+    this.produtoProvider.getAllRefri()
+      .then((result: any[]) => {
+        this.produtos = result;
+        this.qtd_produtos = this.produtos.length;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
+  getProdutosDestilados(){
+    this.produtoProvider.getAllDestilados()
+      .then((result: any[]) => {
+        this.produtos = result;
+        this.qtd_produtos = this.produtos.length;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
@@ -68,7 +122,23 @@ export class ListaProdutoPage {
   }
 
   getItems(ev: any) {
-    this.produtoProvider.getAll()
+    if (this.tipo == 'cerveja') {
+      this.produtoProvider.getAllCerveja()
+        .then((result: any[]) => {
+          this.produtos = result;
+          // Lógica para povoar o array só com os produtos que atendem o filtro.
+          const val = ev.target.value;
+          if (val && val.trim() != '') {
+            this.produtos = this.produtos.filter((item) => {
+              return (item.nome_produto.toLowerCase().indexOf(val.toLowerCase()) > -1);
+            })
+          }
+        })
+        .catch(() => {
+          this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+      });
+    } else if (this.tipo == 'refri') {
+      this.produtoProvider.getAllRefri()
       .then((result: any[]) => {
         this.produtos = result;
         // Lógica para povoar o array só com os produtos que atendem o filtro.
@@ -81,7 +151,39 @@ export class ListaProdutoPage {
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
-    });
+      });
+    } else if (this.tipo == 'outros') {
+      this.produtoProvider.getAllDestilados()
+      .then((result: any[]) => {
+        this.produtos = result;
+        // Lógica para povoar o array só com os produtos que atendem o filtro.
+        const val = ev.target.value;
+        if (val && val.trim() != '') {
+          this.produtos = this.produtos.filter((item) => {
+            return (item.nome_produto.toLowerCase().indexOf(val.toLowerCase()) > -1);
+          })
+        }
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+      });
+    } else {
+      this.produtoProvider.getAll()
+      .then((result: any[]) => {
+        this.produtos = result;
+        // Lógica para povoar o array só com os produtos que atendem o filtro.
+        const val = ev.target.value;
+        if (val && val.trim() != '') {
+          this.produtos = this.produtos.filter((item) => {
+            return (item.nome_produto.toLowerCase().indexOf(val.toLowerCase()) > -1);
+          })
+        }
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+      });
+    }
+
   }
 
   pedidoProduto(produto: Produto) {

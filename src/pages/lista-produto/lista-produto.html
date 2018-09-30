@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title><h1>Lista de Produtos</h1></ion-title>
+    <ion-title><h1>{{tipo_titulo}} - {{qtd_produtos}}</h1></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
       <button ion-item (click)="pedidoProduto(produto)">
         <h1>{{ produto.nome_produto }} </h1>
         <h2><b ion-text color="danger">
-          R$ {{ produto.preco | number:'1.2-2' }} -
+          R$ {{ produto.preco | number:'1.2-2' }} <span *ngIf="produto.vasilhame_nome">-</span>
              {{ produto.vasilhame_nome }} - 
              {{ produto.unidade_venda_nome }} 
             </b></h2>

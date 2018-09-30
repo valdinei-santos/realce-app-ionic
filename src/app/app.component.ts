@@ -5,12 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { DatabaseProvider } from '../providers/database/database';
 
 import { HomePage } from '../pages/home/home';
-//import { CadastroClientePage } from '../pages/cadastro-cliente/cadastro-cliente';
-import { ListaClientePage } from '../pages/lista-cliente/lista-cliente';
-
-import { ListaProdutoPage } from '../pages/lista-produto/lista-produto';
-import { ListaPedidoPage } from '../pages/lista-pedido/lista-pedido';
-import { ListaFolhacargaPage } from '../pages/lista-folhacarga/lista-folhacarga';
 
 @Component({
   templateUrl: 'app.html'

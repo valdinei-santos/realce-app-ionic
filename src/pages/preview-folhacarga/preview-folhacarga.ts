@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 
-import { PedidoProvider, Pedido, Pedido2, Item_pedido, PedidoAllItens, PedidoAllItens2 } from '../../providers/pedido/pedido';
+import { PedidoProvider, PedidoAllItens, PedidoAllItens2 } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
 import { Folhacarga, FolhacargaProvider, Folhacarga2, Folhacarga3 } from '../../providers/folhacarga/folhacarga';
 import { FormatDatePipe } from '../../pipes/format-date/format-date';
@@ -16,7 +16,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 @Component({
   selector: 'page-preview-folhacarga',
   templateUrl: 'preview-folhacarga.html',
-  providers: [ /* FormatCurrencyPipe,  */ FormatDatePipe ]
+  providers: [ FormatDatePipe ]
 })
 export class PreviewFolhacargaPage {
 
@@ -81,8 +81,8 @@ export class PreviewFolhacargaPage {
       .then((result: PedidoAllItens[]) => {
         this.itens = result;
         for (let i=0; i < this.itens.length; i++){
-          this.total_geral = this.total_geral + this.itens[i].valor;
-          this.total_geral_padrao = this.total_geral_padrao + this.itens[i].valor_padrao;
+          this.total_geral = Number(this.total_geral) + Number(this.itens[i].valor);
+          this.total_geral_padrao = Number(this.total_geral_padrao) + Number(this.itens[i].valor_padrao);
         }
       })
       .catch(() => {
@@ -126,7 +126,45 @@ export class PreviewFolhacargaPage {
   }
 
   save() {
-    if (!this.navParams.data.isEdit) { // eh cadastro
+    if (this.editando) {
+      console.log('passo11');
+      this.folhacargaProvider.remove(this.model.id)
+        .then(() => {
+          this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado')
+            .then(()=> {
+              this.folhacargaProvider.insert(this.model)
+                .then(() => {
+                  this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
+                  this.toast.create({ message: 'Folha de Carga alterada!', duration: 3000, position: 'center' }).present();
+                  this.navCtrl.pop();
+                });
+            });
+        })
+        .catch(() => {
+          console.log('Erro ao alterar Folha de Carga!');
+        });
+      
+    } else { // Eh Cadastro
+      this.data_atual_aux = this.model.data;
+      this.model.data = this.data_atual_aux.substring(0,10);
+      this.model.status = 'Pendente';
+      this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
+      this.folhacargaProvider.insert(this.model)
+        .then(() => {
+          this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id)
+            .then(() => {
+              this.toast.create({ message: 'Folha de Carga salva!', duration: 3000, position: 'center' }).present();
+              this.navCtrl.getPrevious().data.vem_preview = true;
+              this.navCtrl.pop();
+            });
+        });
+    }
+
+
+
+
+
+/*     if (!this.navParams.data.isEdit) { // eh cadastro
       if (this.saveFolhacarga()) {
         this.toast.create({ message: 'Folha de Carga salva!', duration: 3000, position: 'center' }).present();
         this.navCtrl.getPrevious().data.vem_preview = true;
@@ -135,21 +173,29 @@ export class PreviewFolhacargaPage {
         this.toast.create({ message: 'Erro ao salvar a Folha de Carga!', duration: 3000, position: 'center' }).present();
       }
     } else { // eh Edit
+      console.log('passo21');
       if (this.saveFolhacarga()) {
+        console.log('passo22');
         this.toast.create({ message: 'Folha de Carga alterada!', duration: 3000, position: 'center' }).present();
         this.navCtrl.pop();
       } else {
+        console.log('passo23');
         this.toast.create({ message: 'Erro ao alterar a Folha de Carga!', duration: 3000, position: 'center' }).present();
       }
-    }
+    } */
   }
 
-  private saveFolhacarga() {
+  // PENDENTE CORRIGIR PARA SAVEFOLHACARGA esperar promisse terminar.
+/*   private saveFolhacarga() {
     if (this.editando) {
+      console.log('passo11');
       this.folhacargaProvider.remove(this.model.id)
         .then(() => {
+          console.log('passo12');
           this.pedidoProvider.update_status(this.lista_pedidos, 'Alocado');
+          console.log('passo13');
           let insert_folha = this.folhacargaProvider.insert(this.model);
+          console.log('passo14');
           return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
         })
         .catch(() => {
@@ -163,7 +209,7 @@ export class PreviewFolhacargaPage {
       let insert_folha = this.folhacargaProvider.insert(this.model);  
       return this.folhacargaProvider.insert_itens(this.lista_pedidos, this.model.id);
     } 
-  }
+  } */
 
   private getTimestamp() {
     let now = new Date();
