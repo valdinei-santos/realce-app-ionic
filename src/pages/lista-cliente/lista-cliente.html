@@ -9,9 +9,9 @@
   <ion-list>
     <ion-item-sliding *ngFor="let cliente of clientes">
       <button ion-item (click)="pedidoCliente(cliente)">
-        <h1>{{ cliente.nome }}</h1>
-        <h2>{{ cliente.celular }}</h2>
-        <h2>{{ cliente.endereco }}</h2>
+        <h1 text-wrap>{{ cliente.nome }}</h1>
+        <h2 text-wrap>{{ cliente.celular }}</h2>
+        <h2 text-wrap>{{ cliente.endereco }}</h2>
       </button>
       <ion-item-options side="left">
         <button ion-button color="danger" (click)="removeCliente(cliente)">

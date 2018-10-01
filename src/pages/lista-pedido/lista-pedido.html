@@ -13,8 +13,8 @@
         <ion-icon name="checkmark-circle" item-start *ngIf="pedido.status == 'Alocado' " style="color:blue;"></ion-icon>
         <ion-icon name="lock" item-start *ngIf="pedido.status == 'Entregue' " style="color:green;"></ion-icon>
 
-        <h1>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} </h1>
-        <h2>{{ pedido.cliente_nome }}</h2>
+        <h1 text-wrap>Pedido: {{ pedido.id }} - {{ pedido.data | formatDate }} </h1>
+        <h2 text-wrap>{{ pedido.cliente_nome }}</h2>
         <h2><b ion-text color="danger">Total: {{ soma(pedido.total, pedido.valor_adicional) | number:'1.2-2' }}</b></h2>
       </button>
       <ion-item-options side="left">

@@ -129,9 +129,7 @@ export class CadastroProdutoPage {
 
   private saveProduto() {
     const newProduto: Produto = this.myForm.getRawValue();
-    newProduto.ativo = newProduto.ativo['value'];
     newProduto.preco = Number(newProduto.preco.toString().replace(',', '.'));
-    console.log(newProduto);
     if (newProduto.id) {
       return this.produtoProvider.update(newProduto);
     } else {

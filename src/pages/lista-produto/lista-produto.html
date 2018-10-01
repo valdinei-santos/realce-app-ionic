@@ -9,8 +9,8 @@
   <ion-list>
     <ion-item-sliding *ngFor="let produto of produtos">
       <button ion-item (click)="pedidoProduto(produto)">
-        <h1>{{ produto.nome_produto }} </h1>
-        <h2><b ion-text color="danger">
+        <h1 text-wrap>{{ produto.nome_produto }} </h1>
+        <h2 text-wrap><b ion-text color="danger">
           R$ {{ produto.preco | number:'1.2-2' }} <span *ngIf="produto.vasilhame_nome">-</span>
              {{ produto.vasilhame_nome }} - 
              {{ produto.unidade_venda_nome }} 

@@ -8,8 +8,8 @@
     <ion-list>
       <ion-item-sliding *ngFor="let item of itens">
           <button ion-item>
-            <h2>{{ item.nome_produto }}</h2>
-            <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
+            <h2 text-wrap>{{ item.nome_produto }}</h2>
+            <h2 text-wrap>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
                 Valor: <b ion-text color="danger">{{ item.valor_unitario| number:'1.2-2' }}</b>
                 Total: <b ion-text color="danger">{{ item.quantidade * item.valor_unitario | number:'1.2-2' }}</b>
             </h2>

@@ -17,8 +17,8 @@
     <h2>Produtos:</h2>
     <ion-list>
       <ion-item *ngFor="let item of itens">
-        <h2 ion-text color="danger">{{ item.nome_produto }}</h2>
-        <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }} </b>
+        <h2 text-wrap ion-text color="danger">{{ item.nome_produto }}</h2>
+        <h2 text-wrap>Quant.: <b ion-text color="danger">{{ item.quantidade }} </b>
             Total: <b ion-text color="danger">{{ item.valor | number:'1.2-2' }}</b>
         </h2>
       </ion-item>  

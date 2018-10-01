@@ -717,11 +717,11 @@ const PRODUTOS = [
   [`insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago) 
                   values (?, ?, ?, ?, ?, ?)`, [1, 1, '2018-06-07', 'Pendente', 0, 0]],
   [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_padrao, valor_total, valor_total_padrao) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, 1, 1, 2, 135.80, 135.80, 271.60, 271.60]],
+                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, 1, 1, 2, 142.80, 142.80, 271.60, 271.60]],
   [`insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago) 
                   values (?, ?, ?, ?, ?, ?)`, [2, 2, '2018-06-07', 'Pendente', 0, 0]],
   [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_padrao, valor_total, valor_total_padrao) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [2, 2, 1, 2, 135.80, 135.80, 271.60, 271.60]],
+                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [2, 2, 1, 2, 135.80, 135.80, 291.60, 291.60]],
   [`PRAGMA foreign_keys=ON`],
 
  

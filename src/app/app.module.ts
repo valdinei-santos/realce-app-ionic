@@ -28,8 +28,6 @@ import { PedidoProvider } from '../providers/pedido/pedido';
 import { FolhacargaProvider } from '../providers/folhacarga/folhacarga';
 import { DatabaseProvider } from '../providers/database/database';
 import { CategoriaProvider } from '../providers/categoria/categoria';
-import { MarcaProvider } from '../providers/marca/marca';
-import { TipoProvider } from '../providers/tipo/tipo';
 import { UnidadeVendaProvider } from '../providers/unidade-venda/unidade-venda';
 import { VasilhameProvider } from '../providers/vasilhame/vasilhame';
 
@@ -45,13 +43,7 @@ import { ListaFolhacargaPageModule } from '../pages/lista-folhacarga/lista-folha
 import { ShowFolhacargaPageModule } from '../pages/show-folhacarga/show-folhacarga.module';
 import { PreviewFolhacargaPageModule } from '../pages/preview-folhacarga/preview-folhacarga.module';
 import { CadastroCategoriaPageModule } from '../pages/cadastro-categoria/cadastro-categoria.module';
-import { ListaCategoriaPageModule } from '../pages/lista-categoria/lista-categoria.module';
-import { CadastroMarcaPageModule } from '../pages/cadastro-marca/cadastro-marca.module';
-import { ListaMarcaPageModule } from '../pages/lista-marca/lista-marca.module';
-import { CadastroTipoPageModule } from '../pages/cadastro-tipo/cadastro-tipo.module';
-import { ListaTipoPageModule } from '../pages/lista-tipo/lista-tipo.module';
 import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/cadastro-unidade-venda.module';
-import { ListaUnidadeVendaPageModule } from '../pages/lista-unidade-venda/lista-unidade-venda.module';
 import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastro-vasilhame.module';
 import { CadastroPedidoItemPageModule } from '../pages/cadastro-pedido-item/cadastro-pedido-item.module';
 
@@ -75,10 +67,6 @@ registerLocaleData(localePtBr);
     ListaProdutoPageModule,
     ListaPedidoPageModule,
     ListaFolhacargaPageModule,
-    ListaCategoriaPageModule,
-    ListaMarcaPageModule,
-    ListaTipoPageModule,
-    ListaUnidadeVendaPageModule,
     PreviewFolhacargaPageModule,
     ShowFolhacargaPageModule,
     ShowPedidoPageModule,
@@ -86,8 +74,6 @@ registerLocaleData(localePtBr);
     CadastroPedidoPageModule,
     CadastroFolhacargaPageModule,
     CadastroCategoriaPageModule,
-    CadastroMarcaPageModule,
-    CadastroTipoPageModule,
     CadastroVasilhamePageModule,
     CadastroUnidadeVendaPageModule,
     CadastroClientePageModule,
@@ -116,8 +102,6 @@ registerLocaleData(localePtBr);
     FolhacargaProvider,
     DatabaseProvider,
     CategoriaProvider,
-    MarcaProvider,
-    TipoProvider,
     UnidadeVendaProvider,
     VasilhameProvider,
     File,
