@@ -11,13 +11,14 @@
       <h2>Folha Carga: <b ion-text color="primary">{{model.id}}</b></h2>
       <h2>Pedidos: <b ion-text color="primary">{{ pedidos }}</b></h2>
       <h2>Status: <b ion-text color="primary">{{ model.status }}</b></h2>
+      <h2>Produtos:</h2>
     </div>
   </div>
   <div ion-row>
-    <h2>Produtos:</h2>
     <ion-list>
       <ion-item *ngFor="let item of itens">
-        <h2 text-wrap ion-text color="danger">{{ item.nome_produto }}</h2>
+        <span ion-text color="danger">{{ item.nome_produto }} </span>
+        <!-- <h2 text-wrap ion-text color="danger">{{ item.nome_produto }}</h2> -->
         <h2 text-wrap>Quant.: <b ion-text color="danger">{{ item.quantidade }} </b>
             Total: <b ion-text color="danger">{{ item.valor | number:'1.2-2' }}</b>
         </h2>

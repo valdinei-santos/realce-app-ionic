@@ -59,9 +59,8 @@ export class ProdutoProvider {
                           u.nome as unidade_venda_nome,
                           c.nome as categoria_nome,
                           p.nome_produto || ' ' 
-                           || case when v.nome is null then '' else v.nome || ' ' end 
-                           || u.nome as nome_completo
-                          -- p.nome_produto || ' ' || v.nome || ' ' || u.nome as nome_completo
+                                         || case when v.nome is null then '' else v.nome || ' ' end 
+                                         || case when u.nome is null then '' else u.nome end as nome_completo
                     FROM produtos p
                     LEFT JOIN produtos_vasilhame v
                       on p.vasilhame_id = v.id
@@ -105,8 +104,8 @@ export class ProdutoProvider {
                            u.nome as unidade_venda_nome,
                            c.nome as categoria_nome,
                            p.nome_produto || ' ' 
-                           || case when v.nome is null then '' else v.nome || ' ' end  
-                           || u.nome as nome_completo
+                                          || case when v.nome is null then '' else v.nome || ' ' end  
+                                          || case when u.nome is null then '' else u.nome end as nome_completo
                     FROM produtos p
                     LEFT JOIN produtos_vasilhame v
                       on p.vasilhame_id = v.id
@@ -144,8 +143,8 @@ export class ProdutoProvider {
                            u.nome as unidade_venda_nome,
                            c.nome as categoria_nome,
                            p.nome_produto || ' ' 
-                           || case when v.nome is null then '' else v.nome || ' ' end  
-                           || u.nome as nome_completo
+                                          || case when v.nome is null then '' else v.nome || ' ' end  
+                                          || case when u.nome is null then '' else u.nome end as nome_completo
                     FROM produtos p
                     LEFT JOIN produtos_vasilhame v
                       on p.vasilhame_id = v.id
@@ -184,8 +183,8 @@ export class ProdutoProvider {
                            u.nome as unidade_venda_nome,
                            c.nome as categoria_nome,
                            p.nome_produto || ' ' 
-                           || case when v.nome is null then '' else v.nome || ' ' end  
-                           || u.nome as nome_completo
+                                          || case when v.nome is null then '' else v.nome || ' ' end  
+                                          || case when u.nome is null then '' else u.nome end as nome_completo
                       FROM produtos p
                       LEFT JOIN produtos_vasilhame v
                         on p.vasilhame_id = v.id
@@ -224,8 +223,8 @@ export class ProdutoProvider {
                            u.nome as unidade_venda_nome,
                            c.nome as categoria_nome,
                            p.nome_produto || ' ' 
-                           || case when v.nome is null then '' else v.nome || ' ' end  
-                           || u.nome as nome_completo
+                                        || case when v.nome is null then '' else v.nome || ' ' end  
+                                        || case when u.nome is null then '' else u.nome end as nome_completo
                     FROM produtos p
                     LEFT JOIN produtos_vasilhame v
                       on p.vasilhame_id = v.id

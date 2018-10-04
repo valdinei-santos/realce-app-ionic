@@ -722,7 +722,7 @@ const PRODUTOS = [
                   values (?, ?, ?, ?, ?, ?)`, [2, 2, '2018-06-07', 'Pendente', 0, 0]],
   [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_padrao, valor_total, valor_total_padrao) 
                   values (?, ?, ?, ?, ?, ?, ?, ?)`, [2, 2, 1, 2, 135.80, 135.80, 291.60, 291.60]],
-  [`PRAGMA foreign_keys=ON`],
+  
 
  
 ];

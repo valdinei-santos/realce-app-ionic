@@ -204,6 +204,7 @@ public insert(pedido: Pedido) {
                      FROM pedidos p 
                      JOIN clientes c 
                        ON p.cliente_id = c.id
+                    WHERE upper(p.status) <> 'ENTREGUE'
                     ORDER BY p.id desc`;              
         return db.executeSql(sql, [])
           .then((data: any) => {
@@ -263,29 +264,21 @@ public insert(pedido: Pedido) {
                          printf("%.2f",i.valor_total) as valor_total, 
                          printf("%.2f",i.valor_total_padrao) as valor_total_padrao, 
                          p.nome_produto || ' ' 
-                           || case when v.nome is null then '' else v.nome || ' ' end  
-                           || u.nome as nome_produto
-                         --p.nome_produto || ' ' || v.nome || ' ' || u.nome as nome_produto
-                         /* case when c.nome is null then '' else c.nome||' ' end ||
-                         case when m.nome is null then '' else m.nome||' ' end ||
-                         case when t.nome is null then '' else t.nome||' ' end ||
-                         case when v.nome is null then '' else v.nome||' ' end ||
-                         case when u.nome is null then '' else u.nome end  as nome_produto */
+                                        || case when v.nome is null then '' else v.nome || ' ' end  
+                                        || case when u.nome is null then '' else u.nome end as nome_produto,
+                         c.id as categoria_id,
+                         v.nome as nome_vasilhame
                     FROM pedidos_itens i 
                     JOIN produtos p
                       ON i.produto_id = p.id
-                    /* JOIN produtos_categoria c 
+                    JOIN produtos_categoria c 
                       on p.categoria_id = c.id 
-                    LEFT JOIN produtos_marca m 
-                      on p.marca_id = m.id 
-                    LEFT JOIN produtos_tipo t 
-                      on p.tipo_id = t.id */
                     LEFT JOIN produtos_vasilhame v
                       on p.vasilhame_id = v.id
                     LEFT JOIN produtos_unidade_venda u
                       on p.unidade_venda_id = u.id
                   WHERE pedido_id = ?
-                  ORDER BY 7`;
+                  ORDER BY c.id, v.nome`;
         let data = [pedido_id];
         return db.executeSql(sql, data)
           .then((data: any) => {
@@ -314,13 +307,7 @@ public insert(pedido: Pedido) {
       .then((db: SQLiteObject) => {
         let sql =`SELECT p.nome_produto || ' ' 
                           || case when v.nome is null then '' else v.nome || ' ' end  
-                          || u.nome as nome_produto,
-                          --p.nome_produto || ' ' || v.nome || ' ' || u.nome as nome_produto,
-                         /*case when c.nome is null then '' else c.nome||' ' end ||
-                         case when m.nome is null then '' else m.nome||' ' end ||
-                         case when t.nome is null then '' else t.nome||' ' end ||
-                         case when v.nome is null then '' else v.nome||' ' end ||
-                         case when u.nome is null then '' else u.nome end  as nome_produto,*/
+                          || case when u.nome is null then '' else u.nome end as nome_produto,
                          i.produto_id, 
                          sum(i.quantidade) as quantidade, 
                          sum(i.valor_total) as valor, 
@@ -328,14 +315,6 @@ public insert(pedido: Pedido) {
                     FROM pedidos_itens i 
                     JOIN produtos p
                       ON i.produto_id = p.id
-                    /*
-                      JOIN produtos_categoria c 
-                      on p.categoria_id = c.id 
-                    LEFT JOIN produtos_marca m 
-                      on p.marca_id = m.id 
-                    LEFT JOIN produtos_tipo t 
-                      on p.tipo_id = t.id
-                    */ 
                     LEFT JOIN produtos_vasilhame v
                       on p.vasilhame_id = v.id
                     LEFT JOIN produtos_unidade_venda u
@@ -343,13 +322,7 @@ public insert(pedido: Pedido) {
                    WHERE i.pedido_id in (${lista})
                    GROUP BY p.nome_produto || ' ' 
                             || case when v.nome is null then '' else v.nome || ' ' end  
-                            || u.nome,
-                            --p.nome_produto || ' ' || v.nome || ' ' || u.nome,
-                            /*case when c.nome is null then '' else c.nome||' ' end ||
-                            case when m.nome is null then '' else m.nome||' ' end ||
-                            case when t.nome is null then '' else t.nome||' ' end ||
-                            case when v.nome is null then '' else v.nome||' ' end ||
-                            case when u.nome is null then '' else u.nome end,*/
+                            || case when u.nome is null then '' else u.nome end,
                             i.produto_id
                    ORDER BY 1`;
         return db.executeSql(sql, [])

@@ -76,24 +76,28 @@
           </ion-col>
         </ion-row>
 
-        <ion-row>
+        <!-- <ion-row>
           <ion-col col-8 offset-2>
             <button [disabled]="myForm.invalid" ion-button block (click)="addItem()" >Adicionar Produto</button>
           </ion-col>
-        </ion-row>
+        </ion-row> -->
       </form>
     </ion-grid>
-    <ion-row>
+    <!-- <ion-row>
         <ion-col col-8 offset-2>
           <button ion-button block (click)="backPedido()" >Voltar Pedido</button>
         </ion-col>
-      </ion-row>
+      </ion-row> -->
   </ion-list>
   
   <ion-fab right top>
       <button ion-fab color="primary" (click)="getListProdutosCerveja()"><ion-icon name="ios-beer-outline"></ion-icon></button>
       <button ion-fab color="primary" (click)="getListProdutosRefri()"><ion-icon name="ios-pint-outline"></ion-icon></button>
       <button ion-fab color="primary" (click)="getListProdutosOutros()"><ion-icon name="ios-wine-outline"></ion-icon></button>
+  </ion-fab>
+
+  <ion-fab left bottom>
+      <button ion-fab color="primary" [disabled]="myForm.invalid" (click)="addItem()"><ion-icon name="md-add-circle"></ion-icon></button>
   </ion-fab>
 
 </ion-content>
