@@ -4,15 +4,15 @@
 /* ACHO QUE NAO ESTA SENDO USADO */
 
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { FolhacargaProvider, Folhacarga2, Item_folhacarga } from '../../providers/folhacarga/folhacarga';
+import { FolhacargaProvider, Folhacarga2 } from '../../providers/folhacarga/folhacarga';
 import { ToastController } from 'ionic-angular';
 import { FormatDatePipe } from '../../pipes/format-date/format-date';
-import { DecimalPipe } from '@angular/common';
+// import { DecimalPipe } from '@angular/common';
 
-import { File } from '@ionic-native/file';
-import { FileOpener } from '@ionic-native/file-opener';
+// import { File } from '@ionic-native/file';
+// import { FileOpener } from '@ionic-native/file-opener';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;

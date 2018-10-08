@@ -22,6 +22,12 @@ ionic serve --lab
   -- PARA FAZER IMPORT E EXPORT DO DB SQLITE
     ionic cordova plugin add uk.co.workingedge.cordova.plugin.sqliteporter
     npm install --save @ionic-native/sqlite-porter
+    
+    -- No app.module.ts
+    import { SQLitePorter } from '@ionic-native/sqlite-porter';
+    ...
+    SQLitePorter,
+
 
   2 - Incluir essa nova biblioteca no module da APP "app.module.ts"
     ...
@@ -40,6 +46,7 @@ ionic serve --lab
     ionic g provider Unidade
     ionic g provider Pedido
     ionic g provider Folhacarga
+    ionic g provider ExpImpDB
     
     
     3.1 - Ser� criado o diret�rio ../src/provider/cliente e o arquivo cliente.ts
@@ -78,6 +85,9 @@ S� INCLUI    Ficando assim: "constructor(private storage: Storage) {"
     ionic g page CadastroFolhacarga
     ionic g page ListaFolhacarga
     #ionic g page EditFolhacarga
+    ionic g page Relatorios
+    ionic g page ListaPedidoHist
+    ionic g page ListaFolhacargaHist
 
   2 - Incluir o m�dulo dessa pagina no module da APP "app.module.ts"
     ...
@@ -118,6 +128,10 @@ ionic cordova run browser
 11 - Instalar pacote para mascara decimal https://www.npmjs.com/package/brmasker-ionic-3
 npm install brmasker-ionic-3 --save
 
+
+
+/mnt/sdcard/Download
+
 ####################################
 12 - Criar o APK para produção sem assinatura.
 ionic cordova run android --prod --release
@@ -149,7 +163,7 @@ DICAS:
 ...
 import { LoadingController } from 'ionic-angular';
 ...
-constructor(..., private loadingController LoadingController) {
+constructor(..., private loadingController: LoadingController) {
 
   let loading = this.loadingController.create({
     content: 'Aguarde o carregamento...'
@@ -180,4 +194,6 @@ this.alertController.create({
 
 3 -  
 
+SELECT COUNT(*) AS existe FROM PRAGMA table_info ('pedidos') WHERE name='pago';
+PRAGMA table_info ('pedidos');
 

@@ -60,6 +60,7 @@ export class CadastroPedidoPage {
     this.model = new Pedido();
     this.model.valor_adicional = 0;
     this.model.valor_pago = 0;
+    this.model.pago = 0;
     this.model_produto = new Produto();
     this.model_cliente = new Cliente();
     this.model_item_pedido = new Item_pedido(); 
@@ -75,6 +76,7 @@ export class CadastroPedidoPage {
           this.form.get('ad').setValue(this.model.valor_adicional.toString().replace('.', ',') );
           this.ad = this.form.get('ad').value;
           this.form.get('valor_pago').setValue(this.model.valor_pago.toString().replace('.', ','));
+          this.form.get('pago').setValue(this.model.pago);
           this.clienteProvider.get(this.model.cliente_id)
             .then((result: Cliente) => {
             this.model_cliente = result;
@@ -133,7 +135,8 @@ export class CadastroPedidoPage {
   protected createForm(): FormGroup {
     return new FormGroup({
       ad: new FormControl(this.createMaskAd()),
-      valor_pago : new FormControl(this.createMaskValorPago())
+      valor_pago : new FormControl(this.createMaskValorPago()),
+      pago: new FormControl(null)
     });
   }
    
@@ -238,6 +241,7 @@ export class CadastroPedidoPage {
     this.model.cliente_id = this.model_cliente.id;
     this.model.valor_pago = Number(this.form.get('valor_pago').value.replace(',','.'));
     this.model.valor_adicional = Number(this.form.get('ad').value.replace(',','.'));
+    this.model.pago = Number(this.form.get('pago').value);
 
     if (this.editando) {
       this.pedidoProvider.update(this.model);

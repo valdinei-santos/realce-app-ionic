@@ -48,8 +48,7 @@ const DATABASES_TABLES = [
                                        data TEXT,
                                        status VARCHAR(30),
                                        valor_adicional NUMERIC(10,2),
-                                       valor_pago NUMERIC(10,2),
-                                       pago INTEGER default 0
+                                       valor_pago NUMERIC(10,2)
                                       )`,
   `CREATE TABLE IF NOT EXISTS pedidos_itens (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                               pedido_id INTEGER,

@@ -4,6 +4,7 @@ import { registerLocaleData } from '@angular/common';  // Incluido para funciona
 import localePtBr from '@angular/common/locales/pt';     // Incluido para funcionar o LOCALE_ID 'pt-BR' e o PIPE de data.
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SQLite } from '@ionic-native/sqlite';
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { DatePipe } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
 
@@ -46,6 +47,10 @@ import { CadastroCategoriaPageModule } from '../pages/cadastro-categoria/cadastr
 import { CadastroUnidadeVendaPageModule } from '../pages/cadastro-unidade-venda/cadastro-unidade-venda.module';
 import { CadastroVasilhamePageModule } from '../pages/cadastro-vasilhame/cadastro-vasilhame.module';
 import { CadastroPedidoItemPageModule } from '../pages/cadastro-pedido-item/cadastro-pedido-item.module';
+import { ExpImpDbProvider } from '../providers/exp-imp-db/exp-imp-db';
+import { RelatoriosPageModule } from '../pages/relatorios/relatorios.module';
+import { ListaPedidoHistPageModule } from '../pages/lista-pedido-hist/lista-pedido-hist.module';
+import { ListaFolhacargaHistPageModule } from '../pages/lista-folhacarga-hist/lista-folhacarga-hist.module';
 
 registerLocaleData(localePtBr);
 
@@ -78,6 +83,9 @@ registerLocaleData(localePtBr);
     CadastroUnidadeVendaPageModule,
     CadastroClientePageModule,
     CadastroPedidoItemPageModule,
+    RelatoriosPageModule,
+    ListaPedidoHistPageModule,
+    ListaFolhacargaHistPageModule
     // DirectivesModule,
     
 
@@ -94,6 +102,7 @@ registerLocaleData(localePtBr);
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SQLite,
+    SQLitePorter,
     DatePipe,
     DecimalPipe,
     ClienteProvider,
@@ -106,6 +115,7 @@ registerLocaleData(localePtBr);
     VasilhameProvider,
     File,
     FileOpener,
+    ExpImpDbProvider,
   ]
 })
 export class AppModule {}

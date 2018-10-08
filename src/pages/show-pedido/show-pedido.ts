@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
 
 import { PedidoProvider, Pedido, Pedido2, Item_pedido } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
@@ -27,6 +27,7 @@ export class ShowPedidoPage {
   total_geral: number = 0;
   dataAtual: Date;
   horaAtual: string;
+  pagoString: string;
   pagePdf = { 
     'pedido_id': null, 
     'cliente_nome': null,
@@ -34,6 +35,7 @@ export class ShowPedidoPage {
     'cliente_celular': null, 
     'data': null, 
     'status': null, 
+    'pago': null,
     'total': null 
   };
   pdfObj = null;
@@ -46,7 +48,8 @@ export class ShowPedidoPage {
               private decimalPipe: DecimalPipe,
               private plt: Platform,
               private file: File,
-              private fileOpener: FileOpener) { 
+              private fileOpener: FileOpener,
+              private loadingController: LoadingController) { 
 
       this.model = new Pedido2();
   }
@@ -88,6 +91,12 @@ export class ShowPedidoPage {
   }
 
   createPdf() {
+    let loading = this.loadingController.create({
+      content: 'Aguarde o carregamento...'
+    });
+    loading.present(); // Inicia LOADING
+
+    this.model.pago ? this.pagoString = 'Pago' : this.pagoString = '';
     for (let el of this.itens) {
       let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null};
       item.id = el.id;
@@ -104,13 +113,14 @@ export class ShowPedidoPage {
       'cliente_celular': this.model.cliente_celular,
       'data': this.formatDate.transform(this.model.data),
       'status': this.model.status,
+      'pago': this.model.pago,
       'total': this.decimalPipe.transform(this.model.total, '1.2-2'),
     }
     this.horaAtual = this.getTimestamp();
 
     function buildTableBody(data, columns) {
       var body = [];
-      body.push(['Produto', 'Quantidade', 'Valor', 'Total']);
+      body.push(['Produto', 'Quant.', 'Valor', 'Total']);
       data.forEach(function(row) {
           var dataRow = [];
           columns.forEach(function(column) {
@@ -134,25 +144,30 @@ export class ShowPedidoPage {
       content: [
         { text: 'DISTRIBUIDORA REALCE - PEDIDO', style: 'header' },
         { text: this.horaAtual, alignment: 'right' },
-        { text: 'PEDIDO: ' + this.pagePdf.pedido_id, style: 'subheader' },
-        { text: 'CLIENTE: ' + this.pagePdf.cliente_nome, style: 'subheader' },
+        { text: 'PEDIDO: ' + this.pagePdf.pedido_id + 
+                ' -- DATA: ' + this.pagePdf.data +
+                ' -- STATUS: ' + this.pagePdf.status, style: 'subheader' },
+        { text: 'CLIENTE: ' + this.pagePdf.cliente_nome + 
+                ' -- CEL: ' + this.pagePdf.cliente_celular, style: 'subheader' },
+        { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' },
+        /* { text: 'CLIENTE: ' + this.pagePdf.cliente_nome, style: 'subheader' },
         { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' },
         { text: 'CELULAR: ' + this.pagePdf.cliente_celular, style: 'subheader' },
         { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
-        { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' },
-        ' ',
+        { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' }, 
+        ' ',*/
         table(this.itens2, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']),
-        { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' },
+        { text: 'TOTAL: ' + this.pagePdf.total + '  ' + this.pagoString, style: 'subheader' },
       ],
       styles: {
         header: {
-          fontSize: 18,
+          fontSize: 17,
           bold: true,  
         },
         subheader: {
-          fontSize: 14,
+          fontSize: 13,
           bold: true,
-          margin: [0, 15, 0, 0]
+          margin: [0, 5, 0, 0]
         },
         story: {
           italic: true,
@@ -171,9 +186,14 @@ export class ShowPedidoPage {
       }
     }
     this.pdfObj = pdfMake.createPdf(docDefinition);
+    loading.dismiss(); // Filaliza LOADING
   } // Fim createPdf()
 
   viewPdf() {
+    let loading = this.loadingController.create({
+      content: 'Aguarde o carregamento...'
+    });
+    loading.present(); // Inicia LOADING
     if (this.plt.is('cordova')) {
       this.pdfObj.getBuffer((buffer) => {
         var blob = new Blob([buffer], { type: 'application/pdf' });
@@ -189,6 +209,7 @@ export class ShowPedidoPage {
       // On a browser simply use download!
       this.pdfObj.download();
     }
+    loading.dismiss(); // Filaliza LOADING
   }
 
   

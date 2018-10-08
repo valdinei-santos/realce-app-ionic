@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
 
 import { PedidoProvider, PedidoAllItens, PedidoAllItens2 } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
@@ -46,8 +46,8 @@ export class PreviewFolhacargaPage {
               private decimalPipe: DecimalPipe,
               private plt: Platform,
               private file: File,
-              private fileOpener: FileOpener
-             ) {
+              private fileOpener: FileOpener,
+              private loadingController: LoadingController) {
     this.model = new Folhacarga;  
   }
 
@@ -224,6 +224,11 @@ export class PreviewFolhacargaPage {
 
 
   createPdf() {
+    let loading = this.loadingController.create({
+      content: 'Aguarde o carregamento...'
+    });
+    loading.present(); // Inicia LOADING
+
     for (let el of this.itens) {
       let item: PedidoAllItens2 = new PedidoAllItens2;
       item.produto_id = el.produto_id;
@@ -243,7 +248,7 @@ export class PreviewFolhacargaPage {
     this.horaAtual = this.getTimestamp();
     function buildTableBody(data, columns) {
       var body = [];
-      body.push(['ID', 'Produto', 'Quantidade', 'Total']);
+      body.push(['ID', 'Produto', 'Quant.', 'Total']);
       data.forEach(function(row) {
           var dataRow = [];
           columns.forEach(function(column) {
@@ -267,9 +272,11 @@ export class PreviewFolhacargaPage {
       content: [
         { text: 'DISTRIBUIDORA REALCE - FOLHA DE CARGA', style: 'header' },
         { text: this.horaAtual, alignment: 'right' },
-        { text: 'FOLHA CARGA: ' + this.pagePdf.id, style: 'subheader' },
-        { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
-        { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' },
+        { text: 'FOLHA CARGA: ' + this.pagePdf.id +
+                ' -- ' + 'DATA: ' + this.pagePdf.data +
+                ' -- ' + 'STATUS: ' + this.pagePdf.status, style: 'subheader' },
+        /* { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
+        { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' }, */
         { text: 'PEDIDOS: ' + this.pagePdf.pedidos, style: 'subheader' },
         ' ',
         table(this.itens2, ['produto_id', 'nome_produto', 'quantidade', 'valor']),
@@ -278,13 +285,13 @@ export class PreviewFolhacargaPage {
       ],
       styles: {
         header: {
-          fontSize: 18,
+          fontSize: 17,
           bold: true,  
         },
         subheader: {
-          fontSize: 14,
+          fontSize: 13,
           bold: true,
-          margin: [0, 15, 0, 0]
+          margin: [0, 5, 0, 0]
         },
         story: {
           italic: true,
@@ -303,9 +310,15 @@ export class PreviewFolhacargaPage {
       }
     }
     this.pdfObj = pdfMake.createPdf(docDefinition);
+    loading.dismiss(); // Filaliza LOADING
   } // Fim createPdf()
 
   viewPdf() {
+    let loading = this.loadingController.create({
+      content: 'Aguarde o carregamento...'
+    });
+    loading.present(); // Inicia LOADING
+
     if (this.plt.is('cordova')) {
       this.pdfObj.getBuffer((buffer) => {
         var blob = new Blob([buffer], { type: 'application/pdf' });
@@ -321,6 +334,7 @@ export class PreviewFolhacargaPage {
       // On a browser simply use download!
       this.pdfObj.download();
     }
+    loading.dismiss(); // Filaliza LOADING
   }
 
 

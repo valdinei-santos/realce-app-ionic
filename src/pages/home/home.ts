@@ -4,6 +4,7 @@ import { ListaPedidoPage} from '../lista-pedido/lista-pedido';
 import { ListaProdutoPage} from '../lista-produto/lista-produto';
 import { ListaClientePage} from '../lista-cliente/lista-cliente';
 import { ListaFolhacargaPage} from '../lista-folhacarga/lista-folhacarga';
+import { RelatoriosPage } from '../relatorios/relatorios';
 
 @Component({
   selector: 'page-home',
@@ -29,6 +30,10 @@ export class HomePage {
 
   folhasCarga(){
     this.navCtrl.push(ListaFolhacargaPage);
+  }
+
+  relatorios(){
+    this.navCtrl.push(RelatoriosPage);
   }
 
 }

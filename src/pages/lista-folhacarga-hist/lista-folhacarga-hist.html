@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar color="secondary">
+    <ion-title><h1>Histórico Folhas Carga</h1></ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item-sliding *ngFor="let folha of folhas">
+          <button ion-item (click)="showFolha(folha.id)">
+            <!-- <ion-icon name="information-circle" item-start *ngIf="folha.status == 'Pendente' " style="color:red;"></ion-icon>
+            <ion-icon name="checkmark-circle" item-start *ngIf="folha.status == 'Enviada' " style="color:blue;"></ion-icon>
+            <ion-icon name="lock" item-start *ngIf="folha.status == 'Entregue' " style="color:green;"></ion-icon> -->
+            <h2 text-wrap>Folha Carga: {{ folha.id }} - {{ folha.data | formatDate }} </h2>
+            <div *ngFor="let pedido of pedidos">
+              <h2 *ngIf="pedido.folha_carga_id == folha.id">Pedidos: {{ pedido.pedido_id }} </h2>
+            </div>
+            <h2><b ion-text color="danger">Total: {{ folha.total | number:'1.2-2' }}</b></h2>
+          </button>
+          <ion-item-options side="left">
+            <button ion-button color="danger" (click)="removeFolha(folha)">
+              <ion-icon name="trash"></ion-icon>
+              Excluir
+            </button>
+          </ion-item-options>
+          <!-- <ion-item-options side="right">
+            <button ion-button color="primary" (click)="editFolha(folha.id)">
+              <ion-icon name="document"></ion-icon>
+              Editar
+            </button>
+          </ion-item-options> -->
+    
+        </ion-item-sliding>
+    </ion-list>
+
+<!--     <ion-fab right bottom>
+        <button ion-fab color="secondary" (click)="addFolha()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab> -->
+</ion-content>

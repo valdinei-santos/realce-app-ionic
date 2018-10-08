@@ -202,6 +202,39 @@ export class FolhacargaProvider {
                           FROM folhas_carga f
                           JOIN folhas_carga_itens i
                             ON f.id = i.folha_carga_id) tab
+                    WHERE upper(tab.status) <> 'ENTREGUE'
+                    GROUP BY id, data, status
+                    ORDER BY data desc`;
+        return db.executeSql(sql, [])
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let folhas: any[] = [];
+              for (var i = 0; i < data.rows.length; i++) {
+                var folha = data.rows.item(i);
+                folhas.push(folha);
+              }
+              return folhas;
+            } else {
+              return [];
+            }
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
+  public getAll2_hist() {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = `SELECT id, data, status, sum(total) as total
+                    FROM (SELECT f.id, f.data, f.status, i.pedido_id,
+                                 (SELECT printf("%.2f",sum(valor_total)) as total 
+                                    FROM pedidos_itens 
+                                   WHERE pedido_id = i.pedido_id) as total
+                          FROM folhas_carga f
+                          JOIN folhas_carga_itens i
+                            ON f.id = i.folha_carga_id) tab
+                    WHERE upper(tab.status) = 'ENTREGUE'
                     GROUP BY id, data, status
                     ORDER BY data desc`;
         return db.executeSql(sql, [])

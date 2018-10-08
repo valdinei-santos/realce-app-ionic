@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title><h1>Relatórios</h1></ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="primary" full large round icon-left (click)="hist_pedidos()">
+          <ion-icon name="md-clipboard"></ion-icon>
+          Hist. Pedidos
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button color="secondary" full large round icon-left (click)="hist_folhasCarga()">
+          <ion-icon name="ios-bus"></ion-icon>
+          Hist. Folha Carga
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button color="light" full round icon-left (click)="gerarPdfPedidos()">
+          <ion-icon name="md-settings"></ion-icon>
+          PDF Pedidos
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button color="light" full round icon-left [disabled]="!pdfObj" (click)="viewPdfPedidos()">
+          <ion-icon name="md-print"></ion-icon>
+          Ver PDF
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col col-6>
+        <button ion-button color="light" full round icon-left (click)="exportDB()">
+          <ion-icon name="md-download"></ion-icon>
+          Export DB
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button color="light" full round icon-left [disabled]="true" (click)="alteraTabela()">
+          <ion-icon name="md-download"></ion-icon>
+          Alter DB
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <button ion-button secondary menuToggle>Toggle Menu</button> -->
+</ion-content>
+
