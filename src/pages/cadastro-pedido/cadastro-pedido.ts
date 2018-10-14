@@ -61,6 +61,7 @@ export class CadastroPedidoPage {
     this.model.valor_adicional = 0;
     this.model.valor_pago = 0;
     this.model.pago = 0;
+    this.model.avista = 0;
     this.model_produto = new Produto();
     this.model_cliente = new Cliente();
     this.model_item_pedido = new Item_pedido(); 
@@ -77,6 +78,8 @@ export class CadastroPedidoPage {
           this.ad = this.form.get('ad').value;
           this.form.get('valor_pago').setValue(this.model.valor_pago.toString().replace('.', ','));
           this.form.get('pago').setValue(this.model.pago);
+          this.form.get('avista').setValue(this.model.avista);
+          this.form.get('observacao').setValue(this.model.observacao);
           this.clienteProvider.get(this.model.cliente_id)
             .then((result: Cliente) => {
             this.model_cliente = result;
@@ -136,7 +139,9 @@ export class CadastroPedidoPage {
     return new FormGroup({
       ad: new FormControl(this.createMaskAd()),
       valor_pago : new FormControl(this.createMaskValorPago()),
-      pago: new FormControl(null)
+      pago: new FormControl(null),
+      avista: new FormControl(null),
+      observacao: new FormControl(null)
     });
   }
    
@@ -227,6 +232,10 @@ export class CadastroPedidoPage {
       this.toast.create({ message: 'Cliente é obrigatório!', duration: 3000, position: 'center' }).present();
       return null;
     }
+    if (this.itens === undefined || this.itens.length === 0) {
+      this.toast.create({ message: 'Nenhum produto adicionado!', duration: 3000, position: 'center' }).present();
+      return null;
+    }
     if (this.savePedido()) {
       this.toast.create({ message: 'Pedido salvo!', duration: 3000, position: 'center' }).present();
       this.navCtrl.pop();
@@ -242,6 +251,8 @@ export class CadastroPedidoPage {
     this.model.valor_pago = Number(this.form.get('valor_pago').value.replace(',','.'));
     this.model.valor_adicional = Number(this.form.get('ad').value.replace(',','.'));
     this.model.pago = Number(this.form.get('pago').value);
+    this.model.avista = Number(this.form.get('avista').value);
+    this.model.observacao = this.form.get('observacao').value;
 
     if (this.editando) {
       this.pedidoProvider.update(this.model);

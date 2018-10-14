@@ -10,10 +10,10 @@ constructor(private dbProvider: DatabaseProvider) { }
 public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = `insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago, pago) 
-                     values (?, ?, ?, ?, ?, ?, ?)`;
+        let sql = `insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago, pago, avista, observacao) 
+                     values (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         let data = [pedido.id, pedido.cliente_id, pedido.data, pedido.status, pedido.valor_adicional, 
-                    pedido.valor_pago, pedido.pago];
+                    pedido.valor_pago, pedido.pago, pedido.avista, pedido.observacao];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -45,9 +45,9 @@ public insert(pedido: Pedido) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         let sql = `update pedidos set cliente_id = ?, data = ?, status = ?, valor_adicional = ?, 
-                    valor_pago = ?, pago = ? where id = ?`;
+                    valor_pago = ?, pago = ?, avista = ?, observacao = ? where id = ?`;
         let data = [pedido.cliente_id, pedido.data, pedido.status, pedido.valor_adicional, 
-                    pedido.valor_pago, pedido.pago, pedido.id];
+                    pedido.valor_pago, pedido.pago, pedido.avista, pedido.observacao, pedido.id];
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
       })
@@ -118,7 +118,7 @@ public insert(pedido: Pedido) {
         let sql = `select id, cliente_id, data, status, 
                           printf("%.2f",valor_adicional) as valor_adicional, 
                           printf("%.2f",valor_pago) as valor_pago,
-                          pago
+                          pago, avista, observacao
                      from pedidos where id = ?`;
         let data = [id];
         return db.executeSql(sql, data)
@@ -142,7 +142,7 @@ public insert(pedido: Pedido) {
                           c.celular as cliente_celular, 
                           printf("%.2f",p.valor_adicional) as valor_adicional, 
                           printf("%.2f",p.valor_pago) as valor_pago,
-                          p.pago,
+                          p.pago, p.avista, p.observacao,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
                           (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
@@ -155,7 +155,7 @@ public insert(pedido: Pedido) {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
               let pedido = new Pedido2();
-              pedido.id = item.id;
+/*               pedido.id = item.id;
               pedido.cliente_id = item.cliente_id;
               pedido.cliente_nome = item.cliente_nome;
               pedido.cliente_endereco = item.cliente_endereco;
@@ -166,9 +166,41 @@ public insert(pedido: Pedido) {
               pedido.valor_adicional = item.valor_adicional;
               pedido.total_padrao = item.total_padrao;
               pedido.pago = item.pago;
+              pedido.avista = item.avista;
+              pedido.observacao = item.observacao; */
+              pedido = item;
               return pedido;
             }
             return null;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
+  public getListaPedidos(lista_pedidos: any[]) {
+    let lista: string = '0';
+    for (let el of lista_pedidos) {
+      lista = lista +','+el;
+    }
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql =`SELECT * 
+                    FROM pedidos 
+                   WHERE id in (${lista})
+                   ORDER BY id`;
+        return db.executeSql(sql, [])
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let itens: any[] = [];
+              for (var i = 0; i < data.rows.length; i++) {
+                var item = data.rows.item(i);
+                itens.push(item);
+              }
+              return itens;
+            } else {
+              return [];
+            }
           })
           .catch((e) => console.error(e));
       })
@@ -181,7 +213,7 @@ public insert(pedido: Pedido) {
         let sql = `SELECT id, cliente_id, data, status, 
                           printf("%.2f",valor_adicional) as valor_adicional, 
                           printf("%.2f",valor_pago) as valor_pago,
-                          pago
+                          pago, avista, observacao
                      FROM pedidos order by data desc`;
         return db.executeSql(sql, [])
           .then((data: any) => {
@@ -207,7 +239,7 @@ public insert(pedido: Pedido) {
         let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, 
                           printf("%.2f",p.valor_adicional) as valor_adicional, 
                           printf("%.2f",p.valor_pago) as valor_pago,
-                          p.pago,
+                          p.pago, p.avista, p.observacao,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
                           (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
@@ -239,7 +271,7 @@ public insert(pedido: Pedido) {
         let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, 
                           printf("%.2f",p.valor_adicional) as valor_adicional, 
                           printf("%.2f",p.valor_pago) as valor_pago,
-                          p.pago,
+                          p.pago, p.avista, p.observacao,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
                           (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
@@ -271,7 +303,7 @@ public insert(pedido: Pedido) {
         let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, 
                           c.endereco as cliente_endereco, c.celular as cliente_celular,
                           printf("%.2f",p.valor_adicional) as valor_adicional, 
-                          printf("%.2f",p.valor_pago) as valor_pago, p.pago,
+                          printf("%.2f",p.valor_pago) as valor_pago, p.pago, p.avista, p.observacao,
                           (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
                           (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
                      FROM pedidos p 
@@ -302,7 +334,7 @@ public insert(pedido: Pedido) {
       .then((db: SQLiteObject) => {
         let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, 
                           printf("%.2f",p.valor_adicional) as valor_adicional, 
-                          printf("%.2f",p.valor_pago) as valor_pago, p.pago,
+                          printf("%.2f",p.valor_pago) as valor_pago, p.pago, p.avista, p.observacao,
                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
                          ((select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) +
                            p.valor_adicional) as total_geral,
@@ -491,6 +523,8 @@ export class Pedido{
   valor_adicional: number;
   valor_pago: number;
   pago: number;
+  avista: number;
+  observacao: string;
 }
 
 export class Pedido2{
@@ -506,6 +540,8 @@ export class Pedido2{
   valor_adicional: number;
   valor_pago: number;
   pago: number;
+  avista: number;
+  observacao: string;
 }
 
 export class Item_pedido{

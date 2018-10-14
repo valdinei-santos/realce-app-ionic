@@ -27,7 +27,7 @@ export class ShowPedidoPage {
   total_geral: number = 0;
   dataAtual: Date;
   horaAtual: string;
-  pagoString: string;
+  //pagoString: string;
   pagePdf = { 
     'pedido_id': null, 
     'cliente_nome': null,
@@ -36,9 +36,13 @@ export class ShowPedidoPage {
     'data': null, 
     'status': null, 
     'pago': null,
-    'total': null 
+    'avista': null,
+    'observacao': null,
+    'total': null
   };
   pdfObj = null;
+  content: any[] = [];
+  docDefinition: any;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -96,7 +100,7 @@ export class ShowPedidoPage {
     });
     loading.present(); // Inicia LOADING
 
-    this.model.pago ? this.pagoString = 'Pago' : this.pagoString = '';
+    // this.model.pago ? this.pagoString = 'Pago' : this.pagoString = '';
     for (let el of this.itens) {
       let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null};
       item.id = el.id;
@@ -114,9 +118,40 @@ export class ShowPedidoPage {
       'data': this.formatDate.transform(this.model.data),
       'status': this.model.status,
       'pago': this.model.pago,
+      'avista': this.model.avista,
+      'observacao': this.model.observacao,
       'total': this.decimalPipe.transform(this.model.total, '1.2-2'),
     }
     this.horaAtual = this.getTimestamp();
+
+    let l1 = { text: 'DISTRIBUIDORA REALCE - PEDIDO', style: 'header' };
+    let l2 = { text: this.horaAtual, alignment: 'right' };
+    let l3 = { text: 'PEDIDO: ' + this.pagePdf.pedido_id + 
+                     ' -- DATA: ' + this.pagePdf.data +
+                     ' -- STATUS: ' + this.pagePdf.status, style: 'subheader' };
+    let l4 = { text: 'CLIENTE: ' + this.pagePdf.cliente_nome + 
+                     ' -- CEL: ' + this.pagePdf.cliente_celular, style: 'subheader' };
+    let l5 = { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' };
+    let l6 = table(this.itens2, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']);
+    let l7 = { text: 'Observação: ' + this.pagePdf.observacao, style: 'subheader' };
+    let l8;
+    if (this.model.pago) {
+      l8 = { text: 'TOTAL: ' + this.pagePdf.total + '  Pago', style: 'subheader' };
+    } else if (this.model.avista) {
+      l8 = { text: 'TOTAL: ' + this.pagePdf.total + '  Cobrar na Entrega', style: 'subheader' };
+    } else {
+      l8 = { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' };
+    }
+    this.content.push(l1);
+    this.content.push(l2);
+    this.content.push(l3);
+    this.content.push(l4);
+    this.content.push(l5);
+    this.content.push(l6);
+    if (this.pagePdf.observacao !== '' && this.pagePdf.observacao !== undefined) {
+      this.content.push(l7);
+    }
+    this.content.push(l8);
 
     function buildTableBody(data, columns) {
       var body = [];
@@ -140,25 +175,8 @@ export class ShowPedidoPage {
       };
     }
 
-    var docDefinition = {
-      content: [
-        { text: 'DISTRIBUIDORA REALCE - PEDIDO', style: 'header' },
-        { text: this.horaAtual, alignment: 'right' },
-        { text: 'PEDIDO: ' + this.pagePdf.pedido_id + 
-                ' -- DATA: ' + this.pagePdf.data +
-                ' -- STATUS: ' + this.pagePdf.status, style: 'subheader' },
-        { text: 'CLIENTE: ' + this.pagePdf.cliente_nome + 
-                ' -- CEL: ' + this.pagePdf.cliente_celular, style: 'subheader' },
-        { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' },
-        /* { text: 'CLIENTE: ' + this.pagePdf.cliente_nome, style: 'subheader' },
-        { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' },
-        { text: 'CELULAR: ' + this.pagePdf.cliente_celular, style: 'subheader' },
-        { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
-        { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' }, 
-        ' ',*/
-        table(this.itens2, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']),
-        { text: 'TOTAL: ' + this.pagePdf.total + '  ' + this.pagoString, style: 'subheader' },
-      ],
+    this.docDefinition = {
+      content: [this.content],
       styles: {
         header: {
           fontSize: 17,
@@ -185,7 +203,7 @@ export class ShowPedidoPage {
 
       }
     }
-    this.pdfObj = pdfMake.createPdf(docDefinition);
+    this.pdfObj = pdfMake.createPdf(this.docDefinition);
     loading.dismiss(); // Filaliza LOADING
   } // Fim createPdf()
 
@@ -200,9 +218,9 @@ export class ShowPedidoPage {
  
         // Save the PDF to the data Directory of our App 
         // Gera em /data/data/br.com.valdinei.realceapp/files
-        this.file.writeFile(this.file.dataDirectory, 'pedido_'+this.model.id+'.pdf', blob, { replace: true }).then(fileEntry => {
+        this.file.writeFile(this.file.externalDataDirectory, 'pedido_'+this.model.id+'.pdf', blob, { replace: true }).then(fileEntry => {
           // Open the PDf with the correct OS tools
-          this.fileOpener.open(this.file.dataDirectory + 'pedido_'+this.model.id+'.pdf', 'application/pdf');
+          this.fileOpener.open(this.file.externalDataDirectory + 'pedido_'+this.model.id+'.pdf', 'application/pdf');
         })
       });
     } else {

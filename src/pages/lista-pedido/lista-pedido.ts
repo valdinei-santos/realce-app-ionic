@@ -20,7 +20,8 @@ export class ListaPedidoPage {
   pedido2: Pedido2 = new Pedido2(); 
   pedidos: any[];
   pedidos2: any[];
-  cliente: Cliente = new Cliente(); //{nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
+  cliente: Cliente = new Cliente(); 
+  qtd_pedidos: number = 0;
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -32,7 +33,8 @@ export class ListaPedidoPage {
   ionViewDidEnter() {
   	this.pedidoProvider.getAll2()
       .then((result: any[]) => {
-        this.pedidos2 = result;  
+        this.pedidos2 = result;
+        this.qtd_pedidos = this.pedidos2.length;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar pedidos!!!', duration: 3000, position: 'botton' }).present();

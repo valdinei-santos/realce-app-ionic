@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
 
-import { PedidoProvider, PedidoAllItens, PedidoAllItens2 } from '../../providers/pedido/pedido';
+import { PedidoProvider, PedidoAllItens, PedidoAllItens2, Pedido } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
-import { Folhacarga, FolhacargaProvider, Folhacarga2, Folhacarga3 } from '../../providers/folhacarga/folhacarga';
+import { Folhacarga, FolhacargaProvider, Folhacarga3 } from '../../providers/folhacarga/folhacarga';
 import { FormatDatePipe } from '../../pipes/format-date/format-date';
 import { DecimalPipe } from '@angular/common';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { timestamp } from 'rxjs/operator/timestamp';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @IonicPage()
@@ -21,6 +22,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class PreviewFolhacargaPage {
 
   model: Folhacarga;
+  pedidos2: Pedido[];
   itens: PedidoAllItens[] = [];
   itens2: PedidoAllItens2[] = [];
   lista_pedidos: any[] = [];
@@ -35,6 +37,8 @@ export class PreviewFolhacargaPage {
   horaAtual: string;
   pagePdf: Folhacarga3;
   pdfObj = null;
+  content: any[] = [];
+  docDefinition: any;
 
 
   constructor(public navCtrl: NavController, 
@@ -88,6 +92,21 @@ export class PreviewFolhacargaPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
     });
+    console.log('Antes getListaPedidos');
+    this.pedidoProvider.getListaPedidos(this.lista_pedidos)
+      .then((result: Pedido[]) => {
+        let itens: Pedido[] = [];
+        result.forEach(function(el) {
+          if (el.observacao !== null) {
+            itens.push(el);
+          }
+        });
+        itens.sort;
+        this.pedidos2 = itens;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar pedidos.', duration: 3000, position: 'botton' }).present();
+      })
   }
 
   ionViewWillEnter(){
@@ -246,6 +265,33 @@ export class PreviewFolhacargaPage {
       'desconto': this.decimalPipe.transform(Number(this.total_geral) - Number(this.total_geral_padrao), '1.2-2'),
     }
     this.horaAtual = this.getTimestamp();
+
+    let l1 = { text: 'DISTRIBUIDORA REALCE - FOLHA DE CARGA', style: 'header' };
+    let l2 = { text: this.horaAtual, alignment: 'right' };
+    let l3 = { text: 'FOLHA CARGA: ' + this.pagePdf.id +
+                     ' -- ' + 'DATA: ' + this.pagePdf.data +
+                     ' -- ' + 'STATUS: ' + this.pagePdf.status, style: 'subheader' };
+    let l4 = { text: 'PEDIDOS: ' + this.pagePdf.pedidos, style: 'subheader' };
+    let l5 = ' ';
+    let l6 = table(this.itens2, ['produto_id', 'nome_produto', 'quantidade', 'valor']);
+    let l7 = { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' };
+    let l8 = { text: 'DESC: ' + this.pagePdf.desconto, style: 'subheader' };
+
+    this.content.push(l1);
+    this.content.push(l2);
+    this.content.push(l3);
+    this.content.push(l4);
+    this.content.push(l5);
+    this.content.push(l6);
+    for (let el of this.pedidos2) {
+      this.content.push({ text: 'Pedido ' + el.id + ': ' + el.observacao, style: 'subheader' });
+    }
+    /* this.pedidos2.forEach(function(el) {
+      this.content.push({ text: 'Pedido ' + el.id + ': ' + el.observacao, style: 'subheader' });
+    }); */
+    this.content.push(l7);
+    this.content.push(l8);
+
     function buildTableBody(data, columns) {
       var body = [];
       body.push(['ID', 'Produto', 'Quant.', 'Total']);
@@ -268,21 +314,8 @@ export class PreviewFolhacargaPage {
       };
     }
 
-    var docDefinition = {
-      content: [
-        { text: 'DISTRIBUIDORA REALCE - FOLHA DE CARGA', style: 'header' },
-        { text: this.horaAtual, alignment: 'right' },
-        { text: 'FOLHA CARGA: ' + this.pagePdf.id +
-                ' -- ' + 'DATA: ' + this.pagePdf.data +
-                ' -- ' + 'STATUS: ' + this.pagePdf.status, style: 'subheader' },
-        /* { text: 'DATA: ' + this.pagePdf.data, style: 'subheader' },
-        { text: 'STATUS: ' + this.pagePdf.status, style: 'subheader' }, */
-        { text: 'PEDIDOS: ' + this.pagePdf.pedidos, style: 'subheader' },
-        ' ',
-        table(this.itens2, ['produto_id', 'nome_produto', 'quantidade', 'valor']),
-        { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' },
-        { text: 'DESC: ' + this.pagePdf.desconto, style: 'subheader' },
-      ],
+    this.docDefinition = {
+      content: [this.content],
       styles: {
         header: {
           fontSize: 17,
@@ -309,7 +342,7 @@ export class PreviewFolhacargaPage {
 
       }
     }
-    this.pdfObj = pdfMake.createPdf(docDefinition);
+    this.pdfObj = pdfMake.createPdf(this.docDefinition);
     loading.dismiss(); // Filaliza LOADING
   } // Fim createPdf()
 
@@ -325,9 +358,9 @@ export class PreviewFolhacargaPage {
  
         // Save the PDF to the data Directory of our App 
         // Gera em /data/data/br.com.valdinei.realceapp/files
-        this.file.writeFile(this.file.dataDirectory, 'folha_'+this.model.id+'.pdf', blob, { replace: true }).then(fileEntry => {
+        this.file.writeFile(this.file.externalDataDirectory, 'folha_'+this.model.id+'.pdf', blob, { replace: true }).then(fileEntry => {
           // Open the PDf with the correct OS tools
-          this.fileOpener.open(this.file.dataDirectory + 'folha_'+this.model.id+'.pdf', 'application/pdf');
+          this.fileOpener.open(this.file.externalDataDirectory + 'folha_'+this.model.id+'.pdf', 'application/pdf');
         })
       });
     } else {

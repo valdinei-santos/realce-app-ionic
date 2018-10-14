@@ -22,7 +22,10 @@
         <h2 text-wrap>Quant.: <b ion-text color="danger">{{ item.quantidade }} </b>
             Total: <b ion-text color="danger">{{ item.valor | number:'1.2-2' }}</b>
         </h2>
-      </ion-item>  
+      </ion-item>
+      <ion-item *ngFor="let pedido of pedidos2" no-lines>
+        <h2>Pedido {{pedido.id}} - {{pedido.observacao}}</h2>
+      </ion-item>
       <ion-item>
         <h2>Total: <b ion-text color="danger">{{ total_geral | number:'1.2-2' }}</b></h2>
         <h2>Desc: <b ion-text color="danger">{{ total_geral - total_geral_padrao | number:'1.2-2' }}</b></h2>

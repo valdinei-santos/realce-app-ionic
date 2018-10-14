@@ -12,24 +12,37 @@
       <h2>Celular: <b ion-text color="primary">{{model.cliente_celular}}</b></h2>
       <h2>Data: <b ion-text color="primary">{{model.data| formatDate}}</b></h2>
       <h2>Status: <b ion-text color="primary">{{model.status}}</b></h2>
+      <h1>Produtos:</h1>
     </div>
   </div>
-  <div ion-row>
+<!--   <div ion-row>
     <br>
-    <h1>Produtos:</h1>
-    <ion-list>
-      <ion-item *ngFor="let item of itens">
-        <span ion-text color="danger">{{ item.nome_produto }} </span>
-        <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
-            Preço: <b ion-text color="danger">{{ item.valor_unitario| number:'1.2-2' }}</b>
-            Total: <b ion-text color="danger">{{ item.valor_total | number:'1.2-2' }}</b></h2>
-      </ion-item>  
-      <ion-item>
-        <h2><b>Total:</b> <b ion-text color="danger"> {{ total.toFixed(2) | number:'1.2-2' }}</b> </h2>
-        <h2><b>A/D:</b> <b ion-text color="danger"> {{ model.valor_adicional | number:'1.2-2' }}</b> </h2>
-        <h2><b>Total Geral:</b> <b ion-text color="danger"> {{ total_geral | number:'1.2-2' }}</b> </h2>
-      </ion-item>
-    </ion-list>
+    <div ion-col-12>
+      <h1>Produtos:</h1>
+   </div>
+  </div> -->
+  <div ion-row>
+    <div ion-col-12>
+      <ion-list>
+        <ion-item *ngFor="let item of itens">
+          <span ion-text color="danger">{{ item.nome_produto }} </span>
+          <h2>Quant.: <b ion-text color="danger">{{ item.quantidade }}</b>
+              Preço: <b ion-text color="danger">{{ item.valor_unitario| number:'1.2-2' }}</b>
+              Total: <b ion-text color="danger">{{ item.valor_total | number:'1.2-2' }}</b></h2>
+        </ion-item>  
+        <ion-item *ngIf="model.observacao">
+          <h2><b>{{model.observacao}}</b></h2>
+        </ion-item>
+        <ion-item>
+          <h2><b>Total:</b> <b ion-text color="danger"> {{ total.toFixed(2) | number:'1.2-2' }}</b> </h2>
+          <h2><b>A/D:</b> <b ion-text color="danger"> {{ model.valor_adicional | number:'1.2-2' }}</b> </h2>
+          <h2><b>Total Geral:</b> <b ion-text color="danger"> {{ total_geral | number:'1.2-2' }}</b> </h2>
+        </ion-item>
+        <ion-item *ngIf="model.avista === 1">
+          <h2><b>Cobrar na entrega</b></h2>
+        </ion-item>
+      </ion-list>
+    </div>
   </div>
   <button ion-button full (click)="createPdf()">Gerar PDF</button>
   <br>

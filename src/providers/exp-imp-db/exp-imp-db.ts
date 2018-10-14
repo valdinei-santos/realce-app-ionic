@@ -45,7 +45,12 @@ export class ExpImpDbProvider {
     console.log('alterTable');
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        return db.executeSql('ALTER TABLE pedidos ADD pago INTEGER default 0', {})
+        db.executeSql('ALTER TABLE pedidos ADD avista INTEGER default 0', {})
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((e) => console.error(e));
+        return db.executeSql('ALTER TABLE pedidos ADD observacao varchar(80)', {})
           .then((data) => {
             console.log(data);
           })

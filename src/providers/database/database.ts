@@ -43,13 +43,15 @@ const DATABASES_TABLES = [
                                          ativo INTEGER default 1
                                         )`,
   //`CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT,
-  `CREATE TABLE IF NOT EXISTS pedidos (id NOT NULL,
+  `CREATE TABLE IF NOT EXISTS pedidos (id INTEGER NOT NULL,
                                        cliente_id INTEGER,
                                        data TEXT,
                                        status VARCHAR(30),
                                        valor_adicional NUMERIC(10,2),
                                        valor_pago NUMERIC(10,2),
-                                       pago INTEGER default 0
+                                       pago INTEGER default 0,
+                                       avista INTEGER default 0,
+                                       observacao VARCHAR(80)
                                       )`,
   `CREATE TABLE IF NOT EXISTS pedidos_itens (id INTEGER PRIMARY KEY AUTOINCREMENT,
                                               pedido_id INTEGER,
@@ -77,655 +79,529 @@ const DATABASES_TABLES = [
 
 
 const UNIDADES = [
-  ['insert into produtos_categoria (nome) values (?)', ['Cervejas']],  // 1
-  ['insert into produtos_categoria (nome) values (?)', ['Refri e Similares']],   // 2
-  ['insert into produtos_categoria (nome) values (?)', ['Destilados']],   // 3
-  ['insert into produtos_categoria (nome) values (?)', ['Descartáveis']],   // 4
-  /*
-  ['insert into produtos_categoria (nome) values (?)', ['Chá']],    // 4
-  ['insert into produtos_categoria (nome) values (?)', ['Agua de Coco']],  // 5
-  ['insert into produtos_categoria (nome) values (?)', ['Chocoleite']],    // 6
-  ['insert into produtos_categoria (nome) values (?)', ['Isotônico']],     // 7
-  ['insert into produtos_categoria (nome) values (?)', ['Energético']],    // 8
-  ['insert into produtos_categoria (nome) values (?)', ['Cerveja']],       // 9
-  ['insert into produtos_categoria (nome) values (?)', ['Vinho']],         // 10
-  ['insert into produtos_categoria (nome) values (?)', ['Cana']],          // 11
-  ['insert into produtos_categoria (nome) values (?)', ['Whisky']],        // 12
-  ['insert into produtos_categoria (nome) values (?)', ['Vodka']],         // 13
-  ['insert into produtos_categoria (nome) values (?)', ['Conhaque']],      // 14
-  ['insert into produtos_categoria (nome) values (?)', ['Caipira']],       // 15
-  ['insert into produtos_categoria (nome) values (?)', ['Vermuth']],       // 16
-  ['insert into produtos_categoria (nome) values (?)', ['Maracuja']],      // 17
-  ['insert into produtos_categoria (nome) values (?)', ['Batida']],        // 18
-  ['insert into produtos_categoria (nome) values (?)', ['Canelinha']],     // 19
-  ['insert into produtos_categoria (nome) values (?)', ['Raiz Amarga']],   // 20
-  ['insert into produtos_categoria (nome) values (?)', ['Menta']],         // 21
-  ['insert into produtos_categoria (nome) values (?)', ['Catuaba']],       // 22
-  ['insert into produtos_categoria (nome) values (?)', ['Bitter']],        // 23
-  ['insert into produtos_categoria (nome) values (?)', ['Underberg']],     // 24
-  ['insert into produtos_categoria (nome) values (?)', ['Steinharcer']],   // 25
-  ['insert into produtos_categoria (nome) values (?)', ['Martini']],       // 26
-  ['insert into produtos_categoria (nome) values (?)', ['Camapari']],      // 27
-  ['insert into produtos_categoria (nome) values (?)', ['Tequila']],       // 28
-  ['insert into produtos_categoria (nome) values (?)', ['Montila']],       // 29
-  ['insert into produtos_categoria (nome) values (?)', ['Bacardi']],       // 30
-  ['insert into produtos_categoria (nome) values (?)', ['Copo']],          // 31
-  
-*/
-  
-  ['insert into produtos_vasilhame (nome) values (?)', ['220ml']],  // 1
-  ['insert into produtos_vasilhame (nome) values (?)', ['310ml']],  // 2 
-  ['insert into produtos_vasilhame (nome) values (?)', ['350ml']],  // 3
-  ['insert into produtos_vasilhame (nome) values (?)', ['473ml']],  // 4
-  ['insert into produtos_vasilhame (nome) values (?)', ['255ml']],  // 5
-  ['insert into produtos_vasilhame (nome) values (?)', ['275ml']],  // 6
-  ['insert into produtos_vasilhame (nome) values (?)', ['300ml']],  // 7
-  ['insert into produtos_vasilhame (nome) values (?)', ['330ml']],  // 8
-  ['insert into produtos_vasilhame (nome) values (?)', ['355ml']],  // 9
-  ['insert into produtos_vasilhame (nome) values (?)', ['550ml']],  // 10
-  ['insert into produtos_vasilhame (nome) values (?)', ['600ml']],  // 11
-  ['insert into produtos_vasilhame (nome) values (?)', ['1LT']],    // 12
-  ['insert into produtos_vasilhame (nome) values (?)', ['1,5LT']],  // 13
-  ['insert into produtos_vasilhame (nome) values (?)', ['2LT']],    // 14
-  ['insert into produtos_vasilhame (nome) values (?)', ['290ml']],  // 15
-  ['insert into produtos_vasilhame (nome) values (?)', ['450ml']],  // 16
-  ['insert into produtos_vasilhame (nome) values (?)', ['250ml']],  // 17
-  ['insert into produtos_vasilhame (nome) values (?)', ['200ml']],  // 18
-  ['insert into produtos_vasilhame (nome) values (?)', ['500ml']],  // 19
-  ['insert into produtos_vasilhame (nome) values (?)', ['Caixinha']],  // 20
-  ['insert into produtos_vasilhame (nome) values (?)', ['5LT']],    // 21
-  ['insert into produtos_vasilhame (nome) values (?)', ['20LT']],   // 22
-  ['insert into produtos_vasilhame (nome) values (?)', ['750ml']],   // 23
-  ['insert into produtos_vasilhame (nome) values (?)', ['313ml']],   // 24
-  ['insert into produtos_vasilhame (nome) values (?)', ['269ml']],   // 25
-
-
-  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 12 un.']],  // 1
-  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 24 un.']],  // 2
-  ['insert into produtos_unidade_venda (nome) values (?)', ['DZ']],         // 3
-  ['insert into produtos_unidade_venda (nome) values (?)', ['PC 6 un.']],   // 4
-  ['insert into produtos_unidade_venda (nome) values (?)', ['PC 8 un.']],   // 5
-  ['insert into produtos_unidade_venda (nome) values (?)', ['UN']],         // 6
-  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 25 un.']],  // 7
-  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 23 un.']],  // 8
-  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 30 un.']],  // 9
-  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 48 un.']],  // 10
-  ['insert into produtos_unidade_venda (nome) values (?)', ['CX 27 un.']],  // 11
-  ['insert into produtos_unidade_venda (nome) values (?)', ['PC 4 un.']],   // 12
-  ['insert into produtos_unidade_venda (nome) values (?)', ['TIRA C/100 un.']],  // 13
-  ['insert into produtos_unidade_venda (nome) values (?)', ['TIRA C/50 un.']],   // 14
-  ['insert into produtos_unidade_venda (nome) values (?)', ['TIRA C/25 un.']],   // 15
-  ['insert into produtos_unidade_venda (nome) values (?)', ['TIRA C/10 un.']],   // 16
-  ['insert into produtos_unidade_venda (nome) values (?)', ['PC']],   // 17
-
-
+  ["INSERT OR REPLACE INTO produtos_categoria (id,nome) VALUES ('1','Cervejas')"],
+  ["INSERT OR REPLACE INTO `produtos_categoria`(id,nome) VALUES ('2','Refri e Similares')"],
+  ["INSERT OR REPLACE INTO `produtos_categoria`(id,nome) VALUES ('3','Destilados')"],
+  ["INSERT OR REPLACE INTO `produtos_categoria`(id,nome) VALUES ('4','Descartáveis')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('1','220ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('2','310ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('3','350ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('4','473ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('5','255ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('6','275ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('7','300ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('8','330ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('9','355ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('10','550ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('11','600ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('12','1LT')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('13','1,5LT')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('14','2LT')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('15','290ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('16','450ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('17','250ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('18','200ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('19','500ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('20','Caixinha')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('21','5LT')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('22','20LT')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('23','750ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('24','313ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('25','269ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('26','470ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('27','460ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('28','260ml')"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('29',NULL)"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('30',NULL)"],
+  ["INSERT OR REPLACE INTO `produtos_vasilhame`(id,nome) VALUES ('31','400ml ')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('1','CX 12 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('2','CX 24 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('3','DZ')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('4','PC 6 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('5','PC 8 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('6','UN')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('7','CX 25 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('8','CX 23 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('9','CX 30 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('10','CX 48 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('11','CX 27 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('12','PC 4 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('13','TIRA C/100 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('14','TIRA C/50 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('15','TIRA C/25 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('16','TIRA C/10 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('17','PC')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('18',NULL)"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('19','CX 6 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('20','CX 15 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('21','13 un.')"],
+  ["INSERT OR REPLACE INTO `produtos_unidade_venda`(id,nome) VALUES ('22','CX 13 un.')"],
 ];
 
-/* const PRODUTOS = [
-    ['insert into produtos_categoria (nome) values (?)', ['Cerveja garrafa 600ml']],
-    ['insert into produtos_categoria (nome) values (?)', ['Cerveja Lata 355ml']],
-    ['insert into produtos_categoria (nome) values (?)', ['Cerveja Longneck 350ml']]
-]; */
 const PRODUTOS = [
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('1','Cerveja garrafa Brahma','1','11','2','142.8','1',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('2','Cerveja garrafa Skol','1','11','2','142.8','1',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('3','Cerveja garrafa Antártica','1','11','2','135.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('4','Cerveja garrafa Antartica Sub Zero','1','11','2','123.6','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('5','Cerveja garrafa Original','1','11','2','171.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('6','Cerveja garrafa Brahma Extra','1','11','2','171.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('7','Cerveja garrafa Bohemia','1','11','2','171.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('8','Cerveja garrafa Heineken','1','11','2','171.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('9','Cerveja garrafa Budweiser','1','11','2','171.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('10','Cerveja garrafa Nova Schin','1','11','2','77.4','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('11','Cerveja garrafa Eisembahn','1','11','2','158','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('12','Cerveja garrafa Pilsen','1','11','2','70','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('13','Cerveja garrafa Burguesa','1','11','2','90','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('14','Cerveja garrafa Brahma Malzebier','1','11','2','171.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('15','Cerveja garrafa Nova Schin Malzebier','1','11','2','96','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('16','Cerveja garrafa Pilsen Malzebier','1','11','2','144','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('17','Cerveja Litrão Schin','1','12','1','56','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('18','Cerveja Litrão Brahma','1','12','1','78.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('19','Cerveja Litrão Skol','1','12','1','74.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('20','Cerveja long neck Skol','1','9','2','86.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('21','Cerveja long neck Brahma','1','9','2','86.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('22','Cerveja long neck Eisembahn','1','9','2','93.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('23','Cerveja long neck Bohemia','1','9','2','93.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('24','Cerveja long neck Heineken','1','9','2','93.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('25','Cerveja long neck Stella','1','9','2','93.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('26','Cerveja long neck Budweiser','1','9','2','93.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('27','Cerveja long neck Corona','1','9','2','144','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('28','Cerveja long neck Schin Malzebier','1','9','1','31','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('29','Cerveja long neck Brahma Malzebier','1','9','2','96.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('30','Cerveja long neck Skol Beats','1','9','2','119','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('31','Cerveja Skol Profissa','1','7','8','43.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('32','Cerveja Brahma Profissa','1','7','8','43.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('33','Cerveja lata Skol','1','3','3','28.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('34','Cerveja lata Brahma','1','3','3','28.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('35','Cerveja lata Antartica','1','3','3','25.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('36','Cerveja lata Antartica Sub Zero','1','3','3','24.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('37','Cerveja lata Schin','1','3','3','22.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('38','Cerveja lata Bohemia','1','3','3','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('39','Cerveja lata Budweiser','1','3','3','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('40','Cerveja lata Heineken','1','3','3','43.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('41','Cerveja lata Burguesa','1','3','3','23','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('42','Cerveja lata Brahma S/ Alcool','1','3','3','35.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('43','Cerveja lata Schin sem Alcool','1','3','3','32','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('44','Cerveja lata Pilsen Preta','1','3','3','27.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('45','Cerveja lata Amstel','1','3','3','31.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('46','Skol Beats Lata','1','25','5','31','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('47','Refri Pureza Garrafa','2','11','2','47.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('48','Refri KS Coca Cola','2','15','2','42.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('49','Refri KS Guarana','2','15','2','42.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('50','Refri KS Pureza','2','15','2','37.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('51','Refri Laranjinha água da serra','2','18','9','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('52','Refri Purezinha','2','18','9','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('53','Refri Coca Cola','2','14','5','48.7','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('54','Refri Guarana','2','14','4','31.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('55','Refri Pureza','2','14','4','28.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('56','Refri lata Coca Cola zero','2','3','3','27.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('57','Refri Max Wilheln guarana ','2','14','5','29.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('58','Refri Agua da Serra laranjinha','2','14','4','26.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('59','Refri Capricho','2','14','4','18.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('60','Refri Coca Cola','2','13','5','37.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('63','Refri Pureza','2','12','3','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('64','Refri Agua da Serra','2','12','3','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('65','Refri Coca Cola','2','11','3','39.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('66','Refri Guarana','2','11','3','39.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('67','Refri Pureza','2','11','3','32.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('68','Refri Pureza','2','3','3','29.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('69','Refri lata Coca Cola','2','3','3','27.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('70','Refri lata Guarana','2','3','3','27.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('71','Refri Schweppes Citrus Lata','2','3','3','33.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('72','Suco Sufrech Lata uva','2','8','3','36.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('73','Suco Skinka Pet','2','16','3','28.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('74','Suco Tily cítrico ','2','16','3','12.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('75','Suco Sufrech LT uva','2','12','3','56.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('77','Refri Coca Cola juninho','2','17','3','16.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('78','Mate Leão copo limão','2','18','3','26.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('80','Chocoleite','2','18','10','79.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('81','Chocoleite','2','27','1','46.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('82','Chocoleite','2','20','11','29.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('83','Chocoleite','2','28','2','59.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('84','Chocoleite Oni Way','2',NULL,'2','62.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('86','Agua Sem Gás Sta Catarina','2','19','3','12.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('87','Agua Com Gás Sta Catarina','2','19','3','13.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('88','Agua fonte life Sem Gás','2','19','3','11.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('89','Agua fonte life Com Gás','2','19','3','12.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('91','Agua fonte Life ','2','13','3','23.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('92','Agua 5lts ','2','21','12','14.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('93','Agua Bombona','2','22','6','8.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('94','Agua H2o limão ','2','19','3','33.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('96','Agua de côco caixinha ','2','18','2','47.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('97','Gatorade laranja','2','19','4','25.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('98','Energetico Red Horse','2','6','3','3.2','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('99','Energetico Red Horse','2','12','4','7.3','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('100','Energetico Red Horse','2','14','4','8.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('101','Energetico Red Horse Lata','2','9','3','3.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('102','Energetico Baly','2','12','4','7.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('103','Energetico Baly','2','17','3','3.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('104','Energetico Baly','2','14','4','9.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('105','Energetico lata Baly','2','9','3','4.2','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('106','Energetico Red Bull Lata','2','9','6','6.95','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('107','Energetico Safadao','2','14','4','5.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('110','Vinho Vô Luiz garrafão tinto suave','3','21','6','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('111','Cana Garrafao','3','21','6','19.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('113','Vinho Campo Largo tinto seco','3','12','6','9.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('114','Vinho Campo Largo Pessego','3','12','6','14.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('115','Vinho salton tinto suave ','3','12','6','29.6','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('116','Vinho Vô Luiz tinto suave ','3','12','6','11.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('117','Vinho sangue da Uva tinto suave ','3','12','6','8.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('118','Vinho Randon tinto suave ','3','12','6','8.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('119','Espumante Lunnar','3','23','6','21.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('121','Espumante Salton moscatel ','3','23','6','33.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('122','Espumante Terra Nova moscatel ','3','23','6','33.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('123','Espumante Sem Alcool','3','23','6','18.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('124','Sidra','3','23','6','6.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('125','Abcinto','3',NULL,'6','39.2','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('126','Amarula','3','12','6','89.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('127','Marula','3',NULL,'6','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('128','Bacardi carta Blanca ','3','12','6','32.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('129','Bacardi Big Apple','3','12','6','33.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('130','Bacardi Limao','3','12','6','35.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('132','Bitter Pingo de Ouro','3','12','6','6.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('133','Butia Litro','3',NULL,'6','6.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('134','Caipira PVC','3',NULL,'6','5.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('136','Campari','3','12','6','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('137','Cana 51','3',NULL,'6','7.2','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('138','Cana 51 Ouro','3','12','6','11.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('139','Cana Ypioca Prata','3','12','6','14.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('140','Cana Ypioca palha','3','12','6','15.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('141','Cana Ypioca Lemon','3','12','6','26.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('142','Cana Ypioca Organica','3','12','6','15.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('143','Cana Ypioca Ouro','3','12','6','14.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('145','Cana Velho Barreiro','3','12','6','7.2','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('146','Cana Velho Barreiro Gold','3','12','6','11.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('147','Cana Velho Barreiro Limao','3','12','6','12.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('149','Canelinha Pingo de Ouro','3','12','6','6.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('150','Catuaba Pingo de Ouro','3','12','6','6.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('151','Catuaba Selvagem','3','12','6','13.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('152','Catuaba Açai Pingo de Ouro','3','12','6','7.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('153','Conhaque Alcatrão ','3','12','6','16.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('154','Conhaque Delber','3','12','6','5.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('155','Conhaque Domecq','3','12','6','35.6','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('156','Conhaque Dreher','3','12','6','13.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('157','Gin','3','12','6','26.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('159','Licor de Cacau','3',NULL,'6','30.75','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('160','Malibu','3','12','6','54.6','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('161','Batida de maracujá Joinville','3','12','6','10.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('162','Batida de maracujá Pingo de Ouro','3','12','6','7.2','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('163','Martine','3','12','6','26.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('164','Menta Vidro','3','12','6','6.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('165','Montila','3','12','6','28.6','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('166','Montila Limao','3','12','6','28.6','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('169','Undemberger','3','12','6','42.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('171','Jagermeister','3',NULL,'6','89','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('172','Valverde','3',NULL,'6','17','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('173','Vermuth Urú','3','12','6','7.2','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('174','Tequila José Cuervo Ouro','3','12','6','96','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('175','Tequila José Cuervo Prata','3','12','6','96','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('176','Tequileiro Ouro ','3','12','6','56','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('177','Júrupinga','3','12','6','21.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('178','Júrodrinks','3','12','6','8.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('179','Cana 3 Pipa','3','12','3','48.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('180','Cana Serra Azul','3','12','3','49.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('181','Cana Kreff','3','12','3','34.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('182','Vodka Absolut','3','12','6','89.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('183','Vodka Natasha','3','12','6','16.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('184','Vodka Orloff','3','12','6','26.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('186','Vodka Valessa','3','12','6','11.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('187','Vodka Raiska','3','12','6','16.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('188','Vodka Raiska Limao','3','12','6','18.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('189','Vodka Raiska Apple','3','12','6','19.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('190','Vodka Sky','3','12','6','36.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('191','Vodka Smirnoff','3','12','6','36.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('192','Vodka Belkoff Vidro','3','12','6','6.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('193','Vodka Kisla','3','12','6','9.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('195','Vodka Smirnoff Ice','3','3','6','5.6','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('196','Vodka Kisla Ice','3','3','4','3.2','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('197','Whisky Cavalo Branco','3','12','6','89.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('198','Whisky Johnnie Walker Black','3','12','6','155','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('199','Whisky Johnnie Walker Red','3','12','6','93.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('200','Whisky Jack Danils','3','12','6','139.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('201','Whisky Balantaimes','3','12','6','89.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('202','Whisky Drurys','3','12','6','29.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('203','Whisky Nattu Nobilis','3','12','6','32.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('204','Whisky Bells','3','12','6','46.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('205','Whisky Old Eight','3','12','6','38.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('206','Whisky Passport','3','12','6','46.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('207','Whisky Black Stone','3','12','6','16.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('208','Quentao Litro','3',NULL,'6','9.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('209','Saque','3',NULL,'6','35.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('210','Copo PVC 180ml','4',NULL,'13','4.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('211','Copo PVC 300ml','4',NULL,'13','6.25','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('212','Copo PVC 400ml','4',NULL,'14','7.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('213','Copo PVC 500ml','4',NULL,'14','7.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('214','Copo PVC 700ml','4',NULL,'14','8.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('215','Copo Isopor','4',NULL,'15','3.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('216','Copo Acrilico','4',NULL,'16','7.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('217','Copo Cerveja Grosso','4',NULL,'2','29.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('218','Copo Buteco','4',NULL,'2','39.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('219','Copo Cerveja Peq.Fino','4',NULL,'2','84.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('220','Copo de Pinga fundo Grosso ','4',NULL,'6','2.95','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('221','Copo Americano Grande','4',NULL,'6','2.75','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('222','Copo Americano Pequeno','4',NULL,'2','29.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('223','Copo Liso Suco','4','2','6','4.75','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('224','Copo Whisky','4',NULL,'6','4.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('225','Copo Cuba','4','31','6','4.8','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('226','Canudo Embalado C/100','4',NULL,'6','4.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('227','Prato PVC 21','4',NULL,'17','2.9','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('228','Prato PVC 23','4',NULL,'17','3.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('229','Prato PVC 26','4',NULL,'17','4.5','true',NULL)"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('231','Batida de limão pingo de ouro','3','12','6','6.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('232','Batida de limão pingo de ouro c/ mel','3','12','6','6.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('233','Chocoleite','2','18','1','19.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('235','Raiz amarga pingo de ouro','3','12','6','6.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('236','Raiz amarga urú','3','12','6','6.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('237','Vinho Randon garrafão tinto suave','3','21','6','31.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('238','Vinho Randon garrafão tinto seco','3','21','6','31.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('239','Vinho Randon garrafão branco suave','3','21','6','31.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('240','Vinho Randon garrafão branco seco','3','21','6','31.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('241','Heineken garrafa','1','11','6','6.95','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('242','Vermuth c/ selo','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('243','Bitter pingo de ouro c/ selo','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('245','Refri lata Fanta laranja','2','3','3','27.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('246','Refri lata Fanta uva','2','3','3','27.5','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('248','Gatorade Uva','2','19','4','25.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('249','Fanta laranja 2 LT','2','14','5','44.7','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('250','Vinho Campo Largo Tinto Suave','3','12','6','9.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('251','Vinho Campo Largo branco suave','3','12','6','9.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('252','Vinho Campo Largo branco seco','3','12','6','9.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('253','Vinho Vô Luiz garrafão tinto seco','3','21','6','39.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('254','Vinho Vô Luiz garrafão branco suave ','3','21','6','39.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('255','Vinho Vô Luiz garrafão branco seco','3','21','6','39.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('256','Refri lata tônica','2','3','3','27.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('257','Refri água da serra laranjinha','2','12','3','39.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('258','Refri Juninho água da Serra laranjinha','2','18','3','18.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('260','Refri KS Fanta laranja','2','15','2','42.9','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('261','Refri KS Sprite','2','15','2','42.9','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('262','Refri KS Coca cola zero','2','15','2','42.9','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('263','Refri KS Tonica','2','15','2','42.9','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('264','Cerveja long neck Brahma malzebier','1','9','1','46.4','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('265','Cerveja Brahma S/ Álcool profissa','1','7','8','43.5','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('266','Cerveja lata Eisembahn','1','3','3','39.8','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('267','Suco  Sufresh lata uva','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('268','Suco Sufresh lata morango','2','3','3','36.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('269','Suco Sufresh lata morango','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('270','Suco Sufresh lata laranja','2','3','3','36.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('271','Suco Sufresh lata laranja','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('273','Suco Sufresh lata maracujá','2','3','3','36.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('274','Suco Sufresh lata maracujá','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('275','Suco Sufresh lata goiaba','2','3','3','36.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('276','Suco Sufresh lata goiaba','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('277','Suco Sufresh lata pêssego','2','3','3','36.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('278','Suco Sufresh lata pêssego ','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('279','Suco Sufresh lata manga','2','3','3','36.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('280','Suco Sufresh lata manga','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('281','Suco Sufresh lata caju','2','3','3','36.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('282','Suco Sufresh lata caju','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('283','Suco Sufresh LT uva','2','12','4','28.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('284','Suco Sufresh LT morango','2','12','3','56.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('285','Suco Sufresh LT morango','2','12','4','28.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('286','Suco Sufresh LT maracujá','2','12','3','56.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('287','Suco Sufresh LT maracujá','2','12','4','28.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('288','Suco Sufresh lata abacaxi','2','3','3','36.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('289','Suco Sufresh lata ','2','3','4','18.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('290','Suco Sufresh LT pessego','2','12','3','56.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('291','Suco Sufresh LT pessego','2','12','4','28.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('292','Suco Sufresh LT caju','2','12','3','56.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('293','Suco Sufresh LT caju','2','12','4','28.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('294','Suco Sufresh LT abacaxi','2','12','3','56.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('295','Suco Sufresh LT abacaxi','2','12','4','28.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('296','Suco Sufresh LT uva','2','12','3','58.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('297','Suco Sufresh LT laranja','2','12','3','56.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('298','Suco Sufresh LT laranja','2','12','4','28.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('299','Suco Sufresh LT goiaba','2','12','3','56.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('300','Suco Sufresh LT goiaba','2','12','4','28.4','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('302','Refri lata Guarana zero','2','3','3','27.5','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('303','Refri água da serra limão','2','14','4','26.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('304','Refri água da serra limão','2','12','3','39.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('306','Refri juninho água da serra uva','2','18','3','18.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('307','Refri juninho água da serra framboesa ','2','18','3','18.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('308','Refri juninho água da serra cola','2','18','3','18.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('309','Refri juninho água da serra guaraná','2','18','3','18.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('310','Refri Coca Cola zero','2','11','3','39.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('311','Refri Fanta laranja ','2','11','3','39.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('312','Refri Sprite','2','11','3','39.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('313','Refri Guarana zero','2','11','3','39.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('314','Refri fanta laranja ','2','14','5','42.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('315','Refri sprite ','2','14','5','44.7','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('316','Refri Coca Cola zero ','2','14','5','48.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('317','Refri fanta uva ','2','14','5','44.7','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('318','Refri guarana zero ','2','14','4','31.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('319','Refri Max Willian laranjinha ','2','14','5','29.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('320','Refri Max Willian laranja','2','14','5','29.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('321','Refri Max Willian limao','2','14','5','29.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('322','Refri Max Willian uva ','2','14','5','29.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('323','Refri Max Willian cola','2','14','5','29.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('324','Refri Max Willian framboesa ','2','14','5','29.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('325','Refri agua da serra garrafa laranjinha','2','11','2','47.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('326','Refri agua da serra garrafa limao','2','11','2','47.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('328','Refri agua da serra garrafa abacaxi','2','11','2','47.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('329','Refri juninho água da serra limao ','2','18','1','18.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('330','Mate Leão copo natural','2','18','3','26.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('331','Mate Leão copo pawer','2','18','3','26.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('332','Mate Leão copo açaí','2','18','3','26.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('333','Suco Tily maracujá','2','16','3','12.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('334','Suco Tily abacaxi ','2','16','3','12.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('335','Suco Tily abacaxi com hortelã ','2','27','3','12.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('336','Suco Tily uva ','2','16','3','12.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('337','Suco Tily morango','2','16','3','12.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('338','Vinho garrafão Sangue da Uva branco suave','2','21','6','31.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('340','Vinho garrafão Sangue da uva branco seco','3','21','6','31.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('341','Vinho garrafão Sangue da Uva tinto suave','3','21','6','31.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('342','Vinho garrafão Sangue da Uva tinto seco ','3','21','6','31.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('343','Vinho Randon tinto seco','3','12','6','8.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('345','Vinho Randon branco seco ','3','12','6','8.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('349','Vinho sangue da Uva tinto seco ','3','12','6','8.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('350','Vinho sangue da Uva branco suave ','3','12','6','8.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('351','Vinho sangue da Uva branco seco ','3','12','6','8.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('352','Gatorade morango ','2','19','4','25.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('353','Gatorade maracujá ','2','19','4','25.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('354','Gatorade limão ','2','19','4','25.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('355','Gatorade frutas cítricas ','2','19','4','25.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('356','Gatorade tangerina ','2','19','4','25.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('357','Refri Purezinha','2','18','1','16.2','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('358','Chocoleite','2','18','20','24.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('359','Refri laranjinha água da serra','2','18','1','16.2','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('360','Refri laranjinha água da serra','2','18','20','19.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('361','Refri purezinha','2','18','20','19.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('362','Vinho salton tinto seco ','3','12','6','29.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('363','Vinho salton branco suave ','3','12','6','29.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('364','Vinho salton branco seco ','3','12','6','29.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('365','Vinho Randon branco suave ','3','12','6','8.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('366','Vinho Vô Luiz tinto seco ','3','12','6','11.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('367','Vinho Vô Luiz branco suave ','3','12','6','11.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('368','Vinho Vô Luiz branco seco ','3','12','6','11.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('369','Espumante Salton brutt','3','23','6','33.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('370','Espumante Terra Nova brutt','3','23','6','33.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('371','Batida de côco','3','12','6','6.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('372','Batida de Amendoim ','3','12','6','6.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('373','Batida de Amendoim c/selo','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('374','Batida de côco c/selo ','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('375','Batida de limão pingo de ouro c/selo','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('376','Batida de maracujá pingo de ouro c/selo','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('377','Catuaba Pingo de Ouro c/selo','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('378','Menta Vidro c/selo','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('379','Raiz Amarga c/selo','3','12','6','7.6','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('380','Steinhager','3','12','6','31.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('381','Tequileiro Prata ','3','12','6','56','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('382','51 ice','3','3','4','3.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('383','Agua de copo ','2','18','2','24.8','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('384','Copo de Pinga Pequeno ','4','','6','2.95','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('386','Cerveja lata Malzebier Pilsen','1','9','3','29.8','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('395','Refri KS Coca Cola','2','15','1','21.45','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('396','Cana Serra azul c/ selo','3','12','1','48.5','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('397','Refri KS Guaraná','2','15','1','21.5','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('398','Refri KS Fanta laranja','2','15','1','21.45','true','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('399','TROCA coca cola ','2','14','5','0','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('401','Copo Americano pequeno','2','18','3','14.9','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('402','Refri ks Pureza','2','15','1','18.75','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('403','Refri ks coca cola zero','2','15','1','21.45','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('404','Refri ks sprite','2','15','1','21.45','[object Object]','')"],
+  ["INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao) VALUES ('405','Refri lata sprite ','2','9','3','27.5','[object Object]','')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('1','Bar do Passarinho','1','32324543','999442121','Praia de Cima',NULL,NULL,NULL,NULL,'0')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('2','Bar do Zeca','2','32324543','999442121','Caminho Novo',NULL,NULL,NULL,NULL,'0')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('3','Sérgio-passagem','','32861415','9991602989','Passagem do maciambu','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('4','Lamiro','','','32861286','Passagem do maciambu','Pinheira','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('5','Méri-frente lamiro','','','984856139','Passagem do maciambu','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('6','Daiana Passagem','','','984812425','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('7','Panificadora Gaspar','','984400918','984400918','Passagem','','Palhoça','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('8','Pastelaria Cris','','33413531','984409156','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('9','João Carlos jordão','','','984352614','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('10','Dona Augusta','','','984736726','Passagen','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('11','Panif. Mazzei Pan','','','996066340','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('12','Fábio','','','984676463','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('13','Bar do Lageano','','','984273910','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('14','Merc. KM2','','','999285789','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('15','Dona Maria ','','','9996764197','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('16','Merc. Vaz','','','996974042','Passagem','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('17','Marc. Jacaré','','32861104','996028735','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('18','S. Buske','','','988330879','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('19','Estela-bistro','','','984620109','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('20','Marc. Ana Paula','','','998570335','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('21','Frango assado do Leo','','','998154967','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('22','Bar do Telmo','','','984847096','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('23','Rest. Dumar','','','999384080','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('24','Merc. Sidnen','','','32861266','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('25','S. Mazinho','','','32860635','Praia do sonho','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('26','Panif. Tudo caseiro-jessica','','','998373573','Ponta do papagaio','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('27','Rest. Beira Rio','','','999021012','Ponta do papagaio','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('28','Bar da Regina','','991356072','984656074','Mar aberto','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('29','Merc. Pinheira','','04151998930491','999255144','Marc aberto ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('30','Panif. Mar Aberto','','998190426','984878066','Mar aberto','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('31','Merc. Tabuleiro','','','984826817','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('32','Bar do Mineiro- Maura','','','984254330','Pinheiro','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('33','Agenor','','','996927706','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('34','Bar do Valmor','','','32832223','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('35','Joel-Negão','','998233368','998233368','Guarda do Embaú','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('36','Sérgio-Gringo','','','9911220228','Guarda do Embaú','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('37','Adriano-Guarda','','','999502810','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('38','Reginaldo-Guarda','','','999730661','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('39','Anísio-Guarda','','','996926448','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('40','Bernardo','','','04121964433387','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('41','Pousada Zululand','','32832093','32832706','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('42','Bar do Jair','','','999214612','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('43','Marlon-Guarda ','','','996533906','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('44','Arueira','','','984594577','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('45','Rest. Ávalos ','','','991428498','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('46','Rest. Guardião','','','996543412','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('47','Juliano-Guarda','','','991125337','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('48','Rest. Da Telma','','','999960691','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('49','Guarapeira da Guarda','','','984644901','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('50','Saulo-Guarda','','','991045928','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('51','Bar do João','','','996737331','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('52','Armazém','','','998462940','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('53','Quintal do Hamburger','','984420236','984974517','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('54','Jovane-lanches','','','984751750','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('55','Rest. Sabor caseiro','','','999353742','Pinheira ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('56','Rest. Ora pro nobis','','996885111','996308578','Pinheira ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('57','Bar e Rest. Dos Gaúchos','','','0415181914938','Pinheira ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('58','Rest. Cozinha da mama','','','996854917','Pinheira ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('59','Merc.vô inácio- Junior','','','988480943','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('60','Mateus- Bom Bah','','','991847595','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('61','Camping- Tio Nico','','','984692748','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('62','Bar do Passarinho','','','996586161','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('63','Delícias da Mamma','','','991275152','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('64','Rest. Villa','','','996590805','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('65','D. Cóta','','','32831166','Pinheira','','','','','0')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('66','Bar do Zé','','','984584998','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('67','Dico- Ponto integro','','','996367256','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('68','Bar da D. Mária','','','999436051','Passagem do maciambú','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('69','Padaria da pinheira','','','984974018','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('70','Panif. Vó Maria-Elton','','998209570','996203146','Pinheira ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('71','Pantera','','','984929612','Pinheira ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('72','Vilson-casa de sucos','','','999916770','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('73','Merc. Karina','','','32455164','Santo Amaro','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('74','Bar do S. Rogério','','','999493368','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('75','Quitanda Sombrio-Silas','','','32455088','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('76','Bar do Pagé','','','991163019','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('77','Evandro-Calemba','','','984520622','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('78','Bar do Manobra','','','99769145','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('79','Maria do Carmo','','','32453548','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('80','Merc. Beppler','','948933382','32451233','Santo Amaro',' ','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('81','Lanch. Imperial Dinner','','','998608855','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('82','Rest. P7','','999826415','996207017','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('83','Lanch. São Francisco-Estela ','','984090725','984331771','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('84','Bar do Dão','','','999099460','Santo Amaro','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('85','Churrascaria Eduarda-Beto','','','999919457','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('86','Bar D. Célia','','','32453241','Santo Amaro','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('87','Bar Fronteiras','','999965867','32458834','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('88','Bar do Bubi','','','984156151','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('89','Rest. Do Saulo','','','984390338','Santo Amaro ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('90','Fábio- Passagem ','','984676463','984676463','Passagem do maciambú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('91','Merc. Jacaré ','','996028735','999258780','Praia do sonho ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('92','Merc.Ana Paula','','998570335','999600883','Praia do sonho ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('93','Dudú massas- D.Adélia','','','996075230','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('94','Rest. Mané sirí','','996391856','996166941','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('95','Espetinho da Guarda ','','','996299483','Guarda do Embaú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('96','Mercearia Boa Parada-D. Augusta','','','984736726','Passagem do maciambú ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('97','Conf. D. Cóta','','','32831166','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('98','Cunha- em frente Zé dedinho motos','','','999989898','Santo amaro','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('99','Panif. Sol e surf- Mateus ','','','999029500','Mar Aberto','Ponta do papagaio ','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('100','Maria Empadinha- D.Madalena','','','32832073','Pinheira','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('101','Rest. Seu Gonsalves ','','','991678838','Pinheira ','','','','','1')"],
+  ["INSERT OR REPLACE INTO clientes(id,nome,codigo,fone,celular,endereco,bairro,cidade,cnpj,`inscricao_est`,ativo) VALUES ('102','Casa na Árvore ','','','991396933','Pinheira','','','','','1')"],
 
-  // CERVEJAS
-
-  // Cerveja 600ml
-  [`insert OR IGNORE into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Garrafa', 1, 11, 2, 142.80, 1, null]],  
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Skol Garrafa', 1, 11, 2, 135.80, 1, null]],  
-   [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Antartica Garrafa', 1, 11, 2, 135.80, true, null]],  
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Antartica Sub Zero Garrafa', 1, 11, 2, 123.60, true, null]],  
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Original Garrafa', 1, 11, 2, 171.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Extra Garrafa', 1, 11, 2, 171.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Bohemia Garrafa', 1, 11, 2, 171.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-  values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Heineken Garrafa', 1, 11, 2, 171.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Budweiser Garrafa', 1, 11, 2, 171.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-  values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Nova Schin Garrafa', 1, 11, 2, 77.40, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-  values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Eisenbahn Garrafa', 1, 11, 2, 158.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Pilsen Garrafa', 1, 11, 2, 70.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Burguesa Garrafa', 1, 11, 2, 90.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Malzebier Garrafa', 1, 11, 2, 171.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Nova Schin Malzebier Garrafa', 1, 11, 2, 96.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Pilsen Malzebier Garrafa', 1, 11, 2, 144.00, true, null]],
-  
-  // Cerveja Litrao 1LT
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Schin Litrão', 1, 12, 1, 56.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Litrão', 1, 12, 1, 78.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Skol Litrão', 1, 12, 1, 74.80, true, null]],
-
-  //Long Neck 355ml com 24un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Skol Long Neck', 1, 9, 2, 66.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Long Neck', 1, 9, 2, 66.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Eisenbahn Long Neck', 1, 9, 2, 92.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Bohemia Long Neck', 1, 9, 2, 92.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Heineken Long Neck', 1, 9, 2, 92.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Stela Long Neck', 1, 9, 2, 92.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Budweiser Long Neck', 1, 9, 2, 92.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Corona Long Neck', 1, 9, 2, 144.00, true, null]],
-
-  //Long Neck 355ml com 12un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Schin Long Neck Malzebier', 1, 9, 1, 31.00, true, null]],
-  //Long Neck 355ml com 25un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Long Neck Malzebier', 1, 9, 7, 96.80, true, null]],    
-
-  //Long Neck 313ml
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Skol Beats Long Neck', 1, 24, 2, 119.00, true, null]],
-
-  //Profissa 300ml com 23un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Skol Profissa', 1, 7, 8, 41.20, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Profissa', 1, 7, 8, 41.20, true, null]],
-  
-  //Lata 355ml com 12un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Skol Lata', 1, 3, 3, 28.60, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Lata', 1, 3, 3, 28.60, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Antartica Lata', 1, 3, 3, 25.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Antartica Sub Zero Lata', 1, 3, 3, 24.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Schin Lata', 1, 3, 3, 22.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Bohemia Lata', 1, 3, 3, 39.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Budweiser Lata', 1, 3, 3, 39.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Heineken Lata', 1, 3, 3, 39.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Burguesa Lata', 1, 3, 3, 23.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Brahma Zero Alcool Lata', 1, 3, 3, 35.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Schin sem Alcool Lata', 1, 3, 3, 32.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Pilsen Preta Lata', 1, 3, 3, 27.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cerveja Amstel Lata', 1, 3, 3, 31.60, true, null]],
-  
-  // Lata 269ml
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Skol Beats Lata', 1, 25, 5, 31.00, true, null]],
-
-
-  // REFRIS E SIMILARES
-
-  // Refri garrafa 600 cx 24un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Pureza Garrafa', 2, 11, 2, 44.30, true, null]],
-  
-  // Refri garrafa 290 KS cx 24un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Coca Cola KS', 2, 15, 2, 41.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Guarana KS', 2, 15, 2, 41.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Pureza KS', 2, 15, 2, 36.00, true, null]],
-
-  // Refri garrafa 255ml Cx 30un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Laranjinha', 2, 5, 9, 37.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Purezinha', 2, 5, 9, 37.80, true, null]],
-
-
-  // Refri garrafa 2LT PC 8un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Coca Cola', 2, 14, 5, 46.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Guaraná', 2, 14, 5, 31.60, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Pureza', 2, 14, 5, 27.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Sabores Coca Cola', 2, 14, 5, 40.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Max Wilheln', 2, 14, 5, 29.60, true, null]],
-
-  // Refri garrafa 2LT PC 6un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Laranjinha Agua da Serra', 2, 14, 4, 26.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Capricho', 2, 14, 4, 18.50, true, null]],
-  
-  // Refri garrafa 1,5LT PC 8un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Coca Cola', 2, 13, 5, 46.80, true, null]],
-  
-  // Refri garrafa 1,5LT PC 6un
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Guaraná', 2, 13, 4, 46.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Schweppes Citrus', 2, 13, 4, 32.80, true, null]],
-
-  // Refri garrafa 1LT DZ
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Pureza', 2, 12, 3, 39.30, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Agua da Serra', 2, 12, 3, 39.80, true, null]],
-
-  // Refri garrafa 600ml DZ
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Coca Cola', 2, 11, 3, 39.60, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Guarana', 2, 11, 3, 39.60, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao) 
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Pureza', 2, 11, 3, 31.80, true, null]],
-
-  // Refri garrafa 350ml DZ
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Pureza', 2, 3, 3, 26.80, true, null]],
-
-  // Refri lata 350ml DZ
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Coca Cola Lata', 2, 3, 3, 25.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Guarana Lata', 2, 3, 3, 25.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Refri Schweppes Citrus Lata', 2, 3, 3, 32.80, true, null]],
-
-  // Suco
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Suco Sufrech Lata', 2, 8, 3, 36.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Suco Skinka Pet', 2, 16, 3, 28.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Suco Tily Pet', 2, 16, 3, 12.30, true, null]],
-  // 1LT UN
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Suco Sufrech Tetra Pak', 2, 12, 6, 36.80, true, null]],
-
-  // Refri lata 250ml DZ
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Juninhu Agua da Serra', 2, 17, 3, 18.30, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Juninhu Coca Cola', 2, 17, 3, 16.70, true, null]],
-  
-  // Mate Leão
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Mate Leao', 2, null, 3, 26.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Mate Leao Litrinho', 2, null, 3, 32.80, true, null]],
-  
-  // Chocoleite
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Chocoleite', 2, 18, 10, 76.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Chocoleite', 2, 19, 2, 46.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Chocoleite', 2, 20, 11, 29.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Chocoleite', 2, 7, 2, 69.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Chocoleite Oni Way', 2, null, 2, 62.80, true, null]],
-
-  // Agua 
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua Vidro', 2, null, 2, 22.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua Sem Gás Sta Catarina', 2, 19, 3, 12.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua Com Gás Sta Catarina', 2, 19, 3, 13.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua Sem Gás', 2, 19, 3, 10.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua Com Gás', 2, 19, 3, 11.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua Sta Catarina', 2, 13, 4, 12.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua', 2, 13, 4, 10.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua', 2, 21, 12, 14.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua Bombona', 2, 22, 6, 8.20, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua H2O', 2, 19, 3, 32.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua de Copo', 2, null, 10, 20.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Agua de Copo Tetra Pak', 2, 18, 11, 49.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Gatorade', 2, null, 4, 21.60, true, null]],
-  
-  // Energetico
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Red Horse', 2, 6, 6, 2.95, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Red Horse', 2, 12, 6, 7.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Red Horse', 2, 14, 6, 8.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Red Horse Lata', 2, 9, 6, 3.80, true, null]],
-    
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Baly', 2, 12, 6, 7.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Baly', 2, 17, 6, 3.20, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Baly', 2, 14, 6, 9.25, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Baly Lata', 2, 9, 6, 3.40, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Red Bull Lata', 2, 9, 6, 6.45, true, null]],
-
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Energetico Safadao', 2, 14, 6, 5.20, true, null]],
-
-  // DESTILADOS
-
-  // Vinho 5LT
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Garrafao Sangue da Uva', 3, 21, 6, 29.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Garrafao Pinheirense', 3, 21, 6, 27.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Garrafao Vo Luiz', 3, 21, 6, 36.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Garrafao', 3, 21, 6, 16.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Coquetel', 3, 21, 6, 21.80, true, null]],
-
-  // Vinho 1LT
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Campo Largo', 3, 12, 6, 8.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Campo Largo Pessego', 3, 12, 6, 14.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Salton', 3, 12, 6, 23.40, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Vo Luiz', 3, 12, 6, 9.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Sangue da Uva', 3, 12, 6, 7.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vinho Randon', 3, 12, 6, 6.40, true, null]],
-
-  // Espumante
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Espumante Lunnar', 3, 23, 6, 21.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Espumante Prestige', 3, 23, 6, 13.20, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Espumante Salton', 3, 23, 6, 32.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Espumante Terra Nova', 3, 23, 6, 30.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Espumante Sem Alcool', 3, 23, 6, 16.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Sidra', 3, 23, 6, 5.90, true, null]],
-
-  // Destilados
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Abcinto', 3, null, 6, 39.20, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Amarula', 3, null, 6, 84.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Marula', 3, null, 6, 39.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Bacardi', 3, null, 6, 31.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Bacardi Big Apple', 3, null, 6, 31.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Bacardi Limao', 3, null, 6, 33.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Batidas de Vidro Pingo de Ouro', 3, null, 6, 5.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Bitter Pingo de Ouro', 3, null, 6, 5.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Butia Litro', 3, null, 6, 6.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Caipira PVC', 3, null, 6, 5.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Limao com Mel', 3, null, 6, 5.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Campari', 3, null, 6, 36.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana 51', 3, null, 6, 7.20, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana 51 Ouro', 3, null, 6, 11.35, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Ipioca Prata', 3, null, 6, 13.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Ipioca Empalhada', 3, null, 6, 15.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Ipioca Lemon', 3, null, 6, 26.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Ipioca Organica', 3, null, 6, 13.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Ipioca Ouro', 3, null, 6, 13.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Jamel', 3, null, 6, 5.70, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Velho Barreiro', 3, null, 6, 7.10, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Velho Barreiro Gold', 3, null, 6, 10.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Velho Barreiro Limao', 3, null, 6, 11.70, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Terra Brazilis', 3, null, 6, 24.40, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Canelinha Pingo de Ouro', 3, null, 6, 5.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Catuaba Pingo de Ouro', 3, null, 6, 5.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Catuaba Selvagem', 3, null, 6, 12.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Catuaba Açai Pingo de Ouro', 3, null, 6, 7.10, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Conhaque Alcatrao', 3, null, 6, 16.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Conhaque Delber', 3, null, 6, 4.30, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Conhaque Domeq', 3, null, 6, 32.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Conhaque Dreher', 3, null, 6, 13.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Gin', 3, null, 6, 21.40, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Jurubeba', 3, null, 6, 5.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Licor de Cacau', 3, null, 6, 30.75, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Malibu', 3, null, 6, 48.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Maracuja Joinville', 3, null, 6, 9.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Maracuja Pingo de Ouro', 3, null, 6, 6.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Martine', 3, null, 6, 24.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Menta Vidro', 3, null, 6, 5.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Montila', 3, null, 6, 24.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Montila Limao', 3, null, 6, 24.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Raiz Amarga Pingo Ouro', 3, null, 6, 6.60, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Steinhager', 3, null, 6, 29.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Underberger', 3, null, 6, 40.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Underberger', 3, null, 6, 40.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Jagermeister', 3, null, 6, 89.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Valverde', 3, null, 6, 17.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vermuth Uru Pingo Ouro', 3, null, 6, 6.60, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Tequila Jose Cuervo Ouro', 3, null, 6, 89.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Tequila Jose Cuervo Prata', 3, null, 6, 89.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Tequila o Tequileiro', 3, null, 6, 48.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Jurupinga', 3, null, 6, 19.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Jurudrinks', 3, null, 6, 8.40, true, null]],
-
-    // DZ eh 3
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana 3 Pipa', 3, null, 3, 48.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Serra Negra', 3, null, 3, 46.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Cana Kreff', 3, null, 3, 31.00, true, null]],
-
-
-  // VODKA
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Absolut', 3, null, 6, 86.70, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Natasha', 3, null, 6, 14.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Orloff', 3, null, 6, 26.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Intencion', 3, null, 6, 14.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Valessa', 3, null, 6, 10.75, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Raiska', 3, null, 6, 14.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Raiska Limao', 3, null, 6, 16.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Raiska Apple', 3, null, 6, 17.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Sky', 3, null, 6, 33.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Smirnoff', 3, null, 6, 34.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Belkoff Vidro', 3, null, 6, 5.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Kisla', 3, null, 6, 9.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Ice 51', 3, null, 6, 3.48, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Ice Smirnoff', 3, null, 6, 4.98, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Vodka Kisla Ice', 3, null, 6, 2.70, true, null]],
-  // WHISKY
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Cavalo Branco', 3, null, 6, 86.70, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Johnnie Walker Black', 3, null, 6, 148.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Johnnie Walker Red', 3, null, 6, 89.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Johnnie Jack Deniels', 3, null, 6, 136.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Balantaimes', 3, null, 6, 85.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Drurys', 3, null, 6, 27.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Nattu Nobilis', 3, null, 6, 31.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Bells', 3, null, 6, 44.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Old Eight', 3, null, 6, 36.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Passaport', 3, null, 6, 46.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Whisky Black Stone', 3, null, 6, 16.80, true, null]],
-
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Quentao Litro', 3, null, 6, 9.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Saque', 3, null, 6, 35.80, true, null]],
-
-  // DESCARTAVEIS
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo PVC 200ml', 4, null, 13, 4.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo PVC 300ml', 4, null, 13, 5.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo PVC 400ml', 4, null, 14, 7.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo PVC 500ml', 4, null, 14, 7.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo PVC 700ml', 4, null, 14, 8.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Isopor', 4, null, 15, 3.35, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Acrilico', 4, null, 16, 7.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Cerveja Grosso', 4, null, 2, 25.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Buteco', 4, null, 2, 35.00, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Cerveja Fino', 4, null, 2, 78.80, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo de Pinga', 4, null, 6, 2.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Americano Grande', 4, null, 6, 2.20, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Americano Pequeno', 4, null, 2, 23.90, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Liso Suco', 4, null, 6, 4.45, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Whisky', 4, null, 6, 3.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Copo Cuba', 4, null, 6, 3.75, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Canudo Embalado C/100', 4, null, 6, 3.20, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Prato PVC 21', 4, null, 17, 2.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Prato PVC 23', 4, null, 17, 3.50, true, null]],
-  [`insert into produtos (nome_produto, categoria_id, vasilhame_id, unidade_venda_id, preco, ativo, observacao)
-    values (?, ?, ?, ?, ?, ?, ?)`, ['Prato PVC 26', 4, null, 17, 4.00, true, null]],
-
-
-
-  // Clientes
-  [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est, ativo) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [1, 'Bar do Passarinho', 1, '32324543', '999442121', 'Praia de Cima', null, null, null, null, 1]],
-  [`insert into clientes (id, nome, codigo, fone, celular, endereco, bairro, cidade, cnpj, inscricao_est, ativo) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [2, 'Bar do Zeca', 2, '32324543', '999442121', 'Caminho Novo', null, null, null, null, 1]],
-  
-  // Pedidos
-
-  [`insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago) 
-                  values (?, ?, ?, ?, ?, ?)`, [1, 1, '2018-06-07', 'Pendente', 0, 0]],
-  [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_padrao, valor_total, valor_total_padrao) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [1, 1, 1, 2, 142.80, 142.80, 271.60, 271.60]],
-  [`insert into pedidos (id, cliente_id, data, status, valor_adicional, valor_pago) 
-                  values (?, ?, ?, ?, ?, ?)`, [2, 2, '2018-06-07', 'Pendente', 0, 0]],
-  [`insert into pedidos_itens (id, pedido_id, produto_id, quantidade, valor_unitario, valor_padrao, valor_total, valor_total_padrao) 
-                  values (?, ?, ?, ?, ?, ?, ?, ?)`, [2, 2, 1, 2, 135.80, 135.80, 291.60, 291.60]],
-  
-
- 
 ];
 
 @Injectable()
@@ -752,7 +628,7 @@ export class DatabaseProvider {
         // Criando as tabelas
         this.createTables(db);
         // Inserindo dados padrão
-        this.insertDefaultItems(db);;
+        this.insertDefaultItems(db);
       })
       .catch(e => console.log(e));
   }

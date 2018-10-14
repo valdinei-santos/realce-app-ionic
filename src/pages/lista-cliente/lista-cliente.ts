@@ -15,6 +15,7 @@ export class ListaClientePage {
   cliente: Cliente = new Cliente(); //{nome:'', codigo:null, fone:'', celular:'', endereco:'', bairro:'', cidade:'', cnpj:'', inscricao_est:''};
   clientes: any[];
   isPedido: boolean;
+  qtd_clientes: number = 0;
   
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -62,6 +63,7 @@ export class ListaClientePage {
     this.clienteProvider.getAll()
       .then((results: any[]) => {
         this.clientes = results;
+        this.qtd_clientes = this.clientes.length;
       })
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar os clientes.', duration: 3000, position: 'botton' }).present();

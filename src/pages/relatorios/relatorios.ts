@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
 import { ExpImpDbProvider } from '../../providers/exp-imp-db/exp-imp-db';
@@ -34,6 +34,8 @@ export class RelatoriosPage {
     'data': null, 
     'status': null, 
     'pago': null,
+    'avista': null,
+    'observacao': null,
     'total': null 
   };
   pdfObj = null;
@@ -44,8 +46,11 @@ export class RelatoriosPage {
   docDefinition: any;
   pagoString: string;
   hasBreak: boolean = false;
-  rowPage: number = 40;
-  rowNow: number = 0;
+  maxRowPage: number = 40;
+  maxRowPedido: number = 20;
+  rowPageNow: number = 0;
+  rowPedidoNow: number = 0;
+  qtdRowPedido: number = 0;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -54,7 +59,6 @@ export class RelatoriosPage {
               public toast: ToastController,
               private formatDate: FormatDatePipe,
               private decimalPipe: DecimalPipe,
-              private plt: Platform,
               private file: File,
               private fileOpener: FileOpener,
               private loadingController: LoadingController) {
@@ -123,10 +127,10 @@ export class RelatoriosPage {
     }
     let num = 0;
     for (let el1 of this.pedidos) {
+      console.log('Pedido: ' + el1.id);
       this.pedidoProvider.getItens(el1.id)
         .then((result: any) => {
           this.itens = result;
-          console.log(this.itens);
           this.itens2 = [];
           for (let el2 of this.itens) {
             let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null};
@@ -146,54 +150,96 @@ export class RelatoriosPage {
             'data': this.formatDate.transform(el1.data),
             'status': el1.status,
             'pago': el1.pago,
+            'avista': el1.avista,
+            'observacao': el1.observacao,
             'total': this.decimalPipe.transform(el1.total, '1.2-2'),
           }
-          el1.pago ? this.pagoString = 'Pago' : this.pagoString = '';
-          console.log('inicio linhas');
-          let l1;
-          let l2;
+          //el1.pago ? this.pagoString = 'Pago' : this.pagoString = '';
+          //let l1;
+          //let l2;
           num++;
           console.log(num);
-          if (num === 1) {
+          /* if (num === 1) {
             l1 = { text: 'DISTRIBUIDORA REALCE - PEDIDO', style: 'header' };
             l2 = { text: this.horaAtual, alignment: 'right' };
-            this.rowNow = this.rowNow + 2;
-          }
-          let l3 = { text: 'PEDIDO: ' + this.pagePdf.pedido_id + 
+            this.rowPageNow = this.rowPageNow + 2;
+          } */
+          let l1 = { text: 'PEDIDO: ' + this.pagePdf.pedido_id + 
                            ' -- DATA: ' + this.pagePdf.data +
                            ' -- STATUS: ' + this.pagePdf.status, style: 'subheader' };
-          let l4 = { text: 'CLIENTE: ' + this.pagePdf.cliente_nome + 
+          let l2 = { text: 'CLIENTE: ' + this.pagePdf.cliente_nome + 
                            ' -- CEL: ' + this.pagePdf.cliente_celular, style: 'subheader' };
-          let l5 = { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' };
-          let l6 = table(this.itens2, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']);
-          let l7 = { text: 'TOTAL: ' + this.pagePdf.total + '  ' + this.pagoString, style: 'subheader' };
+          let l3 = { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' };
+          let l4 = table(this.itens2, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']);
+          let l5 = { text: 'Observação: ' + this.pagePdf.observacao, style: 'subheader' };
+          let l6;
+          if (el1.pago) {
+            l6 = { text: 'TOTAL: ' + this.pagePdf.total + '  Pago', style: 'subheader' };
+          } else if (el1.avista) {
+            l6 = { text: 'TOTAL: ' + this.pagePdf.total + '  Cobrar na Entrega', style: 'subheader' };
+          } else {
+            l6 = { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' };
+          }
+          let l7 = ' ';
           let l8 = ' ';
-          let l9 = '-------------------------------------------------------------------------------------------------------';
-          let l10 = { text: ' ', pageBreak: 'after'};
-          this.rowNow = this.rowNow + 7 + this.itens2.length + 1;
-          console.log(this.rowNow);
-          this.rowNow >= this.rowPage ? this.hasBreak = true : this.hasBreak = false;
-          // calcBreakPage(this.rowNow, this.rowPage);
+          //let l7 = { text: 'TOTAL: ' + this.pagePdf.total + '  ' + this.pagoString, style: 'subheader' };
+          
+          //let l8 = ' ';
+          //let l9 = '-------------------------------------------------------------------------------------------------------';
+          let l9 = { text: ' ', pageBreak: 'after'};
+          console.log('rowPedidoNow ANTES: '+ this.rowPedidoNow);
+          if (this.pagePdf.observacao !== null) 
+            this.qtdRowPedido = 7 + this.itens2.length + 1;
+          else
+            this.qtdRowPedido = 7 + this.itens2.length;
+          this.rowPedidoNow = this.qtdRowPedido;
+          console.log('rowPedidoNow DEPOIS: '+ this.rowPedidoNow);
+          console.log('this.rowPageNow ANTES: '+ this.rowPageNow);
+          this.rowPageNow = this.rowPageNow + this.rowPedidoNow; //this.rowPageNow + 7 + this.itens2.length + 1;
+          console.log('this.rowPageNow DEPOIS: '+ this.rowPageNow);
+          let rowAdd = 0;
+          console.log('Folha antes: '+ this.rowPageNow);
+          if (this.rowPedidoNow < this.maxRowPedido) {
+            rowAdd = this.maxRowPedido - this.rowPedidoNow;
+            this.rowPageNow = this.rowPageNow + rowAdd;
+            this.rowPedidoNow = this.rowPedidoNow + rowAdd;
+          } else {
+            rowAdd = this.maxRowPage - this.rowPageNow;
+            this.rowPageNow = this.rowPageNow + rowAdd;
+          }
+          console.log('rowAdd: '+ rowAdd);
+          console.log('Folha: '+ this.rowPageNow);
+          console.log('Pedido: '+ this.rowPedidoNow);
+          this.rowPageNow >= this.maxRowPage ? this.hasBreak = true : this.hasBreak = false;
+          // calcBreakPage(this.rowPageNow, this.maxRowPage);
           if (this.hasBreak){
             console.log('hasBreak');
-            this.content.push(l10);
-            this.rowNow = 7 + this.itens2.length;
-            console.log('hasBreak lin: ' + this.rowNow);
+            this.content.push(l9);
+            // this.rowPageNow = this.qtdRowPedido;
+            this.rowPageNow = 0;
+            console.log('hasBreak lin: ' + this.rowPageNow);
           }
           
           console.log('fim linhas');
-          if (num === 1) {
+          /* if (num === 1) {
             this.content.push(l1);
             this.content.push(l2);
-          }
+          } */
+          this.content.push(l1);
+          this.content.push(l2);
           this.content.push(l3);
           this.content.push(l4);
-          this.content.push(l5);
+          if (this.pagePdf.observacao !== null) {
+            this.content.push(l5);
+          }
           this.content.push(l6);
+          for (let i=0; i<rowAdd; i++){
+            this.content.push(' ');
+          }
           this.content.push(l7);
           this.content.push(l8);
-          this.content.push(l8);
-          this.content.push(l9);
+          this.rowPedidoNow = 0;
+          //this.content.push(l9);
           //console.log(this.content);
 
         })
