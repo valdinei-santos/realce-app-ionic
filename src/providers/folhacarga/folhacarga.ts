@@ -7,8 +7,6 @@ import { Pedido2, PedidoProvider } from '../pedido/pedido';
 @Injectable()
 export class FolhacargaProvider {
 
-  private pedidos2: Pedido2[] = [];
-
   constructor(private dbProvider: DatabaseProvider, 
               public toast: ToastController,
               public pedidoProvider: PedidoProvider) { }
@@ -235,6 +233,7 @@ export class FolhacargaProvider {
                           JOIN folhas_carga_itens i
                             ON f.id = i.folha_carga_id) tab
                     WHERE upper(tab.status) = 'ENTREGUE'
+                      AND data > date('now', '-90 days')
                     GROUP BY id, data, status
                     ORDER BY data desc`;
         return db.executeSql(sql, [])

@@ -278,6 +278,7 @@ public insert(pedido: Pedido) {
                      JOIN clientes c 
                        ON p.cliente_id = c.id
                     WHERE upper(p.status) = 'ENTREGUE'
+                      AND p.data > date('now', '-90 days')
                     ORDER BY p.id desc`;              
         return db.executeSql(sql, [])
           .then((data: any) => {

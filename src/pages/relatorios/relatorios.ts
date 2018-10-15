@@ -207,18 +207,18 @@ export class RelatoriosPage {
             rowAdd = this.maxRowPage - this.rowPageNow;
             this.rowPageNow = this.rowPageNow + rowAdd;
           }
-          console.log('rowAdd: '+ rowAdd);
+          /* console.log('rowAdd: '+ rowAdd);
           console.log('Folha: '+ this.rowPageNow);
           console.log('Pedido: '+ this.rowPedidoNow);
-          this.rowPageNow >= this.maxRowPage ? this.hasBreak = true : this.hasBreak = false;
+          this.rowPageNow > this.maxRowPage ? this.hasBreak = true : this.hasBreak = false;
           // calcBreakPage(this.rowPageNow, this.maxRowPage);
           if (this.hasBreak){
             console.log('hasBreak');
             this.content.push(l9);
             // this.rowPageNow = this.qtdRowPedido;
-            this.rowPageNow = 0;
             console.log('hasBreak lin: ' + this.rowPageNow);
-          }
+            this.rowPageNow = 0;
+          } */
           
           console.log('fim linhas');
           /* if (num === 1) {
@@ -238,6 +238,18 @@ export class RelatoriosPage {
           }
           this.content.push(l7);
           this.content.push(l8);
+          console.log('rowAdd: '+ rowAdd);
+          console.log('Folha: '+ this.rowPageNow);
+          console.log('Pedido: '+ this.rowPedidoNow);
+          this.rowPageNow >= this.maxRowPage ? this.hasBreak = true : this.hasBreak = false;
+          // calcBreakPage(this.rowPageNow, this.maxRowPage);
+          if (this.hasBreak){
+            console.log('hasBreak');
+            this.content.push(l9);
+            // this.rowPageNow = this.qtdRowPedido;
+            console.log('hasBreak lin: ' + this.rowPageNow);
+            this.rowPageNow = 0;
+          }
           this.rowPedidoNow = 0;
           //this.content.push(l9);
           //console.log(this.content);

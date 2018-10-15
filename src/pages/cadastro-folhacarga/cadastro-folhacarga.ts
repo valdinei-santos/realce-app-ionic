@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, Platform, ActionSheetController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 
-import { PedidoProvider, Pedido, Pedido2 } from '../../providers/pedido/pedido';
+import { PedidoProvider} from '../../providers/pedido/pedido';
 import { PreviewFolhacargaPage } from '../preview-folhacarga/preview-folhacarga';
 import { FolhacargaProvider, Folhacarga } from '../../providers/folhacarga/folhacarga';
 

@@ -40,11 +40,11 @@
         <ion-col col-6>
         <button ion-button color="light" full round icon-left (click)="exportDB()">
           <ion-icon name="md-download"></ion-icon>
-          Export DB
+          Backup DB
         </button>
       </ion-col>
       <ion-col col-6>
-        <button ion-button color="light" full round icon-left [disabled]="false" (click)="alteraTabela()">
+        <button ion-button color="light" full round icon-left [disabled]="true" (click)="alteraTabela()">
           <ion-icon name="md-download"></ion-icon>
           Alter DB
         </button>
