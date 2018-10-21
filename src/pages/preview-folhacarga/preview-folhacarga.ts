@@ -10,7 +10,8 @@ import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { timestamp } from 'rxjs/operator/timestamp';
+import * as papa from 'papaparse';
+//import { timestamp } from 'rxjs/operator/timestamp';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @IonicPage()
@@ -22,7 +23,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class PreviewFolhacargaPage {
 
   model: Folhacarga;
-  pedidos2: Pedido[];
+  pedidos2: Pedido[]; // Só pedidos com observacao existente
   itens: PedidoAllItens[] = [];
   itens2: PedidoAllItens2[] = [];
   lista_pedidos: any[] = [];
@@ -40,6 +41,10 @@ export class PreviewFolhacargaPage {
   content: any[] = [];
   docDefinition: any;
 
+  csvData: any[] = [];
+  headerRow: any[] = [];
+  linesFile: any[] = [];
+  pageCsv: Folhacarga3;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -112,6 +117,20 @@ export class PreviewFolhacargaPage {
   ionViewWillEnter(){
     if (this.navParams.data.isShow) {
       this.isShow = this.navParams.data.isShow;
+    }
+
+    for (let el of this.itens) {
+      let array = [];
+      array['produto_id'] = el.produto_id;
+      array['nome_produto'] = el.nome_produto;
+      array['quantidade'] = el.quantidade;
+      array['valor'] = this.decimalPipe.transform(el.valor, '1.2-2');
+/*       let item: PedidoAllItens2 = new PedidoAllItens2;
+      item.produto_id = el.produto_id;
+      item.nome_produto = el.nome_produto;
+      item.quantidade = el.quantidade;
+      item.valor = this.decimalPipe.transform(el.valor, '1.2-2'); //el.valor; */
+      this.linesFile.push(array);
     }
   }
 
@@ -370,6 +389,99 @@ export class PreviewFolhacargaPage {
     loading.dismiss(); // Filaliza LOADING
   }
 
+  gerarCsv(){
+  /*   this.linesFile = [];
+    this.pageCsv = {
+      'id': this.model.id,
+      'data': this.formatDate.transform(this.model.data),
+      'status': this.model.status,
+      'pedidos': this.lista_pedidos_str,
+      'total': this.decimalPipe.transform(this.total_geral, '1.2-2'), //this.total_geral
+      'desconto': this.decimalPipe.transform(Number(this.total_geral) - Number(this.total_geral_padrao), '1.2-2'),
+    } */
+    //this.linesFile.push(this.pageCsv);
+/*     for (let el of this.itens) {
+      let array = [];
+      array['produto_id'] = el.produto_id;
+      array['nome_produto'] = el.nome_produto;
+      array['quantidade'] = el.quantidade;
+      array['valor'] = this.decimalPipe.transform(el.valor, '1.2-2');
+//       let item: PedidoAllItens2 = new PedidoAllItens2;
+//      item.produto_id = el.produto_id;
+//      item.nome_produto = el.nome_produto;
+//      item.quantidade = el.quantidade;
+//      item.valor = this.decimalPipe.transform(el.valor, '1.2-2'); //el.valor; 
+      this.linesFile.push(array);
+    } */
+    //console.log(JSON.stringify(this.linesFile));
+    console.log(JSON.stringify(this.itens));
+
+    //this.headerRow = ['ID', 'Produto', 'Quant.', 'Total'];
+    //let aux = [ 'data' [this.itens] ];
+    //this.csvData = this.itens; //this.linesFile;
+    //console.log(JSON.stringify(this.csvData));
+    //JSON.stringify(this.csvData);
+    
+    let dados = [];
+    dados.push(["Num. Folha Carga", this.model.id]);
+    dados.push(["Data", this.formatDate.transform(this.model.data)]);
+    dados.push(["Status", this.model.status]);
+    dados.push(["Pedidos", this.lista_pedidos_str]);
+    
+/*     dados.push(["Num. Folha Carga", "Data", "Status", "Pedidos", "Total"]);
+    dados.push([this.model.id, this.formatDate.transform(this.model.data), this.model.status, this.lista_pedidos_str,
+                this.decimalPipe.transform(this.total_geral, '1.2-2')]); */
+    dados.push(["", "", "", "", ""]);
+    dados.push(["ID", "Produto", "Quant.", "Total"]);
+    for (let el of this.itens) {
+      dados.push([el.produto_id, el.nome_produto, el.quantidade, this.decimalPipe.transform(el.valor, '1.2-2')]);
+    }
+    dados.push(["", "", "", "", ""]);
+    for (let el of this.pedidos2) {
+      dados.push(["Pedido: " + el.id, el.observacao]);
+    }
+    dados.push(["", "", "", "", ""]);
+    dados.push(["Total", this.decimalPipe.transform(this.total_geral, '1.2-2')]);
+
+    let csv = papa.unparse({
+        fields: null,
+        data: JSON.stringify(dados)
+    });
+
+/*     let csv = papa.unparse([
+      { "Column 1": "ID", 
+        "Column 2": "Produto", 
+        "Column 3": "Quant.",
+        "Column 4": "Total" 
+      },
+      { "Column 1": "1", 
+        "Column 2": "2", 
+        "Column 3": "3.",
+        "Column 4": "4" 
+      },
+      { data: JSON.stringify(this.csvData)}  
+    ]); */
+
+    /* var csv = papa.unparse([
+      ["1-1", "1-2", "1-3"],
+      ["2-1", "2-2", "2-3", "5-666"]
+    ]); */
+   
+    // Dummy implementation for Desktop download purpose
+    //var blob = new Blob([csv]);
+    let fileName = 'folha_'+this.model.id+'.csv'
+    var blob = new Blob([csv], { type: 'text/plain' });
+    return this.file.writeFile(this.file.externalDataDirectory, fileName, blob, { replace: true });
+
+    /* var a = window.document.createElement("a");
+    a.href = window.URL.createObjectURL(blob);
+    let fileName = 'folha_'+this.model.id+'.csv'
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a); */
+
+  }
 
 
 }

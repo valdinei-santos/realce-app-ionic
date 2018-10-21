@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
 
-import { PedidoProvider, Pedido, Pedido2, Item_pedido } from '../../providers/pedido/pedido';
+import { PedidoProvider, Pedido2 } from '../../providers/pedido/pedido';
 import { ToastController } from 'ionic-angular';
 import { FormatDatePipe } from '../../pipes/format-date/format-date';
 import { DecimalPipe } from '@angular/common';

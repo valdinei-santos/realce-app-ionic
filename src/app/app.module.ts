@@ -7,6 +7,7 @@ import { SQLite } from '@ionic-native/sqlite';
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { DatePipe } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
+import { Device } from '@ionic-native/device';
 
 import { SelectSearchableModule } from 'ionic-select-searchable';
 import { EmailComposer } from '@ionic-native/email-composer';
@@ -116,6 +117,7 @@ registerLocaleData(localePtBr);
     File,
     FileOpener,
     ExpImpDbProvider,
+    Device
   ]
 })
 export class AppModule {}

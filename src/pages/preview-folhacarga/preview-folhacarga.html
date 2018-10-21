@@ -34,7 +34,20 @@
   </div>
   <button *ngIf="!editando && !isShow" ion-button color="secondary" full (click)="save()">Criar Folha de Carga</button>
   <button *ngIf="editando && !isShow" ion-button color="secondary" block (click)="save()">Alterar Folha de Carga</button>
-  <button *ngIf="isShow" ion-button full (click)="createPdf()">Gerar PDF</button>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+        <button *ngIf="isShow" ion-button full (click)="createPdf()">Gerar PDF</button>
+      </ion-col>
+      <ion-col col-6>
+        <button *ngIf="isShow" ion-button full (click)="gerarCsv()" color="secundary">Gerar CSV</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <button *ngIf="isShow" ion-button full (click)="createPdf()">Gerar PDF</button> -->
   <br>
   <button *ngIf="isShow" ion-button full (click)="viewPdf()" color="secundary" [disabled]="!pdfObj">Visualizar PDF</button>
+  <!-- <br>
+  <button *ngIf="isShow" ion-button full (click)="gerarCsv()" color="secundary">Gerar CSV</button> -->
+  
 </ion-content>

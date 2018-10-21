@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
 import { ToastController } from 'ionic-angular';
-import { Pedido2, PedidoProvider } from '../pedido/pedido';
+import { PedidoProvider } from '../pedido/pedido';
 
 @Injectable()
 export class FolhacargaProvider {
