@@ -13,6 +13,11 @@ import { RelatoriosPage } from '../relatorios/relatorios';
   templateUrl: 'home.html'
 })
 export class HomePage {
+
+  seriais = ['e98142f3e4f30e4e',  // Emulador
+             '8e31f763c754e0ab',  // Moto G4 Valdinei
+            ];
+  uuid: string = '';
   
   constructor(public navCtrl: NavController,
               private device: Device,
@@ -20,8 +25,12 @@ export class HomePage {
               public alertCtrl: AlertController,) { }
 
   ionViewDidLoad() {
-    console.log('Device UUID is: ' + this.device.uuid);
-    if (this.device.uuid === 'e98142f3e4f30e4e') {
+    this.uuid = this.device.uuid;
+    console.log('Device UUID is: ' + this.uuid);
+    /* if (this.device.uuid === 'e98142f3e4f30e4e' ||  // Emulador
+        this.device.uuid === '8e31f763c754e0ab'     // Moto G4 Valdinei
+       ) { */
+    if (this.seriais.find(element => element == this.uuid)) {
       console.log('APP validado.');
     } else {
       //this.platform.exitApp();
