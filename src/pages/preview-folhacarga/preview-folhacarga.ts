@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
+import { File } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 import { PedidoProvider, PedidoAllItens, PedidoAllItens2, Pedido } from '../../providers/pedido/pedido';
-import { ToastController } from 'ionic-angular';
 import { Folhacarga, FolhacargaProvider, Folhacarga3 } from '../../providers/folhacarga/folhacarga';
 import { FormatDatePipe } from '../../pipes/format-date/format-date';
 import { DecimalPipe } from '@angular/common';
-import { File } from '@ionic-native/file';
-import { FileOpener } from '@ionic-native/file-opener';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as papa from 'papaparse';
@@ -47,6 +48,7 @@ export class PreviewFolhacargaPage {
   pageCsv: Folhacarga3;
   blobCsv: Blob = null;
   fileNameCsv: string;
+  hasCsv: boolean = false;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -58,7 +60,8 @@ export class PreviewFolhacargaPage {
               private plt: Platform,
               private file: File,
               private fileOpener: FileOpener,
-              private loadingController: LoadingController) {
+              private loadingController: LoadingController,
+              private emailComposer: EmailComposer) {
     this.model = new Folhacarga;  
   }
 
@@ -261,7 +264,6 @@ export class PreviewFolhacargaPage {
     let second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
     return day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
   }
-
 
   createPdf() {
     let loading = this.loadingController.create({
@@ -480,6 +482,7 @@ export class PreviewFolhacargaPage {
     //var blob = new Blob([csv]);
     this.fileNameCsv = 'folha_'+this.model.id+'.csv'
     this.blobCsv = new Blob([csv], { type: 'text/csv' });
+    this.hasCsv = true;
     return this.file.writeFile(this.file.externalDataDirectory, this.fileNameCsv, this.blobCsv, { replace: true });
   }
 
@@ -491,5 +494,25 @@ export class PreviewFolhacargaPage {
     //})
   }
 
+  sendEmail() {
+    let email = {
+      to: 'guilherme.erhardt84@gmail.com',
+      cc: 'emerson.erhardt84@gmail.com',
+      attachments: [
+        this.file.externalDataDirectory + this.fileNameCsv
+      ],
+      subject: '[Emerson] - Folha de carga ' + this.model.id,
+      body: 'Segue a Folha de carga ' + this.model.id + ' em anexo.',
+      isHtml: true
+    };
+    this.emailComposer.open(email);
+
+    /* this.email.addAlias('gmail', 'com.google.android.gm');
+    // then use alias when sending email
+    this.email.open({
+      app: 'gmail',
+      ...
+    }); */
+  }
 
 }

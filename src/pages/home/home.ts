@@ -17,6 +17,7 @@ export class HomePage {
 
   seriais = ['e98142f3e4f30e4e',  // Emulador
              '8e31f763c754e0ab',  // Moto G4 Valdinei
+             'dde450abb01de31c',  // Samsung Prime 2 Nono
             ];
   uuid: string = '';
   versionNumber: any;
@@ -39,7 +40,7 @@ export class HomePage {
       //this.platform.exitApp();
       const alert = this.alertCtrl.create({
         title: 'RealceApp',
-        message: 'Serial não permitido!!!',
+        message: 'Serial ' + this.uuid + ' não permitido!!!' ,
         buttons: [{ text: 'OK',
                     role: 'cancel',
                     handler: () => {

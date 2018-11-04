@@ -133,7 +133,7 @@ npm install brmasker-ionic-3 --save
 npm install papaparse --save
 npm install @types/papaparse --save
 
-- Instalar plugin para pegar o numero serial do aparelho.
+13 - Instalar plugin para pegar o numero serial do aparelho.
 ionic cordova plugin add cordova-plugin-device
 npm install --save @ionic-native/device
 
@@ -142,7 +142,7 @@ constructor(private device: Device) { }
 ...
 console.log('Device UUID is: ' + this.device.uuid);
 
-- Instalar plugin para pegar a versao do APP
+14 - Instalar plugin para pegar a versao do APP
 # Add the Cordova plugin
 $ ionic cordova plugin add cordova-plugin-app-version
 
@@ -156,8 +156,18 @@ providers: [
     ...
     AppVersion
 
+15 - Instalar plugin de EMAIL
+ionic cordova plugin add cordova-plugin-email-composer
+npm install --save @ionic-native/email-composer
 
+add MODULE
 
+import { EmailComposer } from '@ionic-native/email-composer';
+...
+constructor(private emailComposer: EmailComposer) { }
+...
+
+16 - 
 
 /mnt/sdcard/Download
 
