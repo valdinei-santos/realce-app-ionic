@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ClienteProvider, Cliente } from '../../providers/cliente/cliente';
 import { CadastroClientePage } from '../cadastro-cliente/cadastro-cliente';
 import { ToastController } from 'ionic-angular';
-
+import { ListaPedidoClientePage } from '../lista-pedido-cliente/lista-pedido-cliente';
 
 @IonicPage()
 @Component({
@@ -36,16 +36,17 @@ export class ListaClientePage {
     }
   }
   
-
   addCliente(){
     this.navCtrl.push(CadastroClientePage);
   }
-
 
   editCliente(id: number){
     this.navCtrl.push(CadastroClientePage, { id: id, isEdit: true });
   }
 
+  listaPedidos(client_id: number){
+    this.navCtrl.push(ListaPedidoClientePage, { cliente_id: client_id });
+  }
 
   removeCliente(cliente: Cliente) {
     this.clienteProvider.remove(cliente.id) 

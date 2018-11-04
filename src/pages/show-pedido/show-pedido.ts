@@ -58,22 +58,8 @@ export class ShowPedidoPage {
       this.model = new Pedido2();
   }
 
-
   ionViewDidLoad() {
-    this.pedidoProvider.get2(this.navParams.data.id)
-        .then((result: any) => {
-            this.model = result;
-        })
-        .catch(() => {
-            this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
-      });
-      this.pedidoProvider.getItens(this.navParams.data.id)
-        .then((result: any) => {
-          this.itens = result;
-        })
-        .catch(() => {
-          this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
-      });
+    this.getPedido();
   }
 
   ionViewDidEnter() {
@@ -81,6 +67,28 @@ export class ShowPedidoPage {
       this.total = this.total + parseFloat(el.valor_total);
     }
     this.total_geral = Number(this.total) + Number(this.model.valor_adicional);
+  }
+
+  getPedido() {
+    this.pedidoProvider.get2(this.navParams.data.id)
+      .then((result: any) => {
+        this.model = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar um pedido.', duration: 3000, position: 'botton' }).present();
+    });
+    this.pedidoProvider.getItens(this.navParams.data.id)
+      .then((result: any) => {
+        this.itens = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
+  pago(id: number) {
+    this.pedidoProvider.update_pago(id);
+    this.getPedido();
   }
 
   getTimestamp() {
@@ -99,6 +107,11 @@ export class ShowPedidoPage {
       content: 'Aguarde o carregamento...'
     });
     loading.present(); // Inicia LOADING
+
+    // Iniciando variaveis.
+    this.docDefinition = null;
+    this.itens2 = [];
+    this.content = [];
 
     // this.model.pago ? this.pagoString = 'Pago' : this.pagoString = '';
     for (let el of this.itens) {
@@ -148,7 +161,8 @@ export class ShowPedidoPage {
     this.content.push(l4);
     this.content.push(l5);
     this.content.push(l6);
-    if (this.pagePdf.observacao !== '' && this.pagePdf.observacao !== undefined) {
+    if (this.pagePdf.observacao !== '' && this.pagePdf.observacao !== undefined && this.pagePdf.observacao !== null) {
+      console.log('obs.: ' + this.pagePdf.observacao)
       this.content.push(l7);
     }
     this.content.push(l8);

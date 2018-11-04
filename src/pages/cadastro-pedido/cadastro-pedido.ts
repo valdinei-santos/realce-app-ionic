@@ -198,7 +198,7 @@ export class CadastroPedidoPage {
     }
   }
 
-  addItem() {
+  /* addItem() {
       Observable.forkJoin([
         Observable.fromPromise(
                 this.produtoProvider.get(this.model_produto.id)
@@ -225,7 +225,7 @@ export class CadastroPedidoPage {
         this.model_item_pedido.valor_unitario = null;
         this.total = this.total + (item.valor_total as number);
       });
-  }
+  } */
 
   save() {
     if (this.model_cliente.nome === undefined) {
@@ -267,6 +267,7 @@ export class CadastroPedidoPage {
   removeProduto(item: Item_pedido) {
     this.itens.splice(this.itens.indexOf(item), 1);
     this.total -= item.valor_total; 
+    this.setTotalGeral();
   }
 
   cancelar(){

@@ -75,6 +75,7 @@ S� INCLUI    Ficando assim: "constructor(private storage: Storage) {"
   1 - Gerar uma nova pagina com o nome CadastroCliente
     ionic g page CadastroCliente
     ionic g page ListaCliente
+    ionic g page ListaPedidoCliente
     #ionic g page EditCliente
     ionic g page CadastroProduto
     ionic g page ListaProduto
@@ -141,30 +142,62 @@ constructor(private device: Device) { }
 ...
 console.log('Device UUID is: ' + this.device.uuid);
 
+- Instalar plugin para pegar a versao do APP
+# Add the Cordova plugin
+$ ionic cordova plugin add cordova-plugin-app-version
+
+# Add the Ionic Native wrapper
+$ npm install @ionic-native/app-version
+
+MODULE
+import { AppVersion } from '@ionic-native/app-version';
+...
+providers: [
+    ...
+    AppVersion
+
+
+
+
 /mnt/sdcard/Download
 
 ####################################
-13 - Criar o APK para produção sem assinatura.
+1 - Criar o APK para produção sem assinatura pela PRIMEIRA VEZ.
 ionic cordova run android --prod --release
 # or
 ionic cordova build android --prod --release
 
-14 - Criar uma chave para o APK / Gerar o certificado do App
+2 - Criar uma chave para o APK / Gerar o certificado do App
 keytool -genkey -v -keystore SEU-APP.keystore -alias SEU-APP -keyalg RSA -keysize 2048 -validity 10000
 keytool -genkey -v -keystore realce.keystore -alias realce -keyalg RSA -keysize 2048 -validity 10000
 
 Sugeriu isso no final
 keytool -importkeystore -srckeystore realce.keystore -destkeystore realce.keystore -deststoretype pkcs12
 
-14.1 - Assinar o APK 
+3 - Assinar o APK 
 ### Para Update é a partir daqui, pois precisa ter a mesma assinatura. Tem que mudar a versao no config.xml
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore realce.keystore platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk realce
 
-14.2 - Alinhar o APK
+4 - Alinhar o APK
 cd platforms/android/app/build/outputs/apk/release/
 /Users/valdinei/Library/Android/sdk/build-tools/26.0.2/zipalign -v 4 app-release-unsigned.apk realce.apk
 
 -- Aí é gerado o realce.apk
+
+
+####################################
+1 - Criar o APK para produção sem assinatura com a CHAVE JA EXISTENTE.
+ionic cordova build android --prod --release
+
+2 - Assinar o APK 
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore realce.keystore platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk realce
+
+3 - Alinhar o APK
+cd platforms/android/app/build/outputs/apk/release/
+/Users/valdinei/Library/Android/sdk/build-tools/26.0.2/zipalign -v 4 app-release-unsigned.apk realce.apk
+
+-- Aí é gerado o realce.apk
+
 
 
 

@@ -20,10 +20,14 @@
         </button>
       </ion-item-options>
       <ion-item-options side="right">
-		<button ion-button color="primary" (click)="editCliente(cliente.id)">
-		  <ion-icon name="document"></ion-icon>
-			Editar
-		</button>
+        <button ion-button color="primary" (click)="editCliente(cliente.id)">
+          <ion-icon name="document"></ion-icon>
+          Editar
+        </button>
+        <button ion-button color="light" (click)="listaPedidos(cliente.id)">
+          <ion-icon name="md-clipboard"></ion-icon>
+          Pedidos
+        </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>

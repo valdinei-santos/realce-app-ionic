@@ -8,6 +8,7 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { DatePipe } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
 import { Device } from '@ionic-native/device';
+import { AppVersion } from '@ionic-native/app-version';
 
 import { SelectSearchableModule } from 'ionic-select-searchable';
 import { EmailComposer } from '@ionic-native/email-composer';
@@ -52,6 +53,7 @@ import { ExpImpDbProvider } from '../providers/exp-imp-db/exp-imp-db';
 import { RelatoriosPageModule } from '../pages/relatorios/relatorios.module';
 import { ListaPedidoHistPageModule } from '../pages/lista-pedido-hist/lista-pedido-hist.module';
 import { ListaFolhacargaHistPageModule } from '../pages/lista-folhacarga-hist/lista-folhacarga-hist.module';
+import { ListaPedidoClientePageModule } from '../pages/lista-pedido-cliente/lista-pedido-cliente.module';
 
 registerLocaleData(localePtBr);
 
@@ -68,7 +70,8 @@ registerLocaleData(localePtBr);
 	  IonicStorageModule.forRoot(),
     HttpClientModule,
     SelectSearchableModule,
-	  ListaClientePageModule,
+    ListaClientePageModule,
+    ListaPedidoClientePageModule,
     //EditClientePageModule,
     ListaProdutoPageModule,
     ListaPedidoPageModule,
@@ -117,7 +120,8 @@ registerLocaleData(localePtBr);
     File,
     FileOpener,
     ExpImpDbProvider,
-    Device
+    Device,
+    AppVersion
   ]
 })
 export class AppModule {}

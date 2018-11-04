@@ -45,6 +45,8 @@ export class PreviewFolhacargaPage {
   headerRow: any[] = [];
   linesFile: any[] = [];
   pageCsv: Folhacarga3;
+  blobCsv: Blob = null;
+  fileNameCsv: string;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -267,6 +269,11 @@ export class PreviewFolhacargaPage {
     });
     loading.present(); // Inicia LOADING
 
+    // Iniciando variaveis.
+    this.docDefinition = null;
+    this.itens2 = [];
+    this.content = [];
+
     for (let el of this.itens) {
       let item: PedidoAllItens2 = new PedidoAllItens2;
       item.produto_id = el.produto_id;
@@ -446,7 +453,9 @@ export class PreviewFolhacargaPage {
     let csv = papa.unparse({
         fields: null,
         data: JSON.stringify(dados)
-    });
+        },
+        { delimiter: ";" }
+    );
 
 /*     let csv = papa.unparse([
       { "Column 1": "ID", 
@@ -469,18 +478,17 @@ export class PreviewFolhacargaPage {
    
     // Dummy implementation for Desktop download purpose
     //var blob = new Blob([csv]);
-    let fileName = 'folha_'+this.model.id+'.csv'
-    var blob = new Blob([csv], { type: 'text/plain' });
-    return this.file.writeFile(this.file.externalDataDirectory, fileName, blob, { replace: true });
+    this.fileNameCsv = 'folha_'+this.model.id+'.csv'
+    this.blobCsv = new Blob([csv], { type: 'text/csv' });
+    return this.file.writeFile(this.file.externalDataDirectory, this.fileNameCsv, this.blobCsv, { replace: true });
+  }
 
-    /* var a = window.document.createElement("a");
-    a.href = window.URL.createObjectURL(blob);
-    let fileName = 'folha_'+this.model.id+'.csv'
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a); */
-
+  viewCsv() {
+    //this.file.writeFile(this.file.externalDataDirectory, this.fileNameCsv, this.blobCsv, { replace: true }).then(fileEntry => {
+    this.fileOpener.open(this.file.externalDataDirectory + this.fileNameCsv, 'text/plain')
+      .then(() => console.log('File is opened'))
+      .catch(e => console.log('Error opening file', e));
+    //})
   }
 
 

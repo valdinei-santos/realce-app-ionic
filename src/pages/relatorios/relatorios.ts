@@ -125,6 +125,15 @@ export class RelatoriosPage {
       loading.dismiss(); // Filaliza LOADING
       return;
     }
+
+    // Iniciando variaveis.
+    this.docDefinition = null;
+    this.itens2 = [];
+    this.content = [];
+    this.rowPageNow = 0;
+    this.rowPedidoNow = 0;
+    this.qtdRowPedido = 0;
+
     let num = 0;
     for (let el1 of this.pedidos) {
       console.log('Pedido: ' + el1.id);

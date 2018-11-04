@@ -76,6 +76,17 @@ public insert(pedido: Pedido) {
       .catch((e) => console.error(e));
   }
 
+  public update_pago(id: number) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = `update pedidos set pago = 1 where id = ?`;
+        let data = [id];
+        return db.executeSql(sql, data)
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
   public remove(id: number) {
     this.remove_itens(id);
     return this.dbProvider.getDB()
@@ -248,6 +259,39 @@ public insert(pedido: Pedido) {
                     WHERE upper(p.status) <> 'ENTREGUE'
                     ORDER BY p.id desc`;              
         return db.executeSql(sql, [])
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let pedidos: any[] = [];
+              for (var i = 0; i < data.rows.length; i++) {
+                var pedido = data.rows.item(i);
+                pedidos.push(pedido);
+              }
+              return pedidos;
+            } else {
+              return [];
+            }
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
+  public getAll2_cliente(cliente_id: number) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = `SELECT p.id, p.data, p.status, p.cliente_id, c.nome as cliente_nome, 
+                          printf("%.2f",p.valor_adicional) as valor_adicional, 
+                          printf("%.2f",p.valor_pago) as valor_pago,
+                          p.pago, p.avista, p.observacao,
+                          (select printf("%.2f",sum(valor_total)) as total from pedidos_itens where pedido_id = p.id) as total,
+                          (select printf("%.2f",sum(valor_total_padrao)) as total_padrao from pedidos_itens where pedido_id = p.id) as total_padrao
+                     FROM pedidos p 
+                     JOIN clientes c 
+                       ON p.cliente_id = c.id
+                    WHERE p.cliente_id = ?
+                      --and upper(p.status) <> 'ENTREGUE'
+                    ORDER BY p.id desc`;              
+        return db.executeSql(sql, [cliente_id])
           .then((data: any) => {
             if (data.rows.length > 0) {
               let pedidos: any[] = [];

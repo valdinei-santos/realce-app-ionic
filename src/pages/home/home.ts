@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, Platform, AlertController } from 'ionic-angular';
 import { Device } from '@ionic-native/device';
+import { AppVersion } from '@ionic-native/app-version';
 
 import { ListaPedidoPage} from '../lista-pedido/lista-pedido';
 import { ListaProdutoPage} from '../lista-produto/lista-produto';
@@ -18,11 +19,13 @@ export class HomePage {
              '8e31f763c754e0ab',  // Moto G4 Valdinei
             ];
   uuid: string = '';
+  versionNumber: any;
   
   constructor(public navCtrl: NavController,
               private device: Device,
               private platform: Platform,
-              public alertCtrl: AlertController,) { }
+              public alertCtrl: AlertController,
+              private app: AppVersion) { }
 
   ionViewDidLoad() {
     this.uuid = this.device.uuid;
@@ -53,6 +56,11 @@ export class HomePage {
       alert.present();
       console.log('Serial inválido.');
     }
+    this.app.getVersionNumber()
+      .then((res) => {
+        this.versionNumber = res;
+        console.log(this.versionNumber); 
+      });
   }
 
   pedidos(){
