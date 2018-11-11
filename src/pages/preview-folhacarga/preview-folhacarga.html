@@ -17,18 +17,21 @@
   <div ion-row>
     <ion-list>
       <ion-item *ngFor="let item of itens">
-        <span ion-text color="danger">{{ item.nome_produto }} </span>
+        <span ion-text text-wrap color="danger">{{ item.nome_produto }} </span>
         <!-- <h2 text-wrap ion-text color="danger">{{ item.nome_produto }}</h2> -->
         <h2 text-wrap>Quant.: <b ion-text color="danger">{{ item.quantidade }} </b>
             Total: <b ion-text color="danger">{{ item.valor | number:'1.2-2' }}</b>
         </h2>
       </ion-item>
       <ion-item *ngFor="let pedido of pedidos2" no-lines>
-        <h2>Pedido {{pedido.id}} - {{pedido.observacao}}</h2>
+        <span ion-text text-wrap><b>Pedido {{pedido.id}} - {{pedido.observacao}}</b></span>
+        <!-- <h2>Pedido {{pedido.id}} - {{pedido.observacao}}</h2> -->
       </ion-item>
       <ion-item>
-        <h2>Total: <b ion-text color="danger">{{ total_geral | number:'1.2-2' }}</b></h2>
-        <h2>Desc: <b ion-text color="danger">{{ total_geral - total_geral_padrao | number:'1.2-2' }}</b></h2>
+        <span ion-text><b>Total:</b> <b ion-text color="danger">{{ total_geral | number:'1.2-2' }}</b></span><br>
+        <span ion-text><b>Desc:</b> <b ion-text color="danger">{{ total_geral - total_geral_padrao | number:'1.2-2' }}</b></span>
+        <!-- <h2>Total: <b ion-text color="danger">{{ total_geral | number:'1.2-2' }}</b></h2>
+        <h2>Desc: <b ion-text color="danger">{{ total_geral - total_geral_padrao | number:'1.2-2' }}</b></h2> -->
       </ion-item>
     </ion-list>
   </div>

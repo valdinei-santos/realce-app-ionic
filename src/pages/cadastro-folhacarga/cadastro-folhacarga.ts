@@ -128,6 +128,7 @@ export class CadastroFolhacargaPage {
         lista_pedidos: this.check, 
         fromCadastro: true,
         isEdit: this.editando,
+        isShow: false,
         id: this.folha_id,
         status: this.model.status
       });
@@ -135,9 +136,12 @@ export class CadastroFolhacargaPage {
   }
 
   changeStatus() {
+    console.log('Status: ' + this.model.status);
     if (this.model.status !== this.status) {
+      console.log('Status diferente');
       this.folhacargaProvider.update_status(this.model.id, this.model.status);
       if (this.model.status === 'Entregue') {
+        console.log('Status alterar pedido: ' + this.check_original );
         this.pedidoProvider.update_status(this.check_original, this.model.status);
       }
     }

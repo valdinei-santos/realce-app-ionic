@@ -47,6 +47,7 @@ ionic serve --lab
     ionic g provider Pedido
     ionic g provider Folhacarga
     ionic g provider ExpImpDB
+    ionic g provider Grupocarga
     
     
     3.1 - Ser� criado o diret�rio ../src/provider/cliente e o arquivo cliente.ts
@@ -89,6 +90,8 @@ S� INCLUI    Ficando assim: "constructor(private storage: Storage) {"
     ionic g page Relatorios
     ionic g page ListaPedidoHist
     ionic g page ListaFolhacargaHist
+    ionic g page ListaFolhacargaHist
+    ionic g page CadastroGrupocarga
 
   2 - Incluir o m�dulo dessa pagina no module da APP "app.module.ts"
     ...

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
-import { PedidoProvider, Pedido, Pedido2 } from '../../providers/pedido/pedido';
+import { PedidoProvider, Pedido2 } from '../../providers/pedido/pedido';
 import { ShowPedidoPage } from '../show-pedido/show-pedido';
 import { CadastroPedidoPage } from '../cadastro-pedido/cadastro-pedido';
 import { Cliente, ClienteProvider } from '../../providers/cliente/cliente';

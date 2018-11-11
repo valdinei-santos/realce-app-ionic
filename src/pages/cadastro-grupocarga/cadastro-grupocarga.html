@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>Cadastro Grupo de Carga</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-list>
+    <ion-item>
+		  <ion-label floating>Número</ion-label>
+		  <ion-input type="number" [(ngModel)]="model.numero"></ion-input>
+    </ion-item>
+    <ion-item>
+		  <ion-label floating>Descrição</ion-label>
+		  <ion-input type="text" [(ngModel)]="model.nome"></ion-input>
+	  </ion-item>
+  </ion-list>
+
+  <div padding>
+    <button ion-button color="dark" block (click)="save()">Adicionar</button>
+  </div>
+
+  <ion-list>
+      <br>
+      <h2 ion-text color="danger" text-center>Grupos Existentes</h2>
+      <ion-item-sliding *ngFor="let grupo of grupos">
+        <ion-item text-wrap>
+         {{ grupo.numero }} - {{ grupo.nome }}
+        </ion-item>
+        <ion-item-options side="left">
+          <button ion-button color="danger" (click)="remove(grupo)">
+            <ion-icon name="trash"></ion-icon>
+            Excluir
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+	
+</ion-content>

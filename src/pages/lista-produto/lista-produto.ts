@@ -19,6 +19,10 @@ export class ListaProdutoPage {
   isPedido: boolean;
   tipo: string;
   tipo_titulo: string;
+  page: number = 1;
+  inicioPage: number = 0;
+  fimPage: number = 20;
+  totalPage: number = 20;
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -53,6 +57,7 @@ export class ListaProdutoPage {
       this.tipo_titulo = 'Produtos';
       this.tipo = 'produto';
       this.getProdutos();
+      //this.getProdutosPage(this.inicioPage, this.fimPage);
     }
   }
 
@@ -87,6 +92,18 @@ export class ListaProdutoPage {
         this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
     });
   }
+
+  // VER DEPOIS - NAO DEU POR CAUSA DA BUSCA
+/*   getProdutosPage(inicio: number, fim: number){
+    this.produtoProvider.getAll_page(inicio, fim)
+      .then((result: any[]) => {
+        this.produtos = result;
+        this.qtd_produtos = this.produtos.length;
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar produtos.', duration: 3000, position: 'botton' }).present();
+    });
+  } */
 
   getProdutosCerveja(){
     this.produtoProvider.getAllCerveja()
@@ -194,6 +211,17 @@ export class ListaProdutoPage {
       null;
     }
   }
+
+  // VER DEPOIS - NAO DEU POR CAUSA DA BUSCA
+  /* doInfinite(infiniteScroll) {
+    this.inicioPage = this.fimPage+1;
+    this.fimPage = this.fimPage + this.totalPage;
+    console.log('Begin async operation');
+    this.getProdutosPage(this.inicioPage, this.fimPage);
+
+    console.log('Async operation has ended');
+    infiniteScroll.complete();
+  } */
 
 
 }

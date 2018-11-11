@@ -11,6 +11,8 @@ import { CadastroVasilhamePage } from '../cadastro-vasilhame/cadastro-vasilhame'
 import { CadastroUnidadeVendaPage } from '../cadastro-unidade-venda/cadastro-unidade-venda';
 import { CategoriaProvider } from '../../providers/categoria/categoria';
 import { CadastroCategoriaPage } from '../cadastro-categoria/cadastro-categoria';
+import { CadastroGrupocargaPage } from '../cadastro-grupocarga/cadastro-grupocarga';
+import { GrupocargaProvider } from '../../providers/grupocarga/grupocarga';
 
 @IonicPage()
 @Component({
@@ -26,6 +28,7 @@ export class CadastroProdutoPage {
   vasilhames: any[];
   unidades_venda: any[];
   categorias: any[];
+  grupos_carga: any[];
 
   constructor(public navCtrl: NavController, 
   	          public navParams: NavParams,
@@ -33,6 +36,7 @@ export class CadastroProdutoPage {
               public vasilhameProvider: VasilhameProvider,
               public unidadeVendaProvider: UnidadeVendaProvider,
               public categoriaProvider: CategoriaProvider,
+              public grupocargaProvider: GrupocargaProvider,
               public toast: ToastController,
               public brMaskerIonic3: BrMaskerIonic3) { 
 
@@ -61,6 +65,7 @@ export class CadastroProdutoPage {
     this.loadVasilhame();
     this.loadUnidadeVenda();
     this.loadCategoria();
+    this.loadGrupoCarga();
   }
 
   private loadVasilhame(){
@@ -93,6 +98,17 @@ export class CadastroProdutoPage {
     });
   }
 
+  private loadGrupoCarga(){
+    this.grupocargaProvider.getAll()
+      .then((result: any[]) => {
+        this.grupos_carga = result;
+        //console.log(this.grupos_carga);
+      })
+      .catch(() => {
+        this.toast.create({ message: 'Erro ao carregar os grupos de carga.', duration: 3000, position: 'botton' }).present();
+    });
+  }
+
   protected createForm(): FormGroup {
     return new FormGroup({
       id: new FormControl(""),
@@ -100,8 +116,9 @@ export class CadastroProdutoPage {
       vasilhame_id: new FormControl(""),
       unidade_venda_id: new FormControl(""),
       categoria_id: new FormControl(""),
+      grupo_carga_id: new FormControl(""),
       preco: new FormControl(this.createMaskPreco(), Validators.required),
-      ativo: new FormControl({value:'1'}),
+      ativo: new FormControl(""),
       observacao: new FormControl(""),
     });
   }
@@ -116,14 +133,22 @@ export class CadastroProdutoPage {
   }
 
   save() {
+    if (this.myForm.get("nome_produto").value === '') {
+      this.toast.create({ message: 'Nome do Produto é obrigatório!', duration: 2000, position: 'center' }).present();
+      return null;
+    }
+    if (this.myForm.get("grupo_carga_id").value === '') {
+      this.toast.create({ message: 'Grupo de Carga é obrigatório!', duration: 2000, position: 'center' }).present();
+      return null;
+    }
     if (this.saveProduto()) {
-      this.toast.create({ message: 'Produto salvo!', duration: 3000, position: 'center' }).present();
+      this.toast.create({ message: 'Produto salvo!', duration: 2000, position: 'center' }).present();
       if (this.navParams.data.isEdit) {
         this.navCtrl.getPrevious().data.editBack = true;
       }
       this.navCtrl.pop();
     } else {
-      this.toast.create({ message: 'Erro ao salvar o Produto!', duration: 3000, position: 'center' }).present();
+      this.toast.create({ message: 'Erro ao salvar o Produto!', duration: 2000, position: 'center' }).present();
     }
   }
 
@@ -137,33 +162,37 @@ export class CadastroProdutoPage {
     }
   }
 
-/*   private addCategoria() {
+/*   addCategoria() {
     this.navCtrl.push(CadastroCategoriaPage);
   }
 
-  private addMarca() {
+  addMarca() {
     this.navCtrl.push(CadastroMarcaPage);
   }
 
-  private addTipo() {
+  addTipo() {
     this.navCtrl.push(CadastroTipoPage);
   } */
 
-  private addVasilhame() {
+  addVasilhame() {
     this.navCtrl.push(CadastroVasilhamePage);
   }
 
-  private addUnidade() {
+  addUnidade() {
     this.navCtrl.push(CadastroUnidadeVendaPage);
   }
 
-  private addCategoria() {
+  addCategoria() {
     this.navCtrl.push(CadastroCategoriaPage);
   }
 
   cancelar(){
     //this.navCtrl.setRoot(HomePage);
     this.navCtrl.pop();
+  }
+
+  addGruposCarga() {
+    this.navCtrl.push(CadastroGrupocargaPage);
   }
 
 

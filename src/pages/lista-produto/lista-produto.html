@@ -13,7 +13,8 @@
         <h2 text-wrap><b ion-text color="danger">
           R$ {{ produto.preco | number:'1.2-2' }} <span *ngIf="produto.vasilhame_nome">-</span>
              {{ produto.vasilhame_nome }} - 
-             {{ produto.unidade_venda_nome }} 
+             {{ produto.unidade_venda_nome }} -
+             GC:{{ produto.grupo_carga_numero }}
             </b></h2>
         <!-- Para string com valor decimal o replace funcionava, mas troquei pelo PIPE     .replace('.',',') -->
       </button>
@@ -31,6 +32,11 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+
+  <!-- VER DEPOIS - NAO DEU POR CAUSA DA BUSCA -->
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregando mais produtos..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
 
   <ion-fab right bottom>
     <button ion-fab color="dark" (click)="addProduto()"><ion-icon name="add"></ion-icon></button>

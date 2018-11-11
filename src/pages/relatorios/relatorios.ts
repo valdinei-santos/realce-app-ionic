@@ -95,6 +95,10 @@ export class RelatoriosPage {
     this.exp_imp_db.alterTable();
   }
 
+  insertProdutos(){
+    this.exp_imp_db.insertProdutos();
+  }
+
   getTimestamp() {
     let now = new Date();
     let year = "" + now.getFullYear();

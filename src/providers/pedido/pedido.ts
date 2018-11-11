@@ -417,7 +417,8 @@ public insert(pedido: Pedido) {
                                         || case when v.nome is null then '' else v.nome || ' ' end  
                                         || case when u.nome is null then '' else u.nome end as nome_produto,
                          c.id as categoria_id,
-                         v.nome as nome_vasilhame
+                         v.nome as nome_vasilhame,
+                         g.numero as grupo
                     FROM pedidos_itens i 
                     JOIN produtos p
                       ON i.produto_id = p.id
@@ -427,8 +428,11 @@ public insert(pedido: Pedido) {
                       on p.vasilhame_id = v.id
                     LEFT JOIN produtos_unidade_venda u
                       on p.unidade_venda_id = u.id
+                    LEFT JOIN produtos_grupo_carga g
+                      on p.grupo_carga_id = g.id
                   WHERE pedido_id = ?
-                  ORDER BY c.id, p.nome_produto, v.nome`;
+                  --ORDER BY c.id, p.nome_produto, v.nome
+                  ORDER BY g.numero, p.nome_produto, v.nome`;
         let data = [pedido_id];
         return db.executeSql(sql, data)
           .then((data: any) => {
@@ -458,7 +462,7 @@ public insert(pedido: Pedido) {
         let sql =`SELECT p.nome_produto || ' ' 
                                         || case when v.nome is null then '' else v.nome || ' ' end  
                                         || case when u.nome is null then '' else u.nome end as nome_produto,
-                         i.produto_id, 
+                         i.produto_id, g.numero as grupo,
                          sum(i.quantidade) as quantidade, 
                          sum(i.valor_total) as valor, 
                          sum(i.valor_total_padrao) as valor_padrao 
@@ -471,12 +475,15 @@ public insert(pedido: Pedido) {
                       on p.vasilhame_id = v.id
                     LEFT JOIN produtos_unidade_venda u
                       on p.unidade_venda_id = u.id
+                    LEFT JOIN produtos_grupo_carga g
+                      on p.grupo_carga_id = g.id
                    WHERE i.pedido_id in (${lista})
                    GROUP BY p.nome_produto || ' ' 
                             || case when v.nome is null then '' else v.nome || ' ' end  
                             || case when u.nome is null then '' else u.nome end,
-                            i.produto_id
-                   ORDER BY c.id, p.nome_produto, v.nome`;
+                            i.produto_id, g.numero
+                   --ORDER BY c.id, p.nome_produto, v.nome
+                   ORDER BY g.numero, p.nome_produto, v.nome`;
         return db.executeSql(sql, [])
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -607,6 +614,7 @@ export class PedidoAllItens {
   quantidade: number;
   valor: number;
   valor_padrao: number;
+  grupo: number;
 }
 
 export class PedidoAllItens2 {
@@ -615,5 +623,6 @@ export class PedidoAllItens2 {
   quantidade: number;
   valor: string;
   valor_padrao: string;
+  grupo: number;
 }
 

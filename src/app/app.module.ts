@@ -54,6 +54,8 @@ import { RelatoriosPageModule } from '../pages/relatorios/relatorios.module';
 import { ListaPedidoHistPageModule } from '../pages/lista-pedido-hist/lista-pedido-hist.module';
 import { ListaFolhacargaHistPageModule } from '../pages/lista-folhacarga-hist/lista-folhacarga-hist.module';
 import { ListaPedidoClientePageModule } from '../pages/lista-pedido-cliente/lista-pedido-cliente.module';
+import { GrupocargaProvider } from '../providers/grupocarga/grupocarga';
+import { CadastroGrupocargaPageModule } from '../pages/cadastro-grupocarga/cadastro-grupocarga.module';
 
 registerLocaleData(localePtBr);
 
@@ -89,7 +91,8 @@ registerLocaleData(localePtBr);
     CadastroPedidoItemPageModule,
     RelatoriosPageModule,
     ListaPedidoHistPageModule,
-    ListaFolhacargaHistPageModule
+    ListaFolhacargaHistPageModule,
+    CadastroGrupocargaPageModule,
     // DirectivesModule,
     
 
@@ -121,7 +124,8 @@ registerLocaleData(localePtBr);
     FileOpener,
     ExpImpDbProvider,
     Device,
-    AppVersion
+    AppVersion,
+    GrupocargaProvider
   ]
 })
 export class AppModule {}

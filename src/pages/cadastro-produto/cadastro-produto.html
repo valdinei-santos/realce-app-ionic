@@ -27,11 +27,9 @@
                     </ion-item>
                 </ion-col>
                 <ion-col col-2>
-
                         <button ion-button color="dark" item-end >
                             <ion-icon name="add" (click)="addCategoria()"></ion-icon>
                         </button>
-
                 </ion-col>
             </ion-row>
             <ion-row>
@@ -61,13 +59,32 @@
                     </ion-item>
                 </ion-col>
                 <ion-col col-2>
-
                         <button ion-button color="dark" item-end >
                             <ion-icon name="add" (click)="addUnidade()"></ion-icon>
                         </button>
-
                 </ion-col>
             </ion-row>
+            <ion-row>
+                <ion-col col-10>
+                    <ion-item no-lines>
+                        <ion-label floating>Grupo Carga</ion-label>
+                        <ion-select interface="popover" formControlName="grupo_carga_id">
+                            <ion-option *ngFor="let grupo_carga of grupos_carga" value="{{ grupo_carga.id }}">{{ grupo_carga.numero}} - {{ grupo_carga.nome}}</ion-option>
+                        </ion-select>
+                    </ion-item> 
+                </ion-col>
+                <ion-col col-2>
+                        <button ion-button color="dark" item-end >
+                            <ion-icon name="add" (click)="addGruposCarga()"></ion-icon>
+                        </button>
+                </ion-col>
+            </ion-row>
+            <!-- <ion-row>
+                <ion-item no-lines>
+                    <ion-label floating>Grupo Carga</ion-label>
+                    <ion-input type="number" formControlName="grupo_carga"></ion-input>
+                </ion-item> 
+            </ion-row> -->
             <ion-row>
                     <ion-item no-lines>
                         <ion-label floating>Preço</ion-label>
