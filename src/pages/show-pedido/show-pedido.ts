@@ -115,10 +115,11 @@ export class ShowPedidoPage {
 
     // this.model.pago ? this.pagoString = 'Pago' : this.pagoString = '';
     for (let el of this.itens) {
-      let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null};
+      let item = {id: null, nome_produto:null, quantidade: null, valor_unitario: null, valor_total: null, nome_unidade: null};
       item.id = el.id;
-      item.nome_produto = el.nome_produto;
       item.quantidade = el.quantidade;
+      item.nome_unidade = el.nome_unidade;
+      item.nome_produto = el.nome_produto;
       item.valor_unitario = this.decimalPipe.transform(el.valor_unitario, '1.2-2');
       item.valor_total = this.decimalPipe.transform(el.valor_total, '1.2-2');
       this.itens2.push(item);
@@ -145,7 +146,7 @@ export class ShowPedidoPage {
     let l4 = { text: 'CLIENTE: ' + this.pagePdf.cliente_nome + 
                      ' -- CEL: ' + this.pagePdf.cliente_celular, style: 'subheader' };
     let l5 = { text: 'ENDEREÇO: ' + this.pagePdf.cliente_endereco, style: 'subheader' };
-    let l6 = table(this.itens2, ['nome_produto', 'quantidade', 'valor_unitario', 'valor_total']);
+    let l6 = table(this.itens2, ['quantidade', 'nome_unidade', 'nome_produto', 'valor_unitario', 'valor_total']);
     let l7 = { text: 'Observação: ' + this.pagePdf.observacao, style: 'subheader' };
     let l8;
     if (this.model.pago) {
@@ -162,14 +163,14 @@ export class ShowPedidoPage {
     this.content.push(l5);
     this.content.push(l6);
     if (this.pagePdf.observacao !== '' && this.pagePdf.observacao !== undefined && this.pagePdf.observacao !== null) {
-      console.log('obs.: ' + this.pagePdf.observacao)
+      // console.log('obs.: ' + this.pagePdf.observacao)
       this.content.push(l7);
     }
     this.content.push(l8);
 
     function buildTableBody(data, columns) {
       var body = [];
-      body.push(['Produto', 'Quant.', 'Valor', 'Total']);
+      body.push(['Quant.', 'Unid.', 'Produto', 'Valor', 'Total']);
       data.forEach(function(row) {
           var dataRow = [];
           columns.forEach(function(column) {

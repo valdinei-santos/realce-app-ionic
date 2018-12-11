@@ -18,6 +18,7 @@ export class HomePage {
   seriais = ['e98142f3e4f30e4e',  // Emulador
              '8e31f763c754e0ab',  // Moto G4 Valdinei
              'dde450abb01de31c',  // Samsung Prime 2 Nono
+             'f99872c3cc43df9b',  // Moto G6 Valdinei
             ];
   uuid: string = '';
   versionNumber: any;

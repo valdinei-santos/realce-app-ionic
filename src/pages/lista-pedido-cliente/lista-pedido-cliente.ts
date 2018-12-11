@@ -26,7 +26,7 @@ export class ListaPedidoClientePage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ListaPedidoClientePage'); 
+    // console.log('ionViewDidLoad ListaPedidoClientePage'); 
   }
 
   ionViewDidEnter() {

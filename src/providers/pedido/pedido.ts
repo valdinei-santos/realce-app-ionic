@@ -418,6 +418,7 @@ public insert(pedido: Pedido) {
                                         || case when u.nome is null then '' else u.nome end as nome_produto,
                          c.id as categoria_id,
                          v.nome as nome_vasilhame,
+                         u.nome as nome_unidade,
                          g.numero as grupo
                     FROM pedidos_itens i 
                     JOIN produtos p
@@ -463,6 +464,7 @@ public insert(pedido: Pedido) {
                                         || case when v.nome is null then '' else v.nome || ' ' end  
                                         || case when u.nome is null then '' else u.nome end as nome_produto,
                          i.produto_id, g.numero as grupo,
+                         case when u.nome is null then '' else u.nome end as nome_unidade,
                          sum(i.quantidade) as quantidade, 
                          sum(i.valor_total) as valor, 
                          sum(i.valor_total_padrao) as valor_padrao 
@@ -481,7 +483,8 @@ public insert(pedido: Pedido) {
                    GROUP BY p.nome_produto || ' ' 
                             || case when v.nome is null then '' else v.nome || ' ' end  
                             || case when u.nome is null then '' else u.nome end,
-                            i.produto_id, g.numero
+                            i.produto_id, g.numero,
+                            case when u.nome is null then '' else u.nome end
                    --ORDER BY c.id, p.nome_produto, v.nome
                    ORDER BY g.numero, p.nome_produto, v.nome`;
         return db.executeSql(sql, [])
@@ -611,6 +614,7 @@ export class Item_pedido{
 export class PedidoAllItens {
   produto_id: number;
   nome_produto: string;
+  nome_unidade: string;
   quantidade: number;
   valor: number;
   valor_padrao: number;
@@ -620,6 +624,7 @@ export class PedidoAllItens {
 export class PedidoAllItens2 {
   produto_id: number;
   nome_produto: string;
+  nome_unidade: string;
   quantidade: number;
   valor: string;
   valor_padrao: string;

@@ -2629,3 +2629,6 @@ INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,
 INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao,`grupo_carga_id`) VALUES ('422','Suco Sufresh lata abacaxi ','2','9','4','28.4','[object Object]','','11');
 INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao,`grupo_carga_id`) VALUES ('423','Suco Sufresh lata uva','2','9','3','36.9','true','','11');
 INSERT OR REPLACE INTO produtos(id,`nome_produto`,`categoria_id`,`vasilhame_id`,`unidade_venda_id`,preco,ativo,observacao,`grupo_carga_id`) VALUES ('424','Gelo para uma térmica ','2','','6','35','[object Object]','','14');
+
+
+guilherme.erhardt84@gmail.com

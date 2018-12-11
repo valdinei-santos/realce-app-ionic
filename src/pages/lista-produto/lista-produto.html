@@ -34,8 +34,11 @@
   </ion-list>
 
   <!-- VER DEPOIS - NAO DEU POR CAUSA DA BUSCA -->
-  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregando mais produtos..."></ion-infinite-scroll-content>
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="fimPage < qtd_produtos">
+    <ion-infinite-scroll-content 
+      loadingSpinner="bubbles" 
+      loadingText="Carregando mais produtos...">
+    </ion-infinite-scroll-content>
   </ion-infinite-scroll> -->
 
   <ion-fab right bottom>

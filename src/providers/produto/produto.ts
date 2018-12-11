@@ -97,6 +97,19 @@ export class ProdutoProvider {
       .catch((e) => console.error(e));
   }
  
+  public count_produtos() {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = 'select count(*) as qtd_produtos from produtos';
+        return db.executeSql(sql, [])
+          .then((data: any) => {
+            return data.rows.item(0);
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  }
+
   public getAll() {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
@@ -140,28 +153,32 @@ export class ProdutoProvider {
   }
 
   // VER DEPOIS - NAO DEU POR CAUSA DA BUSCA NA PAGINA DE LISTAR PRODUTOS
-  /* public getAll_page(inicio: number, fim: number) {
+  public getAll_page(inicio: number, fim: number) {
+    console.log('getAll_page');
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
          let sql = `SELECT p.id, p.nome_produto,
                            p.vasilhame_id, p.unidade_venda_id, p.categoria_id,
                            printf("%.2f",p.preco) as preco,
-                           p.ativo, p.observacao, p.grupo_carga,
+                           p.ativo, p.observacao, p.grupo_carga_id,
                            v.nome as vasilhame_nome, 
                            u.nome as unidade_venda_nome,
                            c.nome as categoria_nome,
+                           g.numero as grupo_carga_numero,
                            p.nome_produto || ' ' 
                                           || case when v.nome is null then '' else v.nome || ' ' end  
                                           || case when u.nome is null then '' else u.nome end as nome_completo
-                    FROM produtos p
-                    LEFT JOIN produtos_vasilhame v
-                      on p.vasilhame_id = v.id
-                    LEFT JOIN produtos_unidade_venda u 
-                      on p.unidade_venda_id = u.id 
-                    LEFT JOIN produtos_categoria c
-                      on p.categoria_id = c.id
-                    ORDER BY p.nome_produto
-                    LIMIT ?, ?`;  
+                     FROM produtos p
+                     LEFT JOIN produtos_vasilhame v
+                       on p.vasilhame_id = v.id
+                     LEFT JOIN produtos_unidade_venda u 
+                       on p.unidade_venda_id = u.id 
+                     LEFT JOIN produtos_categoria c
+                       on p.categoria_id = c.id
+                     LEFT JOIN produtos_grupo_carga g
+                       on p.grupo_carga_id = g.id
+                     ORDER BY p.nome_produto
+                     LIMIT ?, ?`;  
         return db.executeSql(sql, [inicio, fim])
           .then((data: any) => {
             if (data.rows.length > 0) {
@@ -178,7 +195,7 @@ export class ProdutoProvider {
           .catch((e) => console.error(e));
       })
       .catch((e) => console.error(e));
-  } */
+  }
 
 
   public getAllCerveja() {

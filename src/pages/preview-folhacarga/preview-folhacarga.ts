@@ -102,7 +102,7 @@ export class PreviewFolhacargaPage {
       .catch(() => {
         this.toast.create({ message: 'Erro ao carregar Itens do pedido.', duration: 3000, position: 'botton' }).present();
     });
-    console.log('Antes getListaPedidos');
+    // console.log('Antes getListaPedidos');
     this.pedidoProvider.getListaPedidos(this.lista_pedidos)
       .then((result: Pedido[]) => {
         let itens: Pedido[] = [];
@@ -128,6 +128,7 @@ export class PreviewFolhacargaPage {
       let array = [];
       array['produto_id'] = el.produto_id;
       array['nome_produto'] = el.nome_produto;
+      array['nome_unidade'] = el.nome_unidade;
       array['quantidade'] = el.quantidade;
       array['valor'] = this.decimalPipe.transform(el.valor, '1.2-2');
       array['grupo'] = el.grupo;
@@ -144,19 +145,19 @@ export class PreviewFolhacargaPage {
     this.editando = this.navParams.data.isEdit;
   }
   ionViewWillLeave(){
-    console.log('preview-folhacarga - ionViewWillLeave');
+    // console.log('preview-folhacarga - ionViewWillLeave');
   }
   ionViewDidLeave(){
-    console.log('preview-folhacarga - ionViewDidLeave');
+    // console.log('preview-folhacarga - ionViewDidLeave');
   }
   ionViewWillUnload(){
-    console.log('preview-folhacarga - ionViewWillUnload');
+    // console.log('preview-folhacarga - ionViewWillUnload');
   }
   ionViewCanEnter(){
-    console.log('preview-folhacarga - ionViewCanEnter');
+    // console.log('preview-folhacarga - ionViewCanEnter');
   }
   ionViewCanLeave(){
-    console.log('preview-folhacarga - ionViewCanLeave');
+    // console.log('preview-folhacarga - ionViewCanLeave');
   }
 
   loadNewId(){
@@ -171,7 +172,7 @@ export class PreviewFolhacargaPage {
 
   save() {
     if (this.editando) {
-      console.log('passo11');
+      // console.log('passo11');
       this.folhacargaProvider.remove(this.model.id)
         .then(() => {
           let status;
@@ -191,7 +192,8 @@ export class PreviewFolhacargaPage {
             });
         })
         .catch(() => {
-          console.log('Erro ao alterar Folha de Carga!');
+          // console.log('Erro ao alterar Folha de Carga!');
+          this.toast.create({ message: 'Erro ao alterar Folha de Carga!', duration: 3000, position: 'center' }).present();
         });
       
     } else { // Eh Cadastro
@@ -288,6 +290,7 @@ export class PreviewFolhacargaPage {
       //item.produto_id = el.produto_id;
       item.nome_produto = el.nome_produto;
       item.quantidade = el.quantidade;
+      item.nome_unidade = el.nome_unidade;
       item.valor = this.decimalPipe.transform(el.valor, '1.2-2'); //el.valor;
       item.grupo = el.grupo;
       this.itens2.push(item);
@@ -309,7 +312,7 @@ export class PreviewFolhacargaPage {
                      ' -- ' + 'STATUS: ' + this.pagePdf.status, style: 'subheader' };
     let l4 = { text: 'PEDIDOS: ' + this.pagePdf.pedidos, style: 'subheader' };
     let l5 = ' ';
-    let l6 = table(this.itens2, ['quantidade', 'nome_produto', 'valor', 'grupo']);
+    let l6 = table(this.itens2, ['quantidade', 'nome_unidade', 'nome_produto', 'valor', 'grupo']);
     let l7 = { text: 'TOTAL: ' + this.pagePdf.total, style: 'subheader' };
     let l8 = { text: 'DESC: ' + this.pagePdf.desconto, style: 'subheader' };
 
@@ -330,12 +333,12 @@ export class PreviewFolhacargaPage {
 
     function buildTableBody(data, columns) {
       var body = [];
-      body.push(['Quant.', 'Produto', 'Total', 'Grupo']);
+      body.push(['Quant.', 'Unid.', 'Produto', 'Total', 'Grupo']);
       data.forEach(function(row) {
           var dataRow = [];
           columns.forEach(function(column) {
-              console.log(column + '---- ' + row[column]);
-              if (row[column] === null) {
+              // console.log(column + ' ---- ' + row[column]);
+              if (row[column] == null) {
                 dataRow.push(row[column]);
               } else {
                 dataRow.push(row[column].toString());
@@ -419,7 +422,7 @@ export class PreviewFolhacargaPage {
     dados.push(["Status", this.model.status]);
     dados.push(["Pedidos", this.lista_pedidos_str]);
     dados.push(["", "", "", "", ""]);
-    dados.push(["Quant.", "Produto", "Total", "Grupo"]);
+    dados.push(["Quant.", "Unid.", "Produto", "Total", "Grupo"]);
     for (let el of this.itens) {
       dados.push([el.quantidade, 
                   el.nome_produto, 
@@ -427,7 +430,7 @@ export class PreviewFolhacargaPage {
                   el.grupo
                 ]);
     }
-    dados.push(["", "", "", ""]);
+    dados.push(["", "", "", "", ""]);
     for (let el of this.pedidos2) {
       dados.push(["Pedido: " + el.id, el.observacao]);
     }

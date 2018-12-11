@@ -426,7 +426,7 @@ export class ExpImpDbProvider {
         return this.sqlitePorter.exportDbToSql(db)
           .then((data) => {
             // let fileName : any 		= Date.now() + '.sql';
-            console.log(data);
+            // console.log(data);
             this.writeFile(data);
           })
           .catch((e) => console.error(e));
@@ -462,7 +462,7 @@ export class ExpImpDbProvider {
 
 
   public alterTable(){
-    console.log('alterTable');
+    // console.log('alterTable');
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         /* db.executeSql('ALTER TABLE produtos ADD grupo_carga INTEGER default 0', {})
@@ -480,7 +480,7 @@ export class ExpImpDbProvider {
   }
 
   public insertProdutos() {
-    console.log('insertProdutos');
+    // console.log('insertProdutos');
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         db.sqlBatch(PRODUTOS)
