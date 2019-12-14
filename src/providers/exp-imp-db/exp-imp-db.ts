@@ -433,32 +433,32 @@ export class ExpImpDbProvider {
       .then((db: SQLiteObject) => {
         this.fileChooser.open()
           .then(uri => {
-            console.log(uri);
+            console.log('URI: ', uri);
             this.filePath.resolveNativePath(uri)
               .then((arq) => { 
-                console.log(arq.substr(7));
                 //var blob = new Blob([arq.substr(7)], { type: 'text/plain' });
                 //this.file.readAsText(arq.substr(7,arq.lastIndexOf('/')), arq.substr(arq.lastIndexOf('/')) )
-                this.sqlitePorter.importSqlToDb(db, this.getFileSql(arq)
-                                                    //arq.substr(7)
-                                                    /* this.file.readAsText(
-                                                      arq.substr(7,arq.lastIndexOf('/')), 
-                                                      arq.substr(arq.lastIndexOf('/')) 
-                                                    )
-                                                    .then((res: string) => { 
-                                                      res
-                                                    }).catch((e) => console.log(e)) */
-                                                )
-                  .then((data) => {
-                    console.log(data);
-                    this.toast.create({ message: 'Banco de Dados restaurado com Sucesso!!!', duration: 3000, position: 'botton' }).present();
-                    //var blob = new Blob([data], { type: 'text/plain' });
-                    //return this.file.readAsText(this.file.externalDataDirectory, sqlFile)
+                  this.file.readAsText(
+                    arq.substr(0,arq.lastIndexOf('/')), 
+                    arq.substr(arq.lastIndexOf('/') + 1) 
+                  )
+                  .then((res: string) => { 
+                    console.log('OK');
+                    this.sqlitePorter.importSqlToDb(db, res)
+                    .then((data) => {
+                      console.log(data);
+                      this.toast.create({ message: 'Banco de Dados restaurado com Sucesso!!!', duration: 3000, position: 'botton' }).present();
+                      //var blob = new Blob([data], { type: 'text/plain' });
+                      //return this.file.readAsText(this.file.externalDataDirectory, sqlFile)
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                      this.toast.create({ message: 'Erro ao restaurar o Banco de Dados.', duration: 3000, position: 'botton' }).present();
+                    }); 
                   })
-                  .catch((e) => {
-                    console.log(e);
-                    this.toast.create({ message: 'Erro ao restaurar o Banco de Dados.', duration: 3000, position: 'botton' }).present();
-                  }); 
+                  .catch((e) => { 
+                    this.toast.create({ message: 'Erro ao resolver Nome Arquivo.', duration: 3000, position: 'botton' }).present(); 
+                  })
               })
               .catch((error) => { 
                 this.toast.create({ message: 'Erro ao resolver PATH.', duration: 3000, position: 'botton' }).present(); 
@@ -557,19 +557,27 @@ export class ExpImpDbProvider {
     }
   }
 
-  getFileSql(arq: string): string {
+  
+  // Desativado por que teria que voltar um promise.
+  /* getFileSql(arq: string): string {
+    console.log('SUB1: ', arq.substr(0, arq.lastIndexOf('/')));
+    console.log('SUB2: ', arq.substr(arq.lastIndexOf('/') + 1))
+    console.log('Numero: ', arq.lastIndexOf('\/'), arq.lastIndexOf('/') );
     this.file.readAsText(
-      arq.substr(7,arq.lastIndexOf('/')), 
+      arq.substr(0,arq.lastIndexOf('/')), 
       arq.substr(arq.lastIndexOf('/') + 1) 
     )
     .then((res: string) => { 
+      console.log('OK');
       return res;
     }).catch((e) => { 
+      console.log('NOK');
       console.log(e)
       //return 'NOK'
     })
+    console.log('NADA');
     return '';
-  }
+  } */
 
 
 }

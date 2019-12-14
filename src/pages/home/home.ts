@@ -21,6 +21,7 @@ export class HomePage {
              'f99872c3cc43df9b',  // Moto G6 Valdinei
              '1da0e8fa48eeb084',  // Smartphone Mãe do Nono
              '41c8212e59663315',  // Moto G7 Valdinei
+             '706d3084e8d457d2',  // Moto G7 Valdinei - Debug
              '4012944a88a38dfa',  // Redmi Nono
             ];
   uuid: string = '';
