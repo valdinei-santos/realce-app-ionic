@@ -91,6 +91,15 @@ export class RelatoriosPage {
     loading.dismiss(); // Finaliza LOADING
   }
 
+  importDB(){
+    let loading = this.loadingController.create({
+      content: 'Aguarde o restore...'
+    });
+    loading.present(); // Inicia LOADING
+    this.exp_imp_db.import();
+    loading.dismiss(); // Finaliza LOADING
+  }
+
   alteraTabela(){
     this.exp_imp_db.alterTable();
   }

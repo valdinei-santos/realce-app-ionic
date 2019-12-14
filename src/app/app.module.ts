@@ -13,6 +13,7 @@ import { AppVersion } from '@ionic-native/app-version';
 import { SelectSearchableModule } from 'ionic-select-searchable';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
 import { FileOpener } from '@ionic-native/file-opener';
 
 import { MyApp } from './app.component';
@@ -56,6 +57,7 @@ import { ListaFolhacargaHistPageModule } from '../pages/lista-folhacarga-hist/li
 import { ListaPedidoClientePageModule } from '../pages/lista-pedido-cliente/lista-pedido-cliente.module';
 import { GrupocargaProvider } from '../providers/grupocarga/grupocarga';
 import { CadastroGrupocargaPageModule } from '../pages/cadastro-grupocarga/cadastro-grupocarga.module';
+import { FileChooser } from '@ionic-native/file-chooser';
 
 registerLocaleData(localePtBr);
 
@@ -121,7 +123,9 @@ registerLocaleData(localePtBr);
     UnidadeVendaProvider,
     VasilhameProvider,
     File,
+    FilePath,
     FileOpener,
+    FileChooser,
     ExpImpDbProvider,
     Device,
     AppVersion,

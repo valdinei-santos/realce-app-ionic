@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { SQLiteObject } from '@ionic-native/sqlite';
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { DatabaseProvider } from '../database/database';
-import { Platform } from 'ionic-angular';
+import { Platform, ToastController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
+//import { FilePath } from '@ionic-native/file-path';
 
 
 const PRODUTOS = [
@@ -418,7 +421,58 @@ export class ExpImpDbProvider {
   constructor(private dbProvider: DatabaseProvider,
               private sqlitePorter: SQLitePorter,
               private platform: Platform,
-              private file: File) { }
+              private file: File, 
+              private filePath: FilePath,
+              private fileChooser: FileChooser,
+              private toast: ToastController,
+              ) { }
+
+  public import() {
+    //let sqlFile;
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        this.fileChooser.open()
+          .then(uri => {
+            console.log(uri);
+            this.filePath.resolveNativePath(uri)
+              .then((arq) => { 
+                console.log(arq.substr(7));
+                //var blob = new Blob([arq.substr(7)], { type: 'text/plain' });
+                //this.file.readAsText(arq.substr(7,arq.lastIndexOf('/')), arq.substr(arq.lastIndexOf('/')) )
+                this.sqlitePorter.importSqlToDb(db, this.getFileSql(arq)
+                                                    //arq.substr(7)
+                                                    /* this.file.readAsText(
+                                                      arq.substr(7,arq.lastIndexOf('/')), 
+                                                      arq.substr(arq.lastIndexOf('/')) 
+                                                    )
+                                                    .then((res: string) => { 
+                                                      res
+                                                    }).catch((e) => console.log(e)) */
+                                                )
+                  .then((data) => {
+                    console.log(data);
+                    this.toast.create({ message: 'Banco de Dados restaurado com Sucesso!!!', duration: 3000, position: 'botton' }).present();
+                    //var blob = new Blob([data], { type: 'text/plain' });
+                    //return this.file.readAsText(this.file.externalDataDirectory, sqlFile)
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    this.toast.create({ message: 'Erro ao restaurar o Banco de Dados.', duration: 3000, position: 'botton' }).present();
+                  }); 
+              })
+              .catch((error) => { 
+                this.toast.create({ message: 'Erro ao resolver PATH.', duration: 3000, position: 'botton' }).present(); 
+              })
+          })
+          .catch(e => {
+            this.toast.create({ message: 'Erro ao escolher arquivo.', duration: 3000, position: 'botton' }).present();
+          });
+      })
+      .catch((e) => {
+        this.toast.create({ message: 'Erro ao abrir o Banco de Dados.', duration: 3000, position: 'botton' }).present();
+      });
+  }
+
 
   public export() {
     return this.dbProvider.getDB()
@@ -488,6 +542,33 @@ export class ExpImpDbProvider {
           .catch(e => console.error('Erro ao incluir dados produtos', e));
       })
       .catch((e) => console.error(e));
+  }
+
+  correctPath(fileUri: string): Promise<string> {
+    if (this.platform.is('android')) {
+      return this.filePath.resolveNativePath(fileUri);
+        /* .then(res => {
+          console.log(res);
+          return res;
+        })
+        .catch(err => console.log(err)); */
+    } else {
+      return Promise.resolve('nok');
+    }
+  }
+
+  getFileSql(arq: string): string {
+    this.file.readAsText(
+      arq.substr(7,arq.lastIndexOf('/')), 
+      arq.substr(arq.lastIndexOf('/') + 1) 
+    )
+    .then((res: string) => { 
+      return res;
+    }).catch((e) => { 
+      console.log(e)
+      //return 'NOK'
+    })
+    return '';
   }
 
 

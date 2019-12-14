@@ -170,7 +170,18 @@ import { EmailComposer } from '@ionic-native/email-composer';
 constructor(private emailComposer: EmailComposer) { }
 ...
 
-16 - 
+16 - Instalar plugin para fazer escolha de arquivo e o outro é para resolver a URI em path
+ionic cordova plugin add cordova-plugin-filechooser
+npm install --save @ionic-native/file-chooser
+
+ionic cordova plugin add cordova-plugin-filepath
+npm install --save @ionic-native/file-path
+
+Incluir no PROVIDER do app.mudules
+
+17 - 
+
+18 - 
 
 /mnt/sdcard/Download
 
